@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>PMP問題集</title>
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2563eb">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PMP問題集">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #f59e0b;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-bottom: env(safe-area-inset-bottom);
+    -webkit-text-size-adjust: 100%;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    color: white;
+    padding: 20px 24px;
+    padding-top: calc(20px + env(safe-area-inset-top));
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .header h1 { font-size: 1.5rem; font-weight: 700; }
+  .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+  .container { max-width: 720px; margin: 0 auto; padding: 20px 16px; }
+
+  .home-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .home-card h2 { font-size: 1.2rem; margin-bottom: 8px; }
+  .home-card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 16px 8px;
+  }
+  .stat-box .num { font-size: 1.6rem; font-weight: 700; color: var(--primary); }
+  .stat-box .label { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; }
+
+  .domain-list { text-align: left; }
+  .domain-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .domain-btn:hover { border-color: var(--primary); background: #eff6ff; }
+  .domain-btn .badge {
+    background: var(--primary);
+    color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.75rem;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+  }
+  .btn:hover { background: var(--primary-dark); }
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+  .btn-outline:hover { background: #eff6ff; }
+
+  .progress-bar {
+    background: var(--border);
+    border-radius: 20px;
+    height: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--primary), #7c3aed);
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+  }
+  .question-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .question-info .domain-tag {
+    background: #eff6ff;
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .question-card h3 {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .option:hover:not(.disabled) { border-color: var(--primary); background: #eff6ff; }
+  .option.selected { border-color: var(--primary); background: #dbeafe; }
+  .option.correct { border-color: var(--success); background: #dcfce7; }
+  .option.wrong { border-color: var(--danger); background: #fee2e2; }
+  .option.disabled { cursor: default; opacity: 0.85; }
+  .option-label { font-weight: 600; margin-right: 8px; }
+
+  .explanation {
+    background: #fefce8;
+    border-left: 4px solid var(--warning);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    display: none;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--warning); }
+
+  .result-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 40px 24px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    margin-bottom: 16px;
+  }
+  .score-circle {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+  }
+  .score-circle.pass { background: linear-gradient(135deg, var(--success), #15803d); }
+  .score-circle.fail { background: linear-gradient(135deg, var(--danger), #b91c1c); }
+  .score-circle small { font-size: 0.8rem; font-weight: 400; opacity: 0.9; }
+  .result-card h2 { margin-bottom: 8px; }
+  .result-card p { color: var(--text-light); margin-bottom: 24px; }
+  .btn-group { display: flex; gap: 12px; }
+  .btn-group .btn { flex: 1; }
+
+  .review-item {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    text-align: left;
+  }
+  .review-item .q-text { font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+  .review-item .answer-info { font-size: 0.85rem; line-height: 1.7; }
+  .review-item .correct-mark { color: var(--success); }
+  .review-item .wrong-mark { color: var(--danger); }
+
+  .hidden { display: none !important; }
+
+  .add-form { text-align: left; }
+  .add-form label { display: block; font-weight: 600; margin: 12px 0 6px; font-size: 0.9rem; }
+  .add-form input, .add-form textarea, .add-form select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+  .add-form textarea { min-height: 80px; resize: vertical; }
+  .add-form .option-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .add-form .option-row input[type="text"] { flex: 1; }
+  .add-form .option-row input[type="radio"] { flex-shrink: 0; }
+
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    transition: all 0.2s;
+  }
+  .tab-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>PMP問題集</h1>
+  <p>Project Management Professional 試験対策</p>
+</div>
+
+<div class="container">
+  <div id="home-screen">
+    <div class="home-card">
+      <h2>学習ダッシュボード</h2>
+      <p>知識を深めてPMP合格を目指しましょう</p>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="num" id="stat-total">0</div>
+          <div class="label">総問題数</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="stat-answered">0</div>
+          <div class="label">回答済み</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="stat-rate">--%</div>
+          <div class="label">正答率</div>
+        </div>
+      </div>
+      <button class="btn" onclick="startQuiz('all')" style="margin-bottom:12px">全分野からランダム出題</button>
+      <button class="btn btn-outline" onclick="startQuiz('weak')" style="margin-bottom:12px">苦手問題を復習</button>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('domains', this)">分野別</button>
+      <button class="tab-btn" onclick="switchTab('add', this)">問題を追加</button>
+      <button class="tab-btn" onclick="switchTab('manage', this)">管理</button>
+    </div>
+
+    <div id="tab-domains" class="domain-list"></div>
+
+    <div id="tab-add" class="hidden">
+      <div class="home-card add-form">
+        <h2 style="margin-bottom:16px">オリジナル問題を追加</h2>
+        <label>分野</label>
+        <select id="add-domain">
+          <option value="People">People（人）</option>
+          <option value="Process">Process（プロセス）</option>
+          <option value="Business">Business Environment（ビジネス環境）</option>
+          <option value="Predictive">Predictive（予測型）</option>
+          <option value="Agile">Agile（アジャイル）</option>
+          <option value="Custom">カスタム</option>
+        </select>
+        <label>問題文</label>
+        <textarea id="add-question" placeholder="問題文を入力..."></textarea>
+        <label>選択肢（正解にチェック）</label>
+        <div class="option-row"><input type="radio" name="correct" value="0" checked><input type="text" id="add-opt0" placeholder="選択肢 A"></div>
+        <div class="option-row"><input type="radio" name="correct" value="1"><input type="text" id="add-opt1" placeholder="選択肢 B"></div>
+        <div class="option-row"><input type="radio" name="correct" value="2"><input type="text" id="add-opt2" placeholder="選択肢 C"></div>
+        <div class="option-row"><input type="radio" name="correct" value="3"><input type="text" id="add-opt3" placeholder="選択肢 D"></div>
+        <label>解説</label>
+        <textarea id="add-explanation" placeholder="解説を入力..."></textarea>
+        <button class="btn" style="margin-top:16px" onclick="addCustomQuestion()">問題を追加</button>
+      </div>
+    </div>
+
+    <div id="tab-manage" class="hidden">
+      <div class="home-card">
+        <h2 style="margin-bottom:16px">データ管理</h2>
+        <button class="btn" onclick="exportData()" style="margin-bottom:10px">問題と成績をエクスポート</button>
+        <button class="btn btn-outline" onclick="document.getElementById('import-file').click()" style="margin-bottom:10px">インポート</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+        <button class="btn btn-outline" onclick="resetStats()" style="border-color:var(--danger);color:var(--danger)">成績をリセット</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-screen" class="hidden">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="question-info">
+      <span id="q-counter">1 / 10</span>
+      <span class="domain-tag" id="q-domain">People</span>
+    </div>
+    <div class="question-card">
+      <h3 id="q-text"></h3>
+      <div id="q-options"></div>
+      <div class="explanation" id="q-explanation"></div>
+    </div>
+    <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none">次の問題</button>
+    <button class="btn btn-outline" onclick="quitQuiz()" style="margin-top:10px">中断してホームに戻る</button>
+  </div>
+
+  <div id="result-screen" class="hidden">
+    <div class="result-card">
+      <div class="score-circle" id="score-circle">
+        <span id="score-pct">0%</span>
+        <small id="score-detail">0/0</small>
+      </div>
+      <h2 id="result-title"></h2>
+      <p id="result-msg"></p>
+      <div class="btn-group">
+        <button class="btn" onclick="goHome()">ホームに戻る</button>
+        <button class="btn btn-outline" onclick="showReview()">復習する</button>
+      </div>
+    </div>
+    <div id="review-section" class="hidden"></div>
+  </div>
+</div>
+
+<script>
+const defaultQuestions=[
+  {id:1,domain:"People",question:"プロジェクトチームのメンバー間で意見の対立が生じています。プロジェクトマネージャーが最初に取るべきアプローチはどれですか？",options:["対立を無視し、作業の進行を優先する","対立の根本原因を特定するため、関係者と個別に話し合う","上位マネジメントにエスカレーションする","対立しているメンバーをチームから外す"],correct:1,explanation:"コンフリクトマネジメントでは、まず根本原因を理解することが重要です。協力的な問題解決（コラボレーション/対峙）が最も望ましいアプローチとされています。"},
+  {id:2,domain:"People",question:"サーバントリーダーシップにおいて、プロジェクトマネージャーの主な役割はどれですか？",options:["チームメンバーに詳細な作業指示を出す","チームの障害を取り除き、メンバーの成長を支援する","すべての意思決定を自ら行う","進捗状況を上位マネジメントに報告する"],correct:1,explanation:"サーバントリーダーシップでは、リーダーはチームに奉仕する存在です。障害の除去、メンバーのエンパワーメント、成長支援が主な役割となります。"},
+  {id:3,domain:"People",question:"タックマンモデルにおいて、チームが最も高いパフォーマンスを発揮する段階はどれですか？",options:["形成期（Forming）","混乱期（Storming）","統一期（Norming）","機能期（Performing）"],correct:3,explanation:"タックマンモデルでは、形成期→混乱期→統一期→機能期→解散期の順に進みます。機能期（Performing）でチームは最も効率的に機能し、高いパフォーマンスを発揮します。"},
+  {id:4,domain:"People",question:"プロジェクトマネージャーがステークホルダーの関与度を「抵抗」から「支持」に変えるために最も効果的な方法はどれですか？",options:["ステークホルダーをプロジェクトから排除する","ステークホルダーの懸念を理解し、プロジェクトの利点を説明する","上位マネジメントに圧力をかけてもらう","ステークホルダーへの情報提供を最小限にする"],correct:1,explanation:"ステークホルダーエンゲージメントでは、懸念事項の理解と対話を通じて関与度を高めることが重要です。抵抗の根本原因を理解し、プロジェクトの価値を共有することで支持を得られます。"},
+  {id:5,domain:"People",question:"チームメンバーのモチベーションに関して、マズローの欲求階層説で最も高次の欲求はどれですか？",options:["安全の欲求","所属の欲求","承認の欲求","自己実現の欲求"],correct:3,explanation:"マズローの欲求階層説では、生理的欲求→安全の欲求→所属の欲求→承認の欲求→自己実現の欲求の順に高次になります。自己実現の欲求が最も高次です。"},
+  {id:6,domain:"People",question:"EQ（心の知能指数）が高いプロジェクトマネージャーの特徴として最も適切なものはどれですか？",options:["技術的な問題を自ら解決できる","自分と他者の感情を理解し適切に対応できる","厳格なスケジュール管理ができる","多くの資格を保有している"],correct:1,explanation:"EQ（Emotional Intelligence）は、自己認識、自己管理、社会的認識、関係管理の4つの要素からなります。自分と他者の感情を理解し、適切に対応する能力がEQの本質です。"},
+  {id:7,domain:"People",question:"コンフリクト解消技法のうち、Win-Winの解決を目指すものはどれですか？",options:["強制（Forcing）","撤退（Withdrawal）","妥協（Compromise）","協力（Collaboration）"],correct:3,explanation:"協力（コラボレーション/対峙）は、双方の意見を十分に話し合い、Win-Winの解決策を見つける手法です。最も望ましいコンフリクト解消法とされています。妥協はLose-Lose、強制はWin-Loseです。"},
+  {id:8,domain:"Process",question:"プロジェクトのクリティカルパスについて正しい説明はどれですか？",options:["最もコストがかかるアクティビティの経路","最もリスクが高いアクティビティの経路","プロジェクトの最短完了期間を決定する最長の経路","最も重要なステークホルダーに関連する経路"],correct:2,explanation:"クリティカルパスは、プロジェクトネットワーク図における最長の経路であり、プロジェクトの最短完了期間を決定します。クリティカルパス上のアクティビティの遅延は、プロジェクト全体の遅延に直結します。"},
+  {id:9,domain:"Process",question:"EVM（アーンドバリューマネジメント）でCPI=0.8の場合、何を意味しますか？",options:["予算より20%コスト効率が良い","予算より20%コスト超過している","スケジュールが20%遅延している","スケジュールが20%前倒しである"],correct:1,explanation:"CPI（コスト効率指標）= EV / AC です。CPI=0.8は、1円の価値を得るために1.25円費やしていることを意味し、予算を超過しています。CPI<1.0はコスト超過、CPI>1.0はコスト節約を示します。"},
+  {id:10,domain:"Process",question:"WBS（Work Breakdown Structure）の最下層の要素を何と呼びますか？",options:["アクティビティ","ワークパッケージ","マイルストーン","デリバラブル"],correct:1,explanation:"WBSの最下層の要素はワークパッケージと呼ばれます。ワークパッケージはさらにアクティビティに分解されますが、それはWBSの外で行われます。"},
+  {id:11,domain:"Process",question:"プロジェクトのリスク対応戦略で「転嫁」に該当するものはどれですか？",options:["リスクの発生確率を下げる対策を実施する","保険を購入してリスクの影響を第三者に移す","リスクを受け入れ、発生時に対処する","リスクの原因となる作業を中止する"],correct:1,explanation:"転嫁（Transfer）は、リスクの影響を第三者に移す戦略です。保険の購入、契約、保証などが該当します。回避、軽減、受容とともにネガティブリスクの4つの対応戦略の一つです。"},
+  {id:12,domain:"Process",question:"プロジェクト憲章（Project Charter）を正式に承認する権限を持つのは誰ですか？",options:["プロジェクトマネージャー","プロジェクトスポンサー","プロジェクトチーム","PMO"],correct:1,explanation:"プロジェクト憲章は、プロジェクトスポンサー（または発起人）が承認します。プロジェクトマネージャーはプロジェクト憲章の作成を支援しますが、承認権限は通常スポンサーにあります。"},
+  {id:13,domain:"Process",question:"5人のチームに新たに2人が加わった場合、コミュニケーションチャネル数はいくつ増えますか？",options:["7","11","12","21"],correct:1,explanation:"コミュニケーションチャネル数 = n(n-1)/2。5人の場合: 5×4/2=10、7人の場合: 7×6/2=21。増加分は21-10=11チャネルです。"},
+  {id:14,domain:"Process",question:"品質マネジメントにおいて「予防コスト」に該当するものはどれですか？",options:["欠陥の修正費用","検査・テストの費用","トレーニングの費用","顧客クレーム対応費用"],correct:2,explanation:"品質コストは適合コスト（予防コスト+評価コスト）と不適合コスト（内部失敗+外部失敗）に分かれます。トレーニングは予防コスト、検査は評価コスト、修正は内部失敗コスト、クレーム対応は外部失敗コストです。"},
+  {id:15,domain:"Process",question:"調達契約タイプで、売り手のリスクが最も高いものはどれですか？",options:["コスト・プラス・フィー（CPF）","タイム＆マテリアル（T&M）","完全定額契約（FFP）","コスト・プラス・インセンティブ・フィー（CPIF）"],correct:2,explanation:"完全定額契約（Firm Fixed Price）は、価格が固定されるため、コスト超過のリスクはすべて売り手が負担します。一方、コスト・プラス系の契約では買い手がリスクを多く負います。"},
+  {id:16,domain:"Business",question:"プロジェクトのビジネスケースに含まれるべき最も重要な要素はどれですか？",options:["詳細なプロジェクトスケジュール","チームメンバーの履歴書","投資対効果（ROI）の分析","技術的なアーキテクチャ図"],correct:2,explanation:"ビジネスケースは、プロジェクトへの投資を正当化する文書です。投資対効果（ROI）の分析、費用便益分析、NPVなどの財務指標が最も重要な要素です。"},
+  {id:17,domain:"Business",question:"組織のPMOの種類で、プロジェクトを直接管理・コントロールする最も権限の強いタイプはどれですか？",options:["支援型PMO","管理型PMO","指揮型PMO","アジャイルPMO"],correct:2,explanation:"PMOには支援型（テンプレート提供等）、管理型（準拠を要求）、指揮型（直接管理）の3種類があります。指揮型PMOが最も権限が強く、プロジェクトマネージャーはPMOの指示下で活動します。"},
+  {id:18,domain:"Business",question:"ベネフィットマネジメント計画書の主な目的はどれですか？",options:["プロジェクトのコストを最小化すること","プロジェクトの成果物から期待される便益を定義し実現を追跡すること","チームメンバーのパフォーマンスを評価すること","リスクの発生確率を計算すること"],correct:1,explanation:"ベネフィットマネジメント計画書は、プロジェクトの便益がいつ・どのように実現されるかを定義します。便益の測定方法、目標便益、タイムフレームなどが含まれます。"},
+  {id:19,domain:"Business",question:"VUCA環境について正しい説明はどれですか？",options:["プロジェクトの品質基準を示すフレームワーク","変動性・不確実性・複雑性・曖昧性が高い環境","アジャイル開発の4つの原則","組織の成熟度モデルの段階"],correct:1,explanation:"VUCAは、Volatility（変動性）、Uncertainty（不確実性）、Complexity（複雑性）、Ambiguity（曖昧性）の頭文字です。現代のビジネス環境を表す概念で、適応型アプローチの必要性を示唆します。"},
+  {id:20,domain:"Business",question:"NPV（正味現在価値）が最も高いプロジェクトを選択すべき理由はどれですか？",options:["最もリスクが低いから","最も短期間で完了するから","投資に対して最大の経済的価値をもたらすから","最も多くのリソースを必要とするから"],correct:2,explanation:"NPVは将来のキャッシュフローを現在価値に割り引いたものです。NPVが最も高いプロジェクトは、投資に対して最大の経済的リターンが期待できるため、財務的な観点では最も望ましい選択です。"},
+  {id:21,domain:"Predictive",question:"ウォーターフォール型開発で、要件定義フェーズの後に変更が発生した場合、最も適切な対応はどれですか？",options:["変更を無視して計画通り進める","統合変更管理プロセスを通じて変更要求を評価する","プロジェクトを最初からやり直す","変更を自動的に承認する"],correct:1,explanation:"予測型（ウォーターフォール）アプローチでも変更は発生します。統合変更管理プロセスを通じて、変更のインパクト分析を行い、CCB（変更管理委員会）で承認/却下を決定します。"},
+  {id:22,domain:"Predictive",question:"三点見積もり法で、楽観値=4日、最可能値=6日、悲観値=14日の場合、PERT期待値はいくつですか？",options:["6日","7日","8日","9日"],correct:1,explanation:"PERT期待値 = (楽観値 + 4×最可能値 + 悲観値) / 6 = (4 + 4×6 + 14) / 6 = (4 + 24 + 14) / 6 = 42/6 = 7日です。"},
+  {id:23,domain:"Predictive",question:"プロジェクトスコープ記述書に含まれないものはどれですか？",options:["プロジェクトの除外事項","成果物の受入基準","チームメンバーの給与情報","プロジェクトの制約条件"],correct:2,explanation:"プロジェクトスコープ記述書には、成果物、受入基準、除外事項、制約条件、前提条件などが含まれます。チームメンバーの給与情報は資源マネジメント計画やHRの領域であり、スコープ記述書には含まれません。"},
+  {id:24,domain:"Predictive",question:"EVM指標でSPI=1.2、CPI=0.9の場合、プロジェクトの状態はどれですか？",options:["スケジュール遅延・コスト節約","スケジュール前倒し・コスト超過","スケジュール遅延・コスト超過","スケジュール前倒し・コスト節約"],correct:1,explanation:"SPI>1.0はスケジュール前倒し、CPI<1.0はコスト超過を意味します。SPI=1.2は計画より20%進んでおり、CPI=0.9は予算を約11%超過している状態です。"},
+  {id:25,domain:"Agile",question:"スクラムにおいて、スプリント中にスコープの変更が必要になった場合、最も適切な対応はどれですか？",options:["スプリントを中止して新しいスプリントを開始する","プロダクトオーナーがプロダクトバックログに追加し、次のスプリントで対応する","スクラムマスターが即座にスプリントバックログを変更する","チームメンバーが残業して対応する"],correct:1,explanation:"スクラムでは、スプリント中のスコープ変更は原則として行いません。新しい要件はプロダクトバックログに追加し、プロダクトオーナーが優先順位を付けて次以降のスプリントで対応します。"},
+  {id:26,domain:"Agile",question:"カンバン方式の主要な原則として正しいものはどれですか？",options:["タイムボックスを厳密に守ること","WIP（仕掛かり作業）制限を設けてフローを最適化すること","2週間のイテレーションで開発すること","デイリースタンドアップを毎日実施すること"],correct:1,explanation:"カンバンの核心原則は、WIP（Work In Progress）制限によりフローを最適化することです。タイムボックスやイテレーションはスクラムの概念であり、カンバンでは継続的なフローを重視します。"},
+  {id:27,domain:"Agile",question:"アジャイルにおけるMVP（Minimum Viable Product）の目的はどれですか？",options:["最も安いコストで製品を完成させること","最小限の機能で早期にユーザーフィードバックを得ること","品質を最低限に抑えて開発速度を上げること","チームの最小構成で開発すること"],correct:1,explanation:"MVPは、最小限の機能セットで製品をリリースし、実際のユーザーからフィードバックを得ることが目的です。これにより、仮説検証を素早く行い、製品の方向性を確認・調整できます。"},
+  {id:28,domain:"Agile",question:"スクラムのレトロスペクティブの主な目的はどれですか？",options:["次のスプリントのバックログアイテムを選択する","完成した成果物をステークホルダーにデモする","チームのプロセスを振り返り改善点を特定する","プロダクトバックログの優先順位を見直す"],correct:2,explanation:"レトロスペクティブ（振り返り）は、チームがスプリントのプロセスを振り返り、うまくいったこと・改善すべきことを議論する場です。継続的改善（カイゼン）の実践です。"},
+  {id:29,domain:"Agile",question:"ベロシティとは何を測定する指標ですか？",options:["チームが1日に消化するタスク数","チームが1スプリントで完了するストーリーポイントの合計","プロダクトバックログの残りアイテム数","リリースまでの残り日数"],correct:1,explanation:"ベロシティは、チームが1スプリントで完了するストーリーポイント（または作業量の単位）の合計です。過去のベロシティを参考にして、将来のスプリントの計画に活用します。"},
+  {id:30,domain:"Agile",question:"ユーザーストーリーの良い書き方として適切なフォーマットはどれですか？",options:["システムは○○の機能を持つこと","○○として、△△したい。なぜなら□□だから","○○画面に△△ボタンを配置する","テスト項目: ○○が正常に動作すること"],correct:1,explanation:"ユーザーストーリーは「[ロール]として、[機能]したい。なぜなら[ビジネス価値]だから」というフォーマットで記述します。ユーザーの視点でビジネス価値を明確にすることが重要です。"},
+  {id:31,domain:"People",question:"ハーズバーグの二要因理論で「動機付け要因」に該当するものはどれですか？",options:["給与","作業環境","達成感","会社の方針"],correct:2,explanation:"ハーズバーグの二要因理論では、動機付け要因（達成感、承認、責任、成長など）と衛生要因（給与、作業環境、方針など）を区別します。動機付け要因は満足をもたらし、衛生要因の不足は不満を引き起こします。"},
+  {id:32,domain:"People",question:"RACI表で「A（Accountable）」の役割について正しいものはどれですか？",options:["作業を実際に行う担当者","最終的な説明責任を持つ人","相談を受ける人","報告を受ける人"],correct:1,explanation:"RACI表において、A（Accountable）は最終的な説明責任者で、各タスクに1人だけ割り当てます。R（Responsible）が実行者、C（Consulted）が相談相手、I（Informed）が情報提供先です。"},
+  {id:33,domain:"People",question:"マクレガーのX理論に基づくマネジメントスタイルはどれですか？",options:["チームに権限委譲し自主性を重視する","厳格な監督と管理で部下をコントロールする","メンバーの自己実現を支援する","コーチングを通じて成長を促す"],correct:1,explanation:"X理論は「人は本来怠惰で、管理・強制しないと働かない」という前提に基づきます。対してY理論は「人は本来働くことを好み、自己管理できる」という前提です。現代のPMではY理論ベースのマネジメントが推奨されます。"},
+  {id:34,domain:"People",question:"バーチャルチームのマネジメントで最も重要な要素はどれですか？",options:["対面のミーティングを毎日実施する","明確なコミュニケーション計画とツールの整備","チームメンバー全員を同じタイムゾーンに配置する","すべてのやり取りをメールのみで行う"],correct:1,explanation:"バーチャルチームでは、明確なコミュニケーション計画、適切なコラボレーションツール、定期的なチェックイン、文化的差異への配慮が成功の鍵です。"},
+  {id:35,domain:"People",question:"権限委譲（Delegation）を行う際、プロジェクトマネージャーが保持すべきものはどれですか？",options:["作業の実行権限","説明責任（Accountability）","すべてのタスクの承認権","チームメンバーの評価権"],correct:1,explanation:"権限委譲では作業の実行権限を移譲しますが、最終的な説明責任（Accountability）はプロジェクトマネージャーが保持します。「権限は委譲できるが、説明責任は委譲できない」が原則です。"},
+  {id:36,domain:"People",question:"チームの意思決定技法のうち「フィスト・オブ・ファイブ」とはどれですか？",options:["多数決で決定する方法","5段階の指の数でコンセンサスレベルを示す方法","5人以下のグループで議論する方法","5つの選択肢から投票する方法"],correct:1,explanation:"フィスト・オブ・ファイブは、0（反対）〜5（強く賛成）の指の数でチーム全員がコンセンサスレベルを同時に示す手法です。素早く合意度を可視化できるアジャイルで人気のテクニックです。"},
+  {id:37,domain:"People",question:"プロジェクトマネージャーが使用する「影響力」の種類で、専門知識に基づくものはどれですか？",options:["報酬パワー","強制パワー","専門パワー","地位パワー"],correct:2,explanation:"パワーの種類には、地位パワー（公式な権限）、報酬パワー（報酬を与える力）、強制パワー（罰を与える力）、専門パワー（専門知識）、参照パワー（人柄）などがあります。専門パワーと参照パワーが最も効果的とされています。"},
+  {id:38,domain:"People",question:"ステークホルダー分析で「権力/関心マトリクス」において、高い権力と高い関心を持つステークホルダーへの戦略はどれですか？",options:["監視する","情報を提供する","満足させ続ける","密接に管理する"],correct:3,explanation:"権力/関心マトリクスでは、高権力・高関心は「密接に管理」、高権力・低関心は「満足させ続ける」、低権力・高関心は「情報提供」、低権力・低関心は「監視」が適切な戦略です。"},
+  {id:39,domain:"People",question:"ダニエル・ゴールマンのリーダーシップスタイルで、危機的状況に最も適しているものはどれですか？",options:["ビジョン型","コーチ型","強制型","民主型"],correct:2,explanation:"ゴールマンの6つのリーダーシップスタイルのうち、強制型（Coercive）は通常推奨されませんが、危機的状況や緊急時に即座の行動が必要な場合に有効です。通常はビジョン型やコーチ型が効果的です。"},
+  {id:40,domain:"People",question:"文化的知性（Cultural Intelligence）が高いプロジェクトマネージャーの行動として最も適切なものはどれですか？",options:["自分の文化の価値観をチーム全体に適用する","異なる文化的背景を理解し、コミュニケーション方法を適応させる","文化的差異を無視してプロセスを統一する","各文化圏のメンバーを別々のチームに分ける"],correct:1,explanation:"文化的知性は、異なる文化を理解し適応する能力です。グローバルプロジェクトでは、文化的差異を尊重し、コミュニケーションスタイルを相手に合わせることが重要です。"},
+  {id:41,domain:"People",question:"チームビルディング活動のうち、プロジェクト初期に最も効果的なものはどれですか？",options:["パフォーマンス評価を実施する","チーム憲章を共同で作成する","個人の弱点を指摘し合う","競争的なゲームを行う"],correct:1,explanation:"プロジェクト初期には、チーム憲章（グランドルール）を共同で作成することで、期待値の共有、コミュニケーション規範の確立、チームの一体感の醸成が図れます。"},
+  {id:42,domain:"People",question:"コーチングとメンタリングの違いとして正しいものはどれですか？",options:["コーチングは長期的、メンタリングは短期的","コーチングは特定スキルの向上、メンタリングはキャリア全般の支援","コーチングは上位者のみが行う、メンタリングは誰でも行える","コーチングとメンタリングは同じもの"],correct:1,explanation:"コーチングは特定のスキルやパフォーマンスの向上に焦点を当てた短期的な支援です。メンタリングはより広範なキャリア開発や個人の成長を支援する長期的な関係です。"},
+  {id:43,domain:"People",question:"交渉においてBATNA（Best Alternative to a Negotiated Agreement）とは何ですか？",options:["交渉で最初に提示する条件","交渉が決裂した場合の最善の代替案","両者が合意できる最低ライン","交渉の最終期限"],correct:1,explanation:"BATNAは「交渉が合意に至らなかった場合の最善の代替案」です。BATNAを把握しておくことで、不利な条件で合意することを避け、交渉力を高められます。"},
+  {id:44,domain:"People",question:"プロジェクトチームが「サイロ化」している場合、最も効果的な対策はどれですか？",options:["各チームの独立性をさらに高める","クロスファンクショナルな活動とコミュニケーションを促進する","チーム間の情報共有を制限する","チームリーダーだけが連絡を取り合う"],correct:1,explanation:"サイロ化はチーム間の壁ができ情報が流れない状態です。クロスファンクショナルな活動、共有ミーティング、コミュニケーションツールの活用で壁を取り除くことが効果的です。"},
+  {id:45,domain:"Process",question:"ローリングウェーブ計画法について正しい説明はどれですか？",options:["すべての作業を最初に詳細に計画する","近い将来の作業は詳細に、遠い将来の作業は概要レベルで計画する","計画を一切行わずに随時対応する","チームの投票で計画の詳細度を決める"],correct:1,explanation:"ローリングウェーブ計画法は段階的詳細化の一種で、直近の作業は詳細に計画し、将来の作業は上位レベルで計画します。情報が利用可能になるにつれて詳細化していく実践的なアプローチです。"},
+  {id:46,domain:"Process",question:"ファスト・トラッキングとクラッシングの違いについて正しいものはどれですか？",options:["どちらも追加コストが必要","ファスト・トラッキングはアクティビティの並行実施、クラッシングはリソース追加","どちらもリスクは変わらない","クラッシングはアクティビティの並行実施、ファスト・トラッキングはリソース追加"],correct:1,explanation:"ファスト・トラッキングは本来順次実行するアクティビティを並行実行する手法（リワークリスクが増加）。クラッシングは追加リソースを投入してスケジュールを短縮する手法（コストが増加）です。"},
+  {id:47,domain:"Process",question:"デルファイ法の特徴として正しいものはどれですか？",options:["チームが対面で議論して合意に至る","匿名のアンケートを繰り返し専門家の意見を収束させる","最も声の大きい人の意見を採用する","コンピュータシミュレーションで結果を予測する"],correct:1,explanation:"デルファイ法は、専門家パネルに匿名でアンケートを繰り返し行い、意見を収束させる手法です。匿名性によりグループシンク（集団浅慮）やアンカリングバイアスを防ぎます。"},
+  {id:48,domain:"Process",question:"モンテカルロ・シミュレーションの主な用途はどれですか？",options:["チームメンバーの選定","プロジェクトのリスクと不確実性の定量的分析","品質検査のサンプリング","ステークホルダーの特定"],correct:1,explanation:"モンテカルロ・シミュレーションは、確率分布を使って何千回もシミュレーションを実行し、プロジェクトのスケジュールやコストの確率分布を算出する定量的リスク分析手法です。"},
+  {id:49,domain:"Process",question:"プロジェクトの教訓登録簿（Lessons Learned Register）を更新すべきタイミングはどれですか？",options:["プロジェクト終了時のみ","各フェーズの終了時のみ","プロジェクト全体を通じて継続的に","スポンサーに求められた時のみ"],correct:2,explanation:"教訓登録簿はプロジェクト全体を通じて継続的に更新すべきです。プロジェクト終了時だけでなく、重要なイベントや判断の後に都度記録することで、リアルタイムに知識を蓄積できます。"},
+  {id:50,domain:"Process",question:"プロジェクトのステークホルダーが100人いる場合、コミュニケーションチャネル数はいくつですか？",options:["100","4,950","9,900","10,000"],correct:1,explanation:"コミュニケーションチャネル数 = n(n-1)/2 = 100×99/2 = 4,950です。ステークホルダーの増加に伴いチャネル数は急増するため、適切なコミュニケーション管理が重要です。"},
+  {id:51,domain:"Process",question:"制約条件の理論（TOC: Theory of Constraints）のボトルネック管理で最初に行うべきことはどれですか？",options:["ボトルネックを排除する","ボトルネックを特定する","すべてのリソースを均等に配分する","新しいリソースを追加する"],correct:1,explanation:"TOCの5つのステップは、①ボトルネックの特定→②ボトルネックの最大活用→③他のすべてをボトルネックに従属→④ボトルネックの能力向上→⑤新たなボトルネックの特定、の繰り返しです。"},
+  {id:52,domain:"Process",question:"EMV（期待金額価値）分析で、発生確率30%・影響額-100万円のリスクのEMVはいくつですか？",options:["-30万円","-70万円","-100万円","-130万円"],correct:0,explanation:"EMV = 発生確率 × 影響額 = 0.30 × (-100万円) = -30万円です。EMVはリスクの定量評価に使用し、すべてのリスクのEMVを合計してコンティンジェンシー予備を算出します。"},
+  {id:53,domain:"Process",question:"親和図法（Affinity Diagram）の主な用途はどれですか？",options:["スケジュールを可視化する","大量のアイデアやデータをグループ化して整理する","プロジェクトコストを計算する","リスクの発生確率を定量化する"],correct:1,explanation:"親和図法（KJ法とも呼ばれる）は、ブレインストーミング等で出た大量のアイデアや情報を、自然なグループ（親和性のあるもの）に整理・分類するための手法です。"},
+  {id:54,domain:"Process",question:"プロジェクトスケジュールの「ラグ」と「リード」の違いは何ですか？",options:["ラグは先行アクティビティの遅延、リードは後続の早期開始","ラグは後続アクティビティの待ち時間、リードは後続の前倒し開始","ラグとリードは同じ意味","ラグはクリティカルパス上のみ、リードはすべてのパスで使用"],correct:1,explanation:"ラグ（Lag）は後続アクティビティの開始を遅らせる待ち時間（例：コンクリート乾燥待ち）。リード（Lead）は後続アクティビティを前倒しで開始すること（例：設計完了前にコーディング開始）です。"},
+  {id:55,domain:"Process",question:"構成管理（Configuration Management）の主な目的はどれですか？",options:["チームメンバーの役割を定義する","成果物のバージョンと変更を体系的に管理する","プロジェクト予算を管理する","ステークホルダーの期待を管理する"],correct:1,explanation:"構成管理は、プロジェクトの成果物や文書のバージョン管理、変更の追跡、整合性の維持を体系的に行うプロセスです。変更管理と密接に関連しています。"},
+  {id:56,domain:"Process",question:"プロジェクトのフロート（余裕時間）がゼロのアクティビティについて正しいものはどれですか？",options:["最も重要度の低いアクティビティである","クリティカルパス上にあるアクティビティである","キャンセルしてもプロジェクトに影響しない","常にプロジェクトの最初に実行される"],correct:1,explanation:"フロート（スラック）がゼロのアクティビティはクリティカルパス上にあります。これらの遅延はプロジェクト全体の遅延に直結するため、重点的に監視する必要があります。"},
+  {id:57,domain:"Process",question:"要件トレーサビリティマトリクスの目的はどれですか？",options:["チームの生産性を追跡する","各要件がプロジェクトのライフサイクル全体で追跡されることを保証する","プロジェクトコストの内訳を示す","リスクの優先順位を決定する"],correct:1,explanation:"要件トレーサビリティマトリクスは、各要件の出所から成果物・テストまでのトレーサビリティを確保し、スコープクリープの防止と要件漏れの検出に役立ちます。"},
+  {id:58,domain:"Process",question:"SIPOC図で表されるものはどれですか？",options:["プロジェクトの組織構造","サプライヤー・インプット・プロセス・アウトプット・カスタマー","スケジュール・投資・計画・成果・制約","ステークホルダー・課題・優先度・カテゴリ"],correct:1,explanation:"SIPOCはSupplier（供給者）、Input（入力）、Process（プロセス）、Output（出力）、Customer（顧客）の頭文字で、プロセスの概要を高レベルで可視化するツールです。"},
+  {id:59,domain:"Business",question:"組織変更管理（Organizational Change Management）でADKARモデルの「A」は何を表しますか？",options:["Approval（承認）","Awareness（認知）","Action（行動）","Assessment（評価）"],correct:1,explanation:"ADKARモデルは、Awareness（認知）→Desire（願望）→Knowledge（知識）→Ability（能力）→Reinforcement（強化）の5段階です。変更の必要性への「認知」が最初のステップです。"},
+  {id:60,domain:"Business",question:"ポートフォリオマネジメントの主な目的はどれですか？",options:["個々のプロジェクトのスケジュールを管理する","組織の戦略目標に合致するようプロジェクト群を最適化する","チームメンバーの評価を行う","品質基準を設定する"],correct:1,explanation:"ポートフォリオマネジメントは、組織の戦略目標達成に向けて、プロジェクト・プログラム・運用業務の集合を一元管理し、リソース配分と投資の最適化を行います。"},
+  {id:61,domain:"Business",question:"プロジェクトとオペレーション（定常業務）の最大の違いはどれですか？",options:["プロジェクトは予算がある、オペレーションにはない","プロジェクトは一時的で独自の成果を生む、オペレーションは継続的で反復的","プロジェクトにはマネージャーがいる、オペレーションにはいない","プロジェクトは小規模、オペレーションは大規模"],correct:1,explanation:"プロジェクトは「一時的」な活動で「独自の成果」を生みます。オペレーション（定常業務）は「継続的」で「反復的」な活動です。これがPMBOKにおける最も基本的な区別です。"},
+  {id:62,domain:"Business",question:"組織体の環境要因（EEF）に該当するものはどれですか？",options:["過去のプロジェクトの教訓","テンプレートやフォーム","法規制や市場環境","組織のプロセス資産"],correct:2,explanation:"組織体の環境要因（Enterprise Environmental Factors）は、チームが制御できない外部・内部の条件で、法規制、市場環境、組織文化、インフラなどが含まれます。テンプレートや教訓はOPA（組織のプロセス資産）です。"},
+  {id:63,domain:"Business",question:"IRR（内部収益率）が組織のハードルレートを上回る場合、そのプロジェクトは？",options:["中止すべき","投資すべき","追加調査が必要","リスクが高すぎる"],correct:1,explanation:"IRR（Internal Rate of Return）がハードルレート（最低要求収益率）を上回る場合、そのプロジェクトは投資に値すると判断されます。IRRが高いほど投資の魅力が高いことを意味します。"},
+  {id:64,domain:"Business",question:"プログラムマネジメントとプロジェクトマネジメントの違いはどれですか？",options:["プログラムは小規模、プロジェクトは大規模","プログラムは関連するプロジェクト群を統合管理し、より大きな便益を実現する","プログラムとプロジェクトは同義語","プログラムはIT分野のみで使用される概念"],correct:1,explanation:"プログラムは、関連するプロジェクト、サブプログラム、活動を調整して管理し、個別管理では得られないより大きな便益とコントロールを実現するものです。"},
+  {id:65,domain:"Business",question:"コンプライアンス要件をプロジェクトで無視した場合の最大のリスクはどれですか？",options:["スケジュールが若干遅延する","法的制裁や組織の信頼失墜","チームの士気が下がる","コストが少し増加する"],correct:1,explanation:"コンプライアンス（法規制遵守）要件の無視は、法的制裁、罰金、プロジェクト中止、組織の評判損失など深刻な結果を招きます。PMはコンプライアンスを常に優先すべきです。"},
+  {id:66,domain:"Business",question:"ビジネスモデルキャンバスの9つの要素に含まれないものはどれですか？",options:["顧客セグメント","価値提案","プロジェクトスケジュール","収益の流れ"],correct:2,explanation:"ビジネスモデルキャンバスの9要素は、顧客セグメント、価値提案、チャネル、顧客との関係、収益の流れ、リソース、主要活動、パートナー、コスト構造です。プロジェクトスケジュールは含まれません。"},
+  {id:67,domain:"Business",question:"フィージビリティスタディ（実現可能性調査）で評価すべき観点に含まれないものはどれですか？",options:["技術的実現可能性","経済的実現可能性","チームメンバーの趣味","法的実現可能性"],correct:2,explanation:"フィージビリティスタディでは、技術的、経済的、法的、運用上、スケジュール上の実現可能性を評価します。個人の趣味は評価の対象外です。"},
+  {id:68,domain:"Business",question:"ガバナンスフレームワークの主な目的はどれですか？",options:["チームの日常作業を細かく管理する","意思決定の権限、プロセス、基準を定義する","技術的なアーキテクチャを設計する","個人のパフォーマンスを測定する"],correct:1,explanation:"ガバナンスフレームワークは、プロジェクトの意思決定権限、報告構造、承認プロセス、エスカレーションパスなどを定義し、適切な監督とコントロールを確保します。"},
+  {id:69,domain:"Predictive",question:"プロジェクトライフサイクルの「立ち上げ」プロセス群に含まれるプロセスはどれですか？",options:["スコープの定義","プロジェクト憲章の作成","品質管理","調達の終結"],correct:1,explanation:"立ち上げプロセス群には、「プロジェクト憲章の作成」と「ステークホルダーの特定」が含まれます。スコープの定義は計画プロセス群、品質管理は監視・コントロールプロセス群に属します。"},
+  {id:70,domain:"Predictive",question:"予備設定分析（Reserve Analysis）において、マネジメント予備とコンティンジェンシー予備の違いはどれですか？",options:["どちらも同じもの","コンティンジェンシー予備は既知のリスク用、マネジメント予備は未知のリスク用","マネジメント予備はPMが管理し、コンティンジェンシー予備はスポンサーが管理","コンティンジェンシー予備の方が常に金額が大きい"],correct:1,explanation:"コンティンジェンシー予備は特定された（既知の）リスクに対する備えでコストベースラインに含まれます。マネジメント予備は未知のリスクに対する備えで予算には含まれますがベースラインには含まれません。"},
+  {id:71,domain:"Predictive",question:"ゴールドプレーティング（Gold Plating）とはどのような行為ですか？",options:["プロジェクトの品質基準を引き上げること","スコープに含まれない余分な機能を追加すること","プロジェクトのコストを削減すること","ステークホルダーの要件を正確に実装すること"],correct:1,explanation:"ゴールドプレーティングは、承認されたスコープ以上の余分な機能や作業を追加する行為です。良かれと思って行われますが、スコープクリープにつながり、リスクを増大させるため推奨されません。"},
+  {id:72,domain:"Predictive",question:"プロジェクト終結プロセスで行うべきことに含まれないものはどれですか？",options:["教訓の文書化","成果物の正式な受入確認","次のプロジェクトの計画立案","契約の終結"],correct:2,explanation:"プロジェクト終結では、成果物の受入確認、教訓の文書化、契約の終結、リソースの解放、最終報告書の作成などを行います。次のプロジェクトの計画は別のプロジェクトの活動です。"},
+  {id:73,domain:"Predictive",question:"クリティカルチェーン法（CCPM）の特徴はどれですか？",options:["各アクティビティに余裕時間を追加する","アクティビティの余裕時間を取り除き、プロジェクトバッファとして集約する","クリティカルパスを無視する","リソースの制約を考慮しない"],correct:1,explanation:"クリティカルチェーン法は、個々のアクティビティの安全余裕を取り除き、プロジェクトの最後にバッファ（プロジェクトバッファ、合流バッファ）として集約する手法です。リソース制約も考慮します。"},
+  {id:74,domain:"Predictive",question:"管理図（Control Chart）で上限管理限界（UCL）を超えるデータポイントは何を意味しますか？",options:["プロセスが正常に機能している","プロセスが管理状態にない（異常原因の可能性）","品質が許容範囲内である","データ収集のエラー"],correct:1,explanation:"管理限界を超えるデータポイントは、プロセスが管理状態にないこと（Out of Control）を示し、異常原因（特殊原因）による変動が発生している可能性があります。調査と是正処置が必要です。"},
+  {id:75,domain:"Predictive",question:"スコープクリープとスコープの変更の違いはどれですか？",options:["どちらも同じ","スコープクリープは未承認の範囲拡大、スコープの変更は正式な変更管理を経たもの","スコープクリープは小さい変更、スコープの変更は大きい変更","スコープクリープはアジャイルのみ、スコープの変更は予測型のみで発生"],correct:1,explanation:"スコープクリープは変更管理プロセスを経ずにスコープが徐々に拡大する現象です。正式なスコープの変更は統合変更管理プロセスを通じて評価・承認されたものであり、管理された変更です。"},
+  {id:76,domain:"Predictive",question:"アクティビティの依存関係で「強制的依存関係」の例はどれですか？",options:["設計完了前にテストを開始する","基礎工事の完了後に建物の構造を建てる","チームの好みで作業順序を決める","外部ベンダーの納品を待つ"],correct:1,explanation:"強制的依存関係（ハード・ロジック）は、作業の性質上避けられない依存関係です。基礎なしに建物は建てられません。任意的依存関係（ソフト・ロジック）はベストプラクティスに基づく選択的な順序です。"},
+  {id:77,domain:"Predictive",question:"EACの計算式で、残りの作業を当初の計画通り実行できる場合の式はどれですか？",options:["EAC = AC + (BAC - EV)","EAC = BAC / CPI","EAC = AC + ETC（ボトムアップ）","EAC = AC + (BAC - EV) / (CPI × SPI)"],correct:0,explanation:"残りの作業を当初の計画通りのレートで実行できる場合、EAC = AC + (BAC - EV) です。現在のCPIが続く場合は EAC = BAC / CPI、両方考慮する場合は EAC = AC + (BAC - EV) / (CPI × SPI) を使用します。"},
+  {id:78,domain:"Agile",question:"スクラムの3つの柱はどれですか？",options:["計画・実行・終結","透明性・検査・適応","スプリント・バックログ・レトロスペクティブ","スクラムマスター・PO・開発チーム"],correct:1,explanation:"スクラムの3つの柱は、透明性（Transparency）、検査（Inspection）、適応（Adaptation）です。これらは経験主義に基づくスクラムの基盤であり、すべてのスクラムイベントに反映されています。"},
+  {id:79,domain:"Agile",question:"プロダクトバックログのリファインメント（グルーミング）の目的はどれですか？",options:["スプリントの成果物をレビューする","バックログアイテムの詳細化、見積もり、優先順位の見直しを行う","チームのパフォーマンスを評価する","スプリントの目標を決定する"],correct:1,explanation:"バックログリファインメントは、プロダクトバックログアイテムの詳細を明確にし、見積もりを行い、優先順位を見直す継続的な活動です。通常、チームの時間の10%以下を使います。"},
+  {id:80,domain:"Agile",question:"スクラムにおいて「完成の定義」（Definition of Done）を決めるのは誰ですか？",options:["プロダクトオーナーのみ","スクラムマスターのみ","開発チーム（スクラムチーム全体）","ステークホルダー"],correct:2,explanation:"完成の定義（DoD）はスクラムチーム全体で合意して決定します。DoDはインクリメントの品質基準を定義し、すべてのバックログアイテムに一貫して適用されます。"},
+  {id:81,domain:"Agile",question:"アジャイルの「情報ラジエーター」とはどれですか？",options:["プロジェクトの詳細な報告書","チームの作業状況を誰でも見られるように掲示した可視化ボード","チームメンバーへのメール通知","プロジェクトの機密情報を共有するツール"],correct:1,explanation:"情報ラジエーターは、タスクボードやバーンダウンチャートなど、チームの状態を「放射」するように誰でも見られる可視化ツールです。透明性を高め、ステータスの確認を容易にします。"},
+  {id:82,domain:"Agile",question:"バーンダウンチャートが予定線より上にある場合、何を意味しますか？",options:["予定より早く進んでいる","予定より遅れている","予算を超過している","品質が低下している"],correct:1,explanation:"バーンダウンチャートは残作業量を示します。実績線が予定線より上にある場合、予定より多くの作業が残っている＝遅れていることを意味します。下にあれば予定より早く進んでいます。"},
+  {id:83,domain:"Agile",question:"ペアプログラミングの主な利点はどれですか？",options:["開発コストが半分になる","コードの品質向上とリアルタイムの知識共有","開発速度が2倍になる","ドキュメント作成が不要になる"],correct:1,explanation:"ペアプログラミングでは2人の開発者が1つのワークステーションで作業します。リアルタイムのコードレビュー、知識の共有、バグの早期発見が主な利点です。短期的なコストは増えますが、品質と知識共有が向上します。"},
+  {id:84,domain:"Agile",question:"XP（エクストリームプログラミング）のプラクティスに含まれないものはどれですか？",options:["テスト駆動開発（TDD）","継続的インテグレーション","ガントチャートによる進捗管理","リファクタリング"],correct:2,explanation:"XPのプラクティスには、TDD、継続的インテグレーション、ペアプログラミング、リファクタリング、シンプルデザイン、コーディング標準などが含まれます。ガントチャートは予測型アプローチのツールです。"},
+  {id:85,domain:"Agile",question:"スプリントプランニングで決定すべき2つの事項はどれですか？",options:["予算と人員配置","スプリントゴールとスプリントバックログ","リリース日と品質基準","契約条件と納品物"],correct:1,explanation:"スプリントプランニングでは、「何を達成するか」（スプリントゴール＋選択するバックログアイテム）と「どのように達成するか」（スプリントバックログ＝具体的な作業計画）を決定します。"},
+  {id:86,domain:"Agile",question:"アジャイルにおけるタイムボックスの目的はどれですか？",options:["コストを削減する","作業時間を制限しフォーカスと規律を確保する","チームメンバーの労働時間を監視する","顧客との契約条件を定める"],correct:1,explanation:"タイムボックスは、活動やイベントに固定の最大時間を設定することで、集中力を高め、無限の議論やスコープ拡大を防ぎます。スプリント、デイリースクラム等すべてのスクラムイベントはタイムボックスされています。"},
+  {id:87,domain:"People",question:"トーマス＝キルマンのコンフリクトモデルで「妥協」の特徴はどれですか？",options:["一方が完全に譲歩する","双方がある程度譲歩して中間点を見つける","問題を完全に解決するまで議論する","コンフリクトを避けて先送りする"],correct:1,explanation:"妥協（Compromise）は、双方がある程度の犠牲を払い、中間的な解決策に落ち着く手法です。Win-Winではありませんが、時間的制約がある場合や暫定的な解決として有効です。"},
+  {id:88,domain:"People",question:"状況対応型リーダーシップ（Situational Leadership）で、能力は高いがやる気の低いメンバーへの適切なスタイルはどれですか？",options:["指示型（Directing）","コーチ型（Coaching）","支援型（Supporting）","委任型（Delegating）"],correct:2,explanation:"状況対応型リーダーシップでは、メンバーの能力とモチベーションに応じてスタイルを変えます。能力が高くモチベーションが低い場合は、支援型（Supporting）で関係構築とモチベーション向上を図ります。"},
+  {id:89,domain:"People",question:"期待理論（ビクター・ブルーム）の3つの要素はどれですか？",options:["計画・実行・統制","期待・手段性・誘意性","動機・衛生・満足","権力・所属・達成"],correct:1,explanation:"ブルームの期待理論は、モチベーション＝期待（努力→成果）×手段性（成果→報酬）×誘意性（報酬の魅力度）で表されます。3つの要素がすべて高い時にモチベーションが最大化されます。"},
+  {id:90,domain:"People",question:"デイリースタンドアップで話すべき3つの質問はどれですか？",options:["何が問題か、誰が悪いか、どう罰するか","昨日やったこと、今日やること、障害は何か","今月の目標、来月の目標、年間目標","予算、スケジュール、スコープの状態"],correct:1,explanation:"デイリースタンドアップ（デイリースクラム）では、①昨日やったこと、②今日やること、③障害・ブロッカーは何か、の3つを共有します。15分以内のタイムボックスで行います。"},
+  {id:91,domain:"Process",question:"パレート図（80/20の法則）をプロジェクトで活用する場面はどれですか？",options:["スケジュールの最適化","最も影響の大きい少数の原因を特定する品質改善","チームメンバーの選定","リスクの転嫁"],correct:1,explanation:"パレート図は、問題の80%が原因の20%から生じるという法則に基づき、最も影響の大きい原因を優先的に対処するための品質ツールです。棒グラフと累積折れ線グラフで表示します。"},
+  {id:92,domain:"Process",question:"変更管理委員会（CCB）の役割はどれですか？",options:["プロジェクトの日常業務を管理する","変更要求を審査し、承認・却下・延期を決定する","チームメンバーを採用する","プロジェクト予算を設定する"],correct:1,explanation:"CCB（Change Control Board）は、変更要求を審査し、その承認、却下、または延期を決定する正式な権限を持つグループです。変更のインパクト分析の結果に基づいて判断します。"},
+  {id:93,domain:"Process",question:"マイルストーンの特徴として正しいものはどれですか？",options:["通常1週間以上の期間がある","期間がゼロの重要な時点またはイベント","必ずクリティカルパス上にある","コストが最も高いアクティビティ"],correct:1,explanation:"マイルストーンは期間がゼロ（0日）の重要な時点やイベントを表します。プロジェクトの進捗を示す目印として使用され、フェーズの完了や重要な承認などを表します。"},
+  {id:94,domain:"Process",question:"PDCA（Plan-Do-Check-Act）サイクルの「Check」で行うことはどれですか？",options:["計画を立てる","計画を実行する","結果を確認・評価する","改善策を実施する"],correct:2,explanation:"PDCAサイクルのCheckは、実行結果を計画と比較して確認・評価する段階です。Plan（計画）→Do（実行）→Check（確認）→Act（改善）を繰り返すことで継続的改善を実現します。"},
+  {id:95,domain:"Predictive",question:"完成時総コスト見積り（EAC）がBACと等しい場合、何を意味しますか？",options:["プロジェクトは失敗している","現在の差異は一時的で、残りは計画通りに完了する見込み","プロジェクトが完了した","コスト超過が続く"],correct:1,explanation:"EAC = BAC は、現在の差異は一時的な異常であり、今後の作業は当初の計画通りのコストで実行できると予測していることを意味します（EAC = AC + BAC - EV の結果）。"},
+  {id:96,domain:"Predictive",question:"類推見積もり法の特徴として正しいものはどれですか？",options:["最も正確な見積もり手法","過去の類似プロジェクトのデータに基づく概算見積もり","ボトムアップで詳細に算出する","三点見積もりと同じ手法"],correct:1,explanation:"類推見積もり（トップダウン見積もり）は、過去の類似プロジェクトの実績データに基づいて概算する手法です。情報が限られたプロジェクト初期段階で使用され、精度は低いが素早く実施できます。"},
+  {id:97,domain:"Agile",question:"プロダクトオーナーの最も重要な責任はどれですか？",options:["チームの技術的な指導","プロダクトバックログの管理と価値の最大化","スプリントの進捗管理","障害の除去"],correct:1,explanation:"プロダクトオーナーの最重要責任は、プロダクトバックログを管理し、プロダクトの価値を最大化することです。バックログの優先順位付け、アイテムの明確化、ステークホルダーとの窓口が主な活動です 。"},
+  {id:98,domain:"Agile",question:"技術的負債（Technical Debt）への対処として最も適切なものはどれですか？",options:["無視して新機能開発に集中する","定期的にバックログに含めて計画的に返済する","プロジェクト終了時にまとめて対処する","別のチームに任せる"],correct:1,explanation:"技術的負債は放置すると利息のように増大します。定期的にプロダクトバックログに含め、スプリントの中で計画的に返済（リファクタリング）していくことが推奨されます。"},
+  {id:99,domain:"Agile",question:"スクラムオブスクラムズ（Scrum of Scrums）の目的はどれですか？",options:["個人のパフォーマンス評価","複数のスクラムチーム間の調整と依存関係の管理","プロダクトバックログの作成","スプリントレビューの代替"],correct:1,explanation:"スクラムオブスクラムズは、複数のスクラムチームが存在する大規模プロジェクトで、チーム間の調整、依存関係の管理、障害の共有を行うスケールドアジャイルの手法です。"},
+  {id:100,domain:"Process",question:"RACI表において、1つのタスクに複数の「R（Responsible）」を割り当てることは？",options:["絶対に許されない","可能だが、1つの「A（Accountable）」は必須","推奨される標準的な方法","Aが不要になる"],correct:1,explanation:"1つのタスクに複数のR（実行者）を割り当てることは可能です。ただし、A（説明責任者）は必ず1人だけ設定する必要があります。Aが複数いると責任が曖昧になるためです。"},
+  {id:101,domain:"People",question:"プロジェクトマネージャーが新しいチームメンバーのオンボーディングで最も重要視すべきことはどれですか？",options:["即座にタスクを割り当てる","チームの目標、ルール、文化を共有する","技術テストを実施する","過去のパフォーマンス評価を確認する"],correct:1,explanation:"新メンバーのオンボーディングでは、チームの目標、グランドルール、コミュニケーション方法、文化を共有し、心理的安全性を確保することが最優先です。"},
+  {id:102,domain:"People",question:"マクレランドの欲求理論で「達成欲求」が高い人の特徴はどれですか？",options:["他者を管理・支配したがる","集団に所属し良好な関係を求める","適度に困難な目標に挑戦し、フィードバックを求める","リスクを完全に回避する"],correct:2,explanation:"マクレランドの欲求理論では、達成欲求（Achievement）が高い人は、適度に困難な目標を設定し、成果に対するフィードバックを強く求めます。権力欲求と親和欲求と合わせて3つの欲求があります。"},
+  {id:103,domain:"People",question:"心理的安全性が高いチームの特徴はどれですか？",options:["メンバーがミスを恐れず率直に意見を言える","リーダーの意見に常に従う","失敗に対して厳しい罰則がある","メンバー間の競争が激しい"],correct:0,explanation:"心理的安全性が高いチームでは、メンバーがミスや失敗を恐れず、率直に意見やアイデアを共有できます。Googleの研究（Project Aristotle）で最も重要なチーム成功因子とされました。"},
+  {id:104,domain:"People",question:"アクティブリスニング（積極的傾聴）の技法に含まれないものはどれですか？",options:["相手の言葉を言い換えて確認する","相手の話を遮って自分の意見を述べる","非言語メッセージにも注意を払う","適切な質問で理解を深める"],correct:1,explanation:"アクティブリスニングは、相手の言葉を言い換え（パラフレーズ）、非言語メッセージに注意し、適切な質問をする技法です。相手の話を遮ることは積極的傾聴の妨げになります。"},
+  {id:105,domain:"People",question:"プロジェクトにおけるグループシンク（集団浅慮）を防ぐ方法はどれですか？",options:["全員が同じ意見を持つよう促す","反対意見を述べる「悪魔の代弁者」役を設ける","議論の時間を最小限にする","リーダーが最初に意見を表明する"],correct:1,explanation:"グループシンクは集団の調和を優先し批判的思考が抑制される現象です。「悪魔の代弁者」役の設置、匿名投票、外部意見の招聘、リーダーが最後に発言するなどの対策が有効です。"},
+  {id:106,domain:"People",question:"ジョハリの窓で「盲点の窓」とはどれですか？",options:["自分も他人も知っている領域","自分は知らないが他人は知っている領域","自分は知っているが他人は知らない領域","自分も他人も知らない領域"],correct:1,explanation:"ジョハリの窓は自己理解のフレームワークです。盲点の窓は自分では気づいていないが他人には見えている特性です。フィードバックを受けることでこの領域を縮小し自己認識を高められます。"},
+  {id:107,domain:"People",question:"多文化チームで時間の概念が異なるメンバーがいる場合、PMの最善の対応はどれですか？",options:["自分の文化の時間感覚を全員に強制する","文化的な違いを理解した上で明確なデッドラインと期待値を設定する","時間にルーズなメンバーをチームから除外する","締め切りを設けない"],correct:1,explanation:"モノクロニック（時間厳守）とポリクロニック（柔軟な時間感覚）の文化差を理解しつつ、プロジェクトとして明確なデッドラインと期待値を設定し、合意を得ることが重要です。"},
+  {id:108,domain:"People",question:"フィードバックを効果的に行うためのSBIモデルとは何ですか？",options:["Strategy-Budget-Implementation","Situation-Behavior-Impact","Scope-Baseline-Integration","Schedule-Buffer-Iteration"],correct:1,explanation:"SBIモデルは、Situation（状況）-Behavior（行動）-Impact（影響）のフレームワークです。具体的な状況で観察された行動とその影響を伝えることで、建設的で客観的なフィードバックが可能になります。"},
+  {id:109,domain:"People",question:"チームのコロケーション（同一場所配置）の主な利点はどれですか？",options:["リモートワークの推進","非公式なコミュニケーションの活性化と迅速な問題解決","コスト削減","個人の集中力向上"],correct:1,explanation:"コロケーションにより、チームメンバー間の非公式な会話（オスモティック・コミュニケーション）が活性化し、情報共有が迅速になり、問題の早期発見・解決が促進されます。"},
+  {id:110,domain:"People",question:"権力の源泉で「参照パワー」とはどのようなものですか？",options:["公式な役職に基づく権力","報酬を与える能力に基づく権力","人柄や尊敬に基づく影響力","罰則を与える能力に基づく権力"],correct:2,explanation:"参照パワー（Referent Power）は、その人の人柄、カリスマ性、信頼性に基づく影響力です。メンバーがリーダーを尊敬し、自発的に従うため、最も効果的なパワーの一つとされています。"},
+  {id:111,domain:"People",question:"チームの自己組織化を促進するためにPMが避けるべき行動はどれですか？",options:["チームに意思決定の権限を委譲する","すべてのタスクの詳細な手順を指示する","障害物を取り除く","チームの目標を明確にする"],correct:1,explanation:"自己組織化チームでは、チーム自身が「どのように」作業するかを決定します。PMがすべての手順を細かく指示すると（マイクロマネジメント）、自律性が損なわれ、自己組織化を阻害します。"},
+  {id:112,domain:"People",question:"ネゴシエーション（交渉）において「ZOPA」とは何ですか？",options:["交渉の最初の提案","合意可能な範囲（Zone of Possible Agreement）","交渉決裂時の代替案","交渉のデッドライン"],correct:1,explanation:"ZOPA（Zone of Possible Agreement）は、交渉当事者双方の許容範囲が重なる領域です。ZOPAが存在すれば合意の可能性があり、存在しなければ交渉は成立しません。"},
+  {id:113,domain:"Process",question:"プロジェクトの前提条件ログ（Assumption Log）の目的はどれですか？",options:["確定した事実を記録する","プロジェクト全体を通じて前提条件と制約条件を追跡する","チームメンバーの出欠を記録する","会議の議事録を管理する"],correct:1,explanation:"前提条件ログは、プロジェクトの前提条件（真実と見なすがまだ確認されていないこと）と制約条件を記録・追跡する文書です。前提条件が誤りだった場合のリスクにもつなげます。"},
+  {id:114,domain:"Process",question:"プレシデンスダイアグラム法（PDM）で使用される4種類の依存関係に含まれないものはどれですか？",options:["FS（終了-開始）","SS（開始-開始）","FF（終了-終了）","FE（終了-評価）"],correct:3,explanation:"PDMの4種類の依存関係は、FS（Finish-to-Start）、SS（Start-to-Start）、FF（Finish-to-Finish）、SF（Start-to-Finish）です。FSが最も一般的に使用されます。"},
+  {id:115,domain:"Process",question:"品質と等級の違いについて正しいものはどれですか？",options:["品質と等級は同じ意味","低品質は常に問題だが、低等級は必ずしも問題ではない","高等級なら品質は不要","等級が低ければ品質も自動的に低くなる"],correct:1,explanation:"品質は「要件への適合度」で、低品質は常に問題です。等級は「機能の範囲やカテゴリ」で、低等級でも品質が高ければ問題ありません（例：シンプルだが高品質な製品）。"},
+  {id:116,domain:"Process",question:"リソース平準化（Resource Leveling）を行った結果として正しいものはどれですか？",options:["プロジェクト期間が短縮される","クリティカルパスが変更される可能性がある","コストが必ず削減される","品質が向上する"],correct:1,explanation:"リソース平準化は、リソースの過負荷を解消するためにアクティビティのスケジュールを調整する手法です。結果としてクリティカルパスが変更され、プロジェクト期間が延長される可能性があります。"},
+  {id:117,domain:"Process",question:"石川ダイアグラム（特性要因図）の別名はどれですか？",options:["パレート図","フィッシュボーン図","散布図","管理図"],correct:1,explanation:"石川ダイアグラム（特性要因図）はフィッシュボーン図（魚の骨図）とも呼ばれます。問題（特性）の原因を体系的に分類・視覚化するツールで、品質管理の7つの基本ツールの一つです。"},
+  {id:118,domain:"Process",question:"プロジェクトのベースラインに含まれるものはどれですか？",options:["スコープ、スケジュール、コストの3つのベースライン","リスク登録簿のみ","チーム憲章のみ","ステークホルダー登録簿のみ"],correct:0,explanation:"プロジェクトのパフォーマンス測定ベースラインは、スコープベースライン（WBS+WBS辞書+スコープ記述書）、スケジュールベースライン、コストベースラインの3つで構成されます。"},
+  {id:119,domain:"Process",question:"Make or Buy分析の目的はどれですか？",options:["チームメンバーを内部昇進させるか外部採用するか決める","成果物を自社で作るか外部から調達するか判断する","プロジェクトを継続するか中止するか決める","テストを自動化するか手動で行うか決める"],correct:1,explanation:"Make or Buy分析は、プロジェクトの成果物やサービスを組織内で作成するか、外部ベンダーから購入・調達するかを、コスト、能力、リスク等の観点から比較検討する手法です。"},
+  {id:120,domain:"Process",question:"タイム＆マテリアル（T&M）契約が最も適している状況はどれですか？",options:["スコープが明確に定義されている場合","作業のスコープが不明確で期間も不確定な場合","長期の大規模プロジェクト","コストを完全に固定したい場合"],correct:1,explanation:"T&M契約は、作業範囲が不明確でスコープを事前に定義できない場合に適しています。時間単価と材料費で支払う形式で、FFPとコスト・プラスの中間的な性質を持ちます。"},
+  {id:121,domain:"Process",question:"プロジェクト統合マネジメントの主な目的はどれですか？",options:["技術的な問題を解決する","各知識エリアのプロセスを統一・調整・統合する","チームメンバーの給与を決定する","品質基準を設定する"],correct:1,explanation:"統合マネジメントは、プロジェクトの各知識エリア（スコープ、スケジュール、コスト等）のプロセスと活動を統一・調整・統合し、全体最適を実現する役割を担います。PMの中心的な責務です。"},
+  {id:122,domain:"Process",question:"フローチャートの品質管理での用途はどれですか？",options:["予算の配分を決める","プロセスのステップと判断ポイントを可視化し、欠陥の原因を特定する","チームの組織図を作成する","スケジュールを作成する"],correct:1,explanation:"フローチャートは、プロセスの流れ、ステップ、分岐（判断ポイント）を図示するツールです。品質管理では、プロセスの非効率や欠陥が発生する箇所を特定するのに使用されます。"},
+  {id:123,domain:"Process",question:"スコープの妥当性確認（Validate Scope）と品質管理（Control Quality）の違いはどれですか？",options:["どちらも同じプロセス","スコープの妥当性確認は成果物の受入確認、品質管理は正確性の検証","品質管理は顧客が行い、スコープの妥当性確認は内部で行う","順序は関係ない"],correct:1,explanation:"品質管理は成果物が品質要件を満たしているか（正確性）を内部で検証します。スコープの妥当性確認は、顧客やスポンサーが成果物を正式に受け入れるプロセスです。通常、品質管理の後に実施されます。"},
+  {id:124,domain:"Process",question:"コミュニケーションの方法で「プッシュ型」に該当するものはどれですか？",options:["対面のミーティング","メールやメモの送付","Webポータルへの情報掲載","電話会議"],correct:1,explanation:"プッシュ型は情報を特定の受信者に送付する方法（メール、メモ、FAX等）です。プル型は受信者が自ら取得する方法（Webサイト、掲示板等）。双方向型は対面やテレビ会議等です。"},
+  {id:125,domain:"Business",question:"OKR（Objectives and Key Results）とKPIの違いはどれですか？",options:["どちらも同じもの","OKRは挑戦的な目標設定、KPIは継続的なパフォーマンス測定","OKRは短期、KPIは長期のみ","KPIの方が挑戦的"],correct:1,explanation:"OKRは野心的・挑戦的な目標（Objective）と定量的な成果指標（Key Results）を設定するフレームワークです。KPIは組織やプロジェクトの重要なパフォーマンスを継続的に測定する指標です。"},
+  {id:126,domain:"Business",question:"組織のプロセス資産（OPA）に該当するものはどれですか？",options:["市場の競合状況","法律や規制","教訓リポジトリやテンプレート","為替レート"],correct:2,explanation:"組織のプロセス資産（OPA）は、組織が蓄積したプロセス、テンプレート、教訓、過去のプロジェクト情報等です。市場状況、法規制、為替レートは組織体の環境要因（EEF）に分類されます。"},
+  {id:127,domain:"Business",question:"デザインシンキングの5つのフェーズの最初のステップはどれですか？",options:["プロトタイプ","テスト","共感（Empathize）","定義"],correct:2,explanation:"デザインシンキングの5フェーズは、共感（Empathize）→定義（Define）→発想（Ideate）→プロトタイプ（Prototype）→テスト（Test）です。ユーザーへの共感が出発点です。"},
+  {id:128,domain:"Business",question:"PESTLE分析で評価する要素に含まれないものはどれですか？",options:["Political（政治的）","Economic（経済的）","Sprint（スプリント）","Legal（法的）"],correct:2,explanation:"PESTLE分析は、Political（政治）、Economic（経済）、Social（社会）、Technological（技術）、Legal（法律）、Environmental（環境）の6つの外部要因を分析するフレームワークです。"},
+  {id:129,domain:"Business",question:"プロジェクトの機会費用（Opportunity Cost）とは何ですか？",options:["プロジェクトにかかる直接費用","あるプロジェクトを選ぶことで放棄した次善の選択肢の価値","プロジェクトの利益","マーケティング費用"],correct:1,explanation:"機会費用は、あるプロジェクトを選択したことで失われた、次善の代替案から得られたであろう価値です。プロジェクト選定の意思決定において重要な概念です。"},
+  {id:130,domain:"Business",question:"SWOT分析の「T（Threats）」に該当するものはどれですか？",options:["チームの技術力の高さ","新しい市場機会","競合他社の新製品投入","効率的な社内プロセス"],correct:2,explanation:"SWOT分析のThreats（脅威）は外部環境の不利な要因です。Strengths（強み）とWeaknesses（弱み）は内部要因、Opportunities（機会）とThreats（脅威）は外部要因です。"},
+  {id:131,domain:"Business",question:"MVE（Minimum Viable Experiment）の目的はどれですか？",options:["製品を完成させること","最小限の投資でビジネス仮説を検証すること","チームの能力を測定すること","予算を削減すること"],correct:1,explanation:"MVEは、最小限のコストと労力でビジネス仮説を検証するための実験です。MVPが製品に焦点を当てるのに対し、MVEは仮説検証そのものに焦点を当て、製品を作る前に市場の反応を確認します。"},
+  {id:132,domain:"Business",question:"回収期間法（Payback Period）の欠点はどれですか？",options:["計算が複雑すぎる","回収後のキャッシュフローと貨幣の時間価値を考慮しない","常にNPVより正確","リスクを過大評価する"],correct:1,explanation:"回収期間法は投資回収にかかる期間を求める簡便な方法ですが、回収期間後のキャッシュフローを無視し、貨幣の時間価値（割引率）も考慮しないため、NPVやIRRと併用すべきです。"},
+  {id:133,domain:"Predictive",question:"WBS辞書に含まれる情報はどれですか？",options:["チームメンバーの個人情報","ワークパッケージの詳細説明、受入基準、リソース要件等","プロジェクト全体の予算総額のみ","ステークホルダーの連絡先"],correct:1,explanation:"WBS辞書は各WBS要素の詳細情報を記載した文書で、作業内容、成果物、受入基準、担当者、スケジュール、コスト見積もり、リソース要件等が含まれます。"},
+  {id:134,domain:"Predictive",question:"プロジェクトのフェーズゲートレビューの目的はどれですか？",options:["チームメンバーの評価","次のフェーズに進むかどうかの判断","日次の進捗確認","技術的な設計レビュー"],correct:1,explanation:"フェーズゲート（ステージゲート）レビューは、各フェーズの終了時に成果物と進捗を評価し、次のフェーズに進む（Go）、修正して再レビュー（Conditional Go）、中止（Kill）を決定するプロセスです。"},
+  {id:135,domain:"Predictive",question:"コスト集約（Cost Aggregation）のプロセスはどれですか？",options:["トップダウンでプロジェクト予算を配分する","ワークパッケージレベルのコストを上位レベルに積み上げてベースラインを作成する","コストを均等に各月に配分する","最も高額なアクティビティのみを計上する"],correct:1,explanation:"コスト集約は、ワークパッケージのコスト見積もりをWBSの上位レベルに積み上げ（ボトムアップ）、コントロールアカウント、そしてプロジェクト全体のコストベースラインを作成するプロセスです。"},
+  {id:136,domain:"Predictive",question:"予測型プロジェクトで「プログレッシブ・エラボレーション」とはどれですか？",options:["プロジェクトを途中で中止すること","情報が入手可能になるにつれ計画を段階的に詳細化すること","すべての計画を最初に完了すること","計画を一切変更しないこと"],correct:1,explanation:"プログレッシブ・エラボレーション（段階的詳細化）は、情報が利用可能になるにつれてプロジェクト計画をより詳細に精緻化していく反復的なプロセスです。予測型でも計画は一度で完成するわけではありません。"},
+  {id:137,domain:"Predictive",question:"プロジェクトの「キックオフミーティング」で行うべきことはどれですか？",options:["詳細な技術設計","プロジェクトの目標、役割、期待値の共有と関係構築","予算の最終確定","契約の締結"],correct:1,explanation:"キックオフミーティングは、プロジェクトの目標、スコープ、役割と責任、コミュニケーション計画、期待値を共有し、チームとステークホルダーの関係構築を図る重要なイベントです。"},
+  {id:138,domain:"Predictive",question:"アーンドバリューでVAC（Variance at Completion）がマイナスの場合、何を意味しますか？",options:["プロジェクトは予算内で完了する見込み","プロジェクトは予算超過で完了する見込み","スケジュールが前倒し","品質が向上している"],correct:1,explanation:"VAC = BAC - EAC で、VACがマイナスの場合は EAC > BAC、つまりプロジェクトが予算を超過して完了する見込みであることを示します。プラスなら予算内での完了が見込まれます。"},
+  {id:139,domain:"Predictive",question:"感度分析（トルネード図）の目的はどれですか？",options:["チームの感情を分析する","各リスク要因がプロジェクト目標に与える影響度を比較する","プロジェクトの完了確率を計算する","品質検査の結果を可視化する"],correct:1,explanation:"感度分析（トルネード図）は、個々のリスク要因がプロジェクトの目標（コスト、スケジュール等）にどの程度影響するかを比較表示する定量的リスク分析ツールです。影響度の大きい順に表示されます。"},
+  {id:140,domain:"Predictive",question:"プロジェクト終結時に更新される組織のプロセス資産はどれですか？",options:["法規制","市場環境","教訓リポジトリとプロジェクトファイル","為替レート"],correct:2,explanation:"プロジェクト終結時には、教訓登録簿が教訓リポジトリに移管され、プロジェクトファイル（計画書、報告書、文書等）が組織のプロセス資産として保管されます。次のプロジェクトで活用されます。"},
+  {id:141,domain:"Agile",question:"スクラムマスターの役割として最も適切なものはどれですか？",options:["チームにタスクを割り当てる","スクラムのフレームワークを促進し、チームの障害を除去する","プロダクトバックログの優先順位を決める","顧客との契約を管理する"],correct:1,explanation:"スクラムマスターはサーバントリーダーとして、スクラムの理論と実践が正しく行われるよう促進し、チームの障害を除去します。タスクの割り当てや優先順位決定はPMやPOの役割です。"},
+  {id:142,domain:"Agile",question:"プランニングポーカーの目的はどれですか？",options:["プロジェクトの予算を決定する","チーム全員の合意に基づいてストーリーポイントを見積もる","スプリントの日程を決める","タスクの担当者を決める"],correct:1,explanation:"プランニングポーカーは、フィボナッチ数列のカードを使ってチーム全員が同時に見積もりを提示するアジャイルの見積もり技法です。アンカリングバイアスを防ぎ、議論を促進します。"},
+  {id:143,domain:"Agile",question:"スプリントレビューで行うべきでないことはどれですか？",options:["完成したインクリメントをデモする","ステークホルダーからフィードバックを得る","プロダクトバックログを更新する","チームの個人パフォーマンスを評価する"],correct:3,explanation:"スプリントレビューは、完成したインクリメントをステークホルダーに示し、フィードバックを得て、プロダクトバックログの調整を行う場です。個人のパフォーマンス評価の場ではありません。"},
+  {id:144,domain:"Agile",question:"SAFe（Scaled Agile Framework）のPI Planningの目的はどれですか？",options:["個人の目標設定","複数チームが同期してプログラムインクリメントの計画を立てる","年間予算の策定","プロダクトオーナーの選出"],correct:1,explanation:"PI（Program Increment）Planningは、SAFeの中核イベントで、複数のアジャイルチームが一堂に会し、次のPI（通常8-12週）の目標、依存関係、リスクを共同で計画します。"},
+  {id:145,domain:"Agile",question:"リーン開発の7つの原則に含まれないものはどれですか？",options:["ムダの排除","品質の作り込み","詳細な事前計画の作成","速く届ける"],correct:2,explanation:"リーン開発の7原則は、ムダの排除、品質の作り込み、知識の創出、決定の遅延、速く届ける、人の尊重、全体の最適化です。詳細な事前計画はリーンの考え方に反します。"},
+  {id:146,domain:"Agile",question:"INVEST基準でユーザーストーリーの「S」は何を表しますか？",options:["Simple（シンプル）","Small（小さい）","Stable（安定）","Specific（具体的）"],correct:1,explanation:"INVESTは、Independent（独立）、Negotiable（交渉可能）、Valuable（価値がある）、Estimable（見積もり可能）、Small（小さい）、Testable（テスト可能）の頭文字で、良いユーザーストーリーの基準です。"},
+  {id:147,domain:"Agile",question:"WIP制限を超えた場合のカンバンチームの対応はどれですか？",options:["WIP制限を無視して新しい作業を始める","進行中の作業を完了させてから新しい作業に着手する","WIP制限を引き上げる","チームメンバーを追加する"],correct:1,explanation:"WIP制限に達した場合、チームは新しい作業を開始せず、現在進行中の作業を完了させることに集中します。これによりフローが最適化され、マルチタスクの弊害を避けられます。"},
+  {id:148,domain:"Agile",question:"アジャイルのインセプションデッキで定義することはどれですか？",options:["詳細な技術仕様","プロジェクトのビジョン、スコープ、トレードオフ等の全体像","個人のKPI","予算の詳細内訳"],correct:1,explanation:"インセプションデッキは、プロジェクトの開始時にチーム全体で「なぜ」「何を」「どのように」を共有するための10の質問とアクティビティで構成されるツールです。"},
+  {id:149,domain:"Process",question:"決定木分析（Decision Tree Analysis）の目的はどれですか？",options:["組織図を作成する","不確実な状況での意思決定を確率とEMVを用いて評価する","プロジェクトのWBSを作成する","品質検査の手順を定義する"],correct:1,explanation:"決定木分析は、複数の選択肢とその結果を樹状図で表し、各経路のEMV（期待金額価値）を計算して最適な意思決定を支援する定量的リスク分析ツールです。"},
+  {id:150,domain:"Process",question:"プロジェクトマネジメント計画書に含まれる補助計画書の数はいくつですか？",options:["3つ","5つ","約10以上の補助計画書","1つだけ"],correct:2,explanation:"プロジェクトマネジメント計画書は、スコープ管理計画、スケジュール管理計画、コスト管理計画、品質管理計画、資源管理計画、コミュニケーション管理計画、リスク管理計画、調達管理計画、ステークホルダーエンゲージメント計画等の補助計画書で構成されます。"},
+  {id:151,domain:"People",question:"チームが「混乱期（Storming）」にある場合、PMの最善のアプローチはどれですか？",options:["対立を放置して自然に解決するのを待つ","対立を建設的に管理し、チームの規範確立を支援する","問題のあるメンバーを即座に交代させる","混乱期が来ないように厳格に管理する"],correct:1,explanation:"混乱期はチーム発展の自然な段階です。PMは対立を抑圧せず建設的に管理し、チームが自らルールと規範を確立できるよう支援します。この段階を乗り越えることでチームは成熟します。"},
+  {id:152,domain:"People",question:"プロジェクトでの「ハロー効果」とは何ですか？",options:["プロジェクトの成功を祝う儀式","ある特性の良い印象が全体の評価に影響するバイアス","ステークホルダーの満足度が高い状態","チームの士気が非常に高い状態"],correct:1,explanation:"ハロー効果は、ある面で優れている人を全体的に優秀だと判断してしまう認知バイアスです。逆にホーン効果は、ある面の悪い印象が全体評価を下げるバイアスです。採用や評価時に注意が必要です。"},
+  {id:153,domain:"People",question:"エンパワーメントの実践として正しいものはどれですか？",options:["すべての決定をPMが行い結果だけ伝える","チームに意思決定の権限と必要なリソースを与える","チームメンバーの行動を細かく監視する","重要な情報をPMだけが保持する"],correct:1,explanation:"エンパワーメントは、チームメンバーに意思決定の権限、必要な情報とリソースを与え、自律的に行動できるようにすることです。信頼と透明性が基盤であり、モチベーションと生産性を向上させます。"},
+  {id:154,domain:"People",question:"組織構造で「プロジェクト型組織」のPMの権限はどれですか？",options:["権限がほとんどない","中程度の権限","ほぼ全面的な権限","権限は機能マネージャーと同等"],correct:2,explanation:"プロジェクト型組織では、PMがほぼ全面的な権限を持ち、チームメンバーはプロジェクトに専任されます。対して機能型組織ではPMの権限は限定的で、マトリクス型はその中間です。"},
+  {id:155,domain:"People",question:"チームのパフォーマンス評価の360度フィードバックとは何ですか？",options:["上司だけが評価する","上司、同僚、部下、自己など多方向から評価する","360日間の評価期間を設ける","全プロジェクトの360人に評価してもらう"],correct:1,explanation:"360度フィードバックは、上司、同僚、部下、顧客、自己評価など複数の視点から包括的にフィードバックを収集する評価手法です。偏りを減らし、より正確な評価が可能になります。"},
+  {id:156,domain:"Process",question:"リスク登録簿に記録すべき情報に含まれないものはどれですか？",options:["リスクの説明と原因","リスクオーナー","対応戦略と残存リスク","チームメンバーの個人的な懸念"],correct:3,explanation:"リスク登録簿には、リスクの特定情報（説明、原因、トリガー）、定性・定量分析結果、リスクオーナー、対応戦略、残存リスク、ステータスを記録します。個人的懸念は含みません。"},
+  {id:157,domain:"Process",question:"EVM指標でTCPI（To-Complete Performance Index）が1.0より大きい場合、何を意味しますか？",options:["残りの作業は予定通りで十分","残りの作業で当初より高い効率が必要","プロジェクトは予算内で完了済み","追加予算が既に承認されている"],correct:1,explanation:"TCPI > 1.0 は、残りの作業を予算内で完了するために、これまでより高いコスト効率が必要であることを示します。値が大きいほど達成が困難です。TCPI = (BAC - EV) / (BAC - AC) で計算します。"},
+  {id:158,domain:"Process",question:"ステークホルダーエンゲージメント評価マトリクスで使う分類はどれですか？",options:["高・中・低","不認識・抵抗・中立・支持・指導","賛成・反対","緊急・重要・低優先"],correct:1,explanation:"ステークホルダーエンゲージメント評価マトリクスは、各ステークホルダーの現在の関与レベルと望ましい関与レベルを、不認識・抵抗・中立・支持・指導の5段階で評価・可視化します。"},
+  {id:159,domain:"Process",question:"プロジェクトの作業パフォーマンスデータ、情報、報告書の関係はどれですか？",options:["すべて同じもの","データ→分析して情報→まとめて報告書の順で加工される","報告書→情報→データの順","関係はない"],correct:1,explanation:"作業パフォーマンスデータ（生の測定値）→分析して作業パフォーマンス情報（状況評価）→まとめて作業パフォーマンス報告書（意思決定用資料）の順に加工・洗練されます。"},
+  {id:160,domain:"Process",question:"要求事項収集のテクニック「ノミナルグループ技法」の特徴はどれですか？",options:["自由に議論して結論を出す","個人でアイデアを出した後、グループで投票して優先順位を付ける","専門家に個別にインタビューする","プロトタイプを作成してフィードバックを得る"],correct:1,explanation:"ノミナルグループ技法は、まず各自が静かにアイデアを書き出し、その後グループで共有・議論し、最後に投票で優先順位を決定する構造化された手法です。全員の意見を平等に反映できます。"},
+  {id:161,domain:"Business",question:"アジャイルにおけるビジネス価値の優先順位付けで、MoSCoW法の「M」は何を表しますか？",options:["Maybe（おそらく）","Must have（必須）","Minimum（最小限）","Maximum（最大限）"],correct:1,explanation:"MoSCoW法は、Must have（必須）、Should have（重要）、Could have（あれば良い）、Won't have（今回は不要）の4つに分類する優先順位付け手法です。"},
+  {id:162,domain:"Business",question:"ステークホルダーの「セイリエンスモデル」で分類に使用する3つの属性はどれですか？",options:["コスト・品質・時間","権力・緊急性・正当性","高・中・低","内部・外部・混合"],correct:1,explanation:"セイリエンスモデルは、ステークホルダーを権力（Power）、緊急性（Urgency）、正当性（Legitimacy）の3つの属性で分類します。3つすべてを持つステークホルダーが最も注意を要します。"},
+  {id:163,domain:"Business",question:"バランスト・スコアカード（BSC）の4つの視点に含まれないものはどれですか？",options:["財務の視点","顧客の視点","競合他社の視点","学習と成長の視点"],correct:2,explanation:"BSCの4つの視点は、財務、顧客、内部ビジネスプロセス、学習と成長です。これらをバランスよく評価することで、財務指標だけでなく多面的に組織のパフォーマンスを測定します。"},
+  {id:164,domain:"Business",question:"プロジェクトの「サンクコスト」について正しいものはどれですか？",options:["今後の意思決定に考慮すべき重要なコスト","既に支出され回収不能なため、将来の意思決定に影響させるべきではないコスト","プロジェクト終了時に返金されるコスト","予算の未使用分"],correct:1,explanation:"サンクコスト（埋没費用）は既に支出され回収できないコストです。将来の意思決定はサンクコストではなく、今後の期待価値に基づいて行うべきです（サンクコストの誤謬を避ける）。"},
+  {id:165,domain:"Business",question:"トリプルボトムライン（TBL）が評価する3つの要素はどれですか？",options:["コスト・スケジュール・品質","経済的利益・社会的責任・環境への影響","計画・実行・統制","過去・現在・未来"],correct:1,explanation:"トリプルボトムライン（People, Planet, Profit）は、経済的利益だけでなく、社会的責任と環境への影響も含めた3つの側面で組織のパフォーマンスを評価するフレームワークです。"},
+  {id:166,domain:"Predictive",question:"プロジェクトの「クリープ」と「エラボレーション」の違いはどれですか？",options:["どちらも同じ","クリープは未承認の範囲拡大、エラボレーションは承認された詳細化","クリープは計画的、エラボレーションは偶発的","エラボレーションは問題、クリープは正常"],correct:1,explanation:"スコープクリープは変更管理を経ない未承認の範囲拡大で問題です。エラボレーション（段階的詳細化）は、計画プロセスの一環として承認された正当なスコープの明確化・詳細化です。"},
+  {id:167,domain:"Predictive",question:"固定価格インセンティブ・フィー契約（FPIF）の特徴はどれですか？",options:["価格が完全に固定","目標コストに対するパフォーマンスに応じて利益が調整される","すべてのコスト超過を買い手が負担","T&M契約と同じ"],correct:1,explanation:"FPIF契約は、目標コスト、目標利益、天井価格が設定され、実際のコストが目標より低い場合は利益が増加、高い場合は減少します。天井価格以上のコスト超過は売り手が負担します。"},
+  {id:168,domain:"Predictive",question:"プロジェクトのリソースカレンダーに記載される情報はどれですか？",options:["プロジェクト全体のマイルストーン","各リソースの利用可能な期間と稼働率","リスク対応計画","品質基準"],correct:1,explanation:"リソースカレンダーは、チームメンバーや物的リソースがいつ・どれだけ利用可能かを示すカレンダーです。休暇、他プロジェクトへの配分、稼働率などの情報が含まれます。"},
+  {id:169,domain:"Predictive",question:"プロジェクトの成果物が要件を満たさない場合に行われる是正措置はどれですか？",options:["予防措置","欠陥修正","変更要求の自動承認","プロジェクトの中止"],correct:1,explanation:"欠陥修正は、成果物が要件を満たさない場合に品質基準に適合させるための措置です。是正措置（パフォーマンスを計画に戻す）、予防措置（将来の逸脱を防ぐ）とともに変更要求の一種です。"},
+  {id:170,domain:"Predictive",question:"プロジェクトのS字カーブ（S-Curve）が示すものはどれですか？",options:["リスクの発生パターン","プロジェクトの累積コストまたは進捗の時間推移","チームの士気の変化","ステークホルダーの関与度"],correct:1,explanation:"S字カーブは、プロジェクトの累積コスト（または作業量）を時間軸で表したグラフです。初期は緩やか、中盤で急上昇、終盤で緩やかになるS字形状が典型的です。EVMのPV、EV、ACの表示にも使われます。"},
+  {id:171,domain:"Agile",question:"アジャイルマニフェストの4つの価値のうち、「プロセスやツールよりも」重視されるものはどれですか？",options:["包括的なドキュメント","契約交渉","計画への追従","個人と対話"],correct:3,explanation:"アジャイルマニフェストの4つの価値は、①個人と対話＞プロセスとツール、②動くソフトウェア＞包括的ドキュメント、③顧客との協調＞契約交渉、④変化への対応＞計画への追従です。"},
+  {id:172,domain:"Agile",question:"ストーリーポイントで見積もる際に考慮すべき要素はどれですか？",options:["作業時間のみ","複雑さ、作業量、不確実性","チームメンバーの時給","過去のプロジェクトの予算"],correct:1,explanation:"ストーリーポイントは、作業の複雑さ（Complexity）、作業量（Effort）、不確実性（Uncertainty）を総合的に考慮した相対的な見積もり単位です。時間ではなく相対サイズで見積もります。"},
+  {id:173,domain:"Agile",question:"継続的インテグレーション（CI）の実践で正しいものはどれですか？",options:["月に一度コードを統合する","開発者が頻繁に（少なくとも毎日）コードを共有リポジトリに統合する","リリース直前にのみ統合する","テストは手動で行う"],correct:1,explanation:"CIは、開発者が頻繁に（理想的には1日に数回）コードをメインブランチに統合し、自動ビルドとテストを実行する実践です。統合の問題を早期に発見し、品質を維持します。"},
+  {id:174,domain:"Agile",question:"スクラムのイベントでスプリントプランニングの最大時間はどれですか？",options:["1時間","4時間","1ヶ月スプリントで最大8時間","制限なし"],correct:2,explanation:"スプリントプランニングのタイムボックスは、1ヶ月スプリントで最大8時間です。スプリント期間が短い場合は比例して短くなります。2週間スプリントなら最大4時間が目安です。"},
+  {id:175,domain:"Agile",question:"バーンアップチャートとバーンダウンチャートの違いはどれですか？",options:["どちらも同じ","バーンアップは完了した作業量を積み上げ表示、バーンダウンは残作業量を減少表示","バーンアップは予算、バーンダウンはスケジュール","バーンアップはアジャイル専用、バーンダウンは予測型専用"],correct:1,explanation:"バーンダウンチャートは残作業量の減少を表示します。バーンアップチャートは完了した作業量の増加を表示し、スコープの変更も可視化できる利点があります。"},
+  {id:176,domain:"Agile",question:"モブプログラミングとペアプログラミングの違いはどれですか？",options:["どちらも同じ","モブは3人以上のチーム全体で1つの作業、ペアは2人で作業","モブは個人作業、ペアは集団作業","モブは設計専用、ペアはコーディング専用"],correct:1,explanation:"ペアプログラミングは2人が1台のマシンで作業する手法です。モブプログラミングは3人以上（通常チーム全体）が1台のマシンで1つの作業を行い、知識共有と品質をさらに高めます。"},
+  {id:177,domain:"Process",question:"ポジティブリスク（機会）への対応戦略に含まれないものはどれですか？",options:["活用（Exploit）","共有（Share）","強化（Enhance）","軽減（Mitigate）"],correct:3,explanation:"ポジティブリスクの対応戦略は、活用（確実に実現させる）、共有（第三者と機会を分かち合う）、強化（発生確率や影響度を高める）、受容です。軽減（Mitigate）はネガティブリスクの対応戦略です。"},
+  {id:178,domain:"Process",question:"プロジェクトの最終報告書に含めるべき内容はどれですか？",options:["次のプロジェクトの計画","プロジェクトの概要、成果、差異分析、教訓の要約","チームメンバーの個人評価の詳細","使用しなかったリスク対応策のみ"],correct:1,explanation:"プロジェクト最終報告書には、プロジェクトの目的と成果の要約、スコープ・スケジュール・コストの計画対実績、リスクと課題の要約、教訓の要約、今後の推奨事項などが含まれます。"},
+  {id:179,domain:"Process",question:"アナロジー見積もりとパラメトリック見積もりの違いはどれですか？",options:["どちらも同じ手法","アナロジーは類似実績ベース、パラメトリックは統計的モデルと変数を使用","アナロジーの方が正確","パラメトリックは使用できる場面が限られない"],correct:1,explanation:"アナロジー見積もり（類推見積もり）は過去の類似プロジェクトの実績を基に概算します。パラメトリック見積もりは、統計モデルと変数（例：1㎡あたりの建築コスト×面積）を使って算出する、より精度の高い手法です。"},
+  {id:180,domain:"Process",question:"プロジェクトの暗黙知を形式知に変換する方法として最も効果的なものはどれですか？",options:["個人の記憶に頼る","ナレッジマネジメント活動（文書化、教訓セッション、メンタリング）","暗黙知は変換できない","メールで情報を共有する"],correct:1,explanation:"暗黙知（個人の経験やノウハウ）を形式知（文書化された知識）に変換するには、教訓セッション、ナレッジベースの構築、メンタリング、コミュニティ・オブ・プラクティスなどの活動が効果的です。"},
+  {id:181,domain:"People",question:"変革のクルト・レヴィンモデルの3つの段階はどれですか？",options:["計画・実行・完了","解凍・変革・再凍結","認識・理解・行動","分析・設計・実装"],correct:1,explanation:"レヴィンの変革モデルは、解凍（Unfreezing：変革の必要性を認識）→変革（Changing：新しい方法を導入）→再凍結（Refreezing：変革を定着させる）の3段階です。"},
+  {id:182,domain:"People",question:"プロジェクトにおける「オスモティック・コミュニケーション」とはどれですか？",options:["公式な報告会議","同じ空間にいることで自然に情報が伝わるコミュニケーション","メールでの定期報告","ステータスレポートの配布"],correct:1,explanation:"オスモティック（浸透性）コミュニケーションは、同じ空間にいるチームメンバーが、直接の会話でなくても周囲の議論から自然に情報を吸収する現象です。アジャイルでコロケーションが重視される理由の一つです。"},
+  {id:183,domain:"People",question:"責任分担マトリクス（RAM）とRACIマトリクスの関係はどれですか？",options:["まったく無関係","RACIはRAMの一形態である","RAMはRACIの一部","RAMは予測型のみ、RACIはアジャイルのみ"],correct:1,explanation:"責任分担マトリクス（RAM: Responsibility Assignment Matrix）はプロジェクトの作業と担当者の関係を示す一般的なツールです。RACIマトリクスは、RAMの最も一般的な形態（R/A/C/Iの4役割を使用）です。"},
+  {id:184,domain:"People",question:"ナッジ理論をプロジェクトマネジメントに活用する例はどれですか？",options:["チームに罰則を設ける","デフォルトの選択肢を望ましい行動に設定して行動変容を促す","強制的にプロセスに従わせる","インセンティブ報酬を支払う"],correct:1,explanation:"ナッジ理論は、強制や経済的インセンティブではなく、選択肢の提示の仕方（デフォルト設定、情報の見せ方等）を工夫することで、自然に望ましい行動を促す手法です。"},
+  {id:185,domain:"Business",question:"プロダクトロードマップの主な目的はどれですか？",options:["詳細な技術仕様を定義する","プロダクトのビジョンと戦略的方向性を時系列で示す","個人のタスクを管理する","日次の進捗を追跡する"],correct:1,explanation:"プロダクトロードマップは、プロダクトのビジョン、戦略的方向性、主要な機能やリリースの計画を時系列で視覚化したものです。ステークホルダーとの期待値の共有に活用します。"},
+  {id:186,domain:"Business",question:"組織の変更管理で「チェンジエージェント」の役割はどれですか？",options:["変更に反対する人","変更の推進と支持者の獲得を担う人","変更を承認する権限者","変更の記録を管理する人"],correct:1,explanation:"チェンジエージェントは、組織変更を推進し、変革のビジョンを伝え、抵抗を管理し、支持者を獲得する役割を担う人です。PMやスポンサーがこの役割を担うことが多いです。"},
+  {id:187,domain:"Business",question:"プロジェクトの便益実現レビューはいつ行われますか？",options:["プロジェクト開始前のみ","プロジェクト完了後、成果物が便益を生み始めた後","毎日のスタンドアップで","スプリントレビュー時のみ"],correct:1,explanation:"便益実現レビューは、プロジェクト完了後に行われ、成果物が計画された便益を実際に実現しているかを検証します。便益の実現には時間がかかるため、プロジェクト終了後しばらくしてから実施されることが多いです。"},
+  {id:188,domain:"Business",question:"ブルーオーシャン戦略とレッドオーシャン戦略の違いはどれですか？",options:["どちらも同じ戦略","ブルーオーシャンは競争のない新市場を創造、レッドオーシャンは既存市場での競争","ブルーオーシャンはリスクが低い","レッドオーシャンの方が利益が高い"],correct:1,explanation:"レッドオーシャンは既存の市場で競合と争う戦略です。ブルーオーシャンは、競争のない新しい市場空間を創造し、競争を無意味にする戦略です。イノベーションと差別化が鍵です。"},
+  {id:189,domain:"Business",question:"プロジェクトの「ビジネスバリューアセスメント」で考慮すべき要素はどれですか？",options:["技術の新しさのみ","有形的価値（財務リターン）と無形的価値（ブランド、知識、社会的影響）","プロジェクトチームの人数のみ","使用するツールの種類"],correct:1,explanation:"ビジネスバリューは、有形的価値（ROI、売上、コスト削減等）と無形的価値（ブランド価値、顧客満足度、従業員の知識、社会的影響等）の両方を包括的に評価すべきです。"},
+  {id:190,domain:"Predictive",question:"プロジェクトのリソース平準化とリソース円滑化の違いはどれですか？",options:["どちらも同じ","平準化はクリティカルパスを変更する可能性あり、円滑化はフロート内でのみ調整","円滑化の方がプロジェクト期間への影響が大きい","平準化はアジャイルのみで使用"],correct:1,explanation:"リソース平準化はリソース制約に基づきスケジュールを調整するため、クリティカルパスが変更され期間延長の可能性があります。リソース円滑化はフロートの範囲内でのみ調整するため、完了日は変わりません。"},
+  {id:191,domain:"Predictive",question:"プロジェクトの「仮定と制約」の違いはどれですか？",options:["どちらも同じ","仮定は真実と見なすが未確認の事項、制約はプロジェクトの選択肢を限定する条件","仮定は確定事実、制約は不確実な事項","仮定はリスク、制約は機会"],correct:1,explanation:"仮定（Assumption）は計画時点で真実と見なすが検証されていない事項で、誤りの場合リスクになります。制約（Constraint）は予算上限、期限、法規制等、プロジェクトの選択肢を限定する確定条件です。"},
+  {id:192,domain:"Predictive",question:"変更管理プロセスでインパクト分析を行う目的はどれですか？",options:["変更を自動的に承認するため","変更がスコープ、スケジュール、コスト、品質等に与える影響を評価するため","変更要求を却下するため","チームのモチベーションを測定するため"],correct:1,explanation:"インパクト分析は、提案された変更がプロジェクトのスコープ、スケジュール、コスト、品質、リスク等に与える影響を包括的に評価し、CCBが承認/却下の判断を行うための情報を提供します。"},
+  {id:193,domain:"Agile",question:"アジャイルにおける「スパイク」とは何ですか？",options:["チームの士気の急上昇","技術的な不確実性を調査するためのタイムボックス化された実験","バグの急増","スプリントの延長"],correct:1,explanation:"スパイクは、技術的な疑問や不確実性を解消するために行うタイムボックス化された調査・実験です。結果に基づいてユーザーストーリーの見積もりや技術的判断を行います。"},
+  {id:194,domain:"Agile",question:"カンバンの「リードタイム」と「サイクルタイム」の違いはどれですか？",options:["どちらも同じ","リードタイムは要求から納品まで、サイクルタイムは作業開始から完了まで","リードタイムの方が常に短い","サイクルタイムは週単位、リードタイムは月単位"],correct:1,explanation:"リードタイムは顧客の要求が入った時点から納品までの全体時間です。サイクルタイムはチームが実際に作業を開始してから完了するまでの時間です。通常、リードタイム≧サイクルタイムです。"},
+  {id:195,domain:"Agile",question:"「フィーチャートグル（Feature Toggle）」の目的はどれですか？",options:["機能を完全に削除する","コードをデプロイしつつ、機能の有効/無効を動的に切り替える","テストを省略する","ブランチ戦略を不要にする"],correct:1,explanation:"フィーチャートグルは、デプロイ済みのコード内で機能の有効/無効を設定で切り替える仕組みです。未完成の機能を本番環境に安全にデプロイし、準備が整ったら有効化できます。"},
+  {id:196,domain:"Agile",question:"アジャイルの「持続可能なペース」の原則が意味するものはどれですか？",options:["できるだけ速く開発する","チームが長期間にわたって一定の生産性を維持できる作業量を保つ","残業を推奨する","スプリントごとにベロシティを増やす"],correct:1,explanation:"持続可能なペースは、アジャイルマニフェストの原則の一つで、チームが燃え尽きることなく無期限に維持できる作業ペースを保つことを重視します。長時間労働は品質低下とバーンアウトを招きます。"},
+  {id:197,domain:"Process",question:"プロジェクトのコンフィギュレーション監査の目的はどれですか？",options:["財務監査","構成アイテムが承認された仕様と一致しているか検証する","チームの出勤状況を確認する","ステークホルダーの満足度を調査する"],correct:1,explanation:"コンフィギュレーション監査は、プロジェクトの構成アイテム（成果物、文書等）が承認されたベースラインや仕様と一致しているか、変更管理プロセスが適切に実施されているかを検証します。"},
+  {id:198,domain:"Process",question:"プロジェクトのフェーズの関係で「オーバーラップ関係」とはどれですか？",options:["すべてのフェーズが同時に開始する","前のフェーズが完了する前に次のフェーズが開始する","フェーズ間に長い休止期間がある","各フェーズが完全に独立している"],correct:1,explanation:"オーバーラップ関係は、前のフェーズが完了する前に次のフェーズが開始する関係です。ファスト・トラッキングに類似し、期間短縮が可能ですが、リワークのリスクが増加します。順次関係では前のフェーズの完了後に次が開始します。"},
+  {id:199,domain:"People",question:"プロジェクトマネージャーのコンピテンシーの「PMIタレントトライアングル」の3つの要素はどれですか？",options:["コスト・品質・時間","テクニカルPM・リーダーシップ・戦略的ビジネスマネジメント","計画・実行・監視","アジャイル・予測型・ハイブリッド"],correct:1,explanation:"PMIタレントトライアングルは、テクニカルプロジェクトマネジメント（技術的スキル）、リーダーシップ（対人スキル）、戦略的ビジネスマネジメント（ビジネス知識）の3つの能力領域でPMのコンピテンシーを定義します。"},
+  {id:200,domain:"People",question:"プロジェクトチームに新しい技術を導入する際、最も効果的な知識移転の方法はどれですか？",options:["マニュアルを配布するだけ","ハンズオンのワークショップとペアワークによる実践的な学習","メールで技術資料を送付する","外部の専門家に完全に委託する"],correct:1,explanation:"知識移転には、実践的なハンズオンワークショップ、ペアワーク、OJT（On-the-Job Training）が最も効果的です。座学やドキュメントだけでなく、実際に手を動かして学ぶことで定着率が大幅に向上します。"}
+];
+
+let questions=[];
+let stats={answered:{},correct:{}};
+let quizState={questions:[],current:0,answers:[],mode:''};
+
+function loadData(){
+  const saved=localStorage.getItem('pmp-questions');
+  if(saved){
+    questions=JSON.parse(saved);
+    const savedIds=new Set(questions.map(q=>q.id));
+    const newQs=defaultQuestions.filter(q=>!savedIds.has(q.id));
+    if(newQs.length>0){questions=questions.concat(newQs);saveQuestions();}
+  }else{
+    questions=[...defaultQuestions];saveQuestions();
+  }
+  const savedStats=localStorage.getItem('pmp-stats');
+  stats=savedStats?JSON.parse(savedStats):{answered:{},correct:{}};
+}
+function saveQuestions(){localStorage.setItem('pmp-questions',JSON.stringify(questions));}
+function saveStats(){localStorage.setItem('pmp-stats',JSON.stringify(stats));}
+
+function updateHome(){
+  const totalQ=questions.length;
+  const answeredIds=Object.keys(stats.answered).length;
+  const totalCorrect=Object.values(stats.correct).reduce((a,b)=>a+b,0);
+  const totalAnswered=Object.values(stats.answered).reduce((a,b)=>a+b,0);
+  const rate=totalAnswered>0?Math.round(totalCorrect/totalAnswered*100):'--';
+  document.getElementById('stat-total').textContent=totalQ;
+  document.getElementById('stat-answered').textContent=answeredIds;
+  document.getElementById('stat-rate').textContent=rate+'%';
+  const domains=[...new Set(questions.map(q=>q.domain))];
+  const domainList=document.getElementById('tab-domains');
+  domainList.innerHTML='';
+  domains.forEach(d=>{
+    const count=questions.filter(q=>q.domain===d).length;
+    const btn=document.createElement('button');
+    btn.className='domain-btn';
+    btn.innerHTML='<span>'+getDomainLabel(d)+'</span><span class="badge">'+count+'問</span>';
+    btn.onclick=()=>startQuiz(d);
+    domainList.appendChild(btn);
+  });
+}
+
+function getDomainLabel(d){
+  const labels={People:'People（人）',Process:'Process（プロセス）',Business:'Business Environment（ビジネス環境）',Predictive:'Predictive（予測型）',Agile:'Agile（アジャイル）'};
+  return labels[d]||d;
+}
+
+function switchTab(name,el){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  ['domains','add','manage'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('hidden',t!==name);
+  });
+}
+
+function showScreen(name){
+  ['home-screen','quiz-screen','result-screen'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden',s!==name+'-screen');
+  });
+}
+
+function startQuiz(mode){
+  let pool=[];
+  if(mode==='all'){pool=[...questions];}
+  else if(mode==='weak'){
+    pool=questions.filter(q=>{
+      const a=stats.answered[q.id]||0;
+      const c=stats.correct[q.id]||0;
+      return a===0||(c/a)<0.6;
+    });
+    if(pool.length===0){alert('苦手問題がありません！素晴らしい成績です！');return;}
+  }else{pool=questions.filter(q=>q.domain===mode);}
+  pool=shuffle(pool).slice(0,10);
+  quizState={questions:pool,current:0,answers:[],mode};
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q=quizState.questions[quizState.current];
+  const total=quizState.questions.length;
+  const idx=quizState.current;
+  document.getElementById('progress-fill').style.width=((idx+1)/total*100)+'%';
+  document.getElementById('q-counter').textContent=(idx+1)+' / '+total;
+  document.getElementById('q-domain').textContent=getDomainLabel(q.domain);
+  document.getElementById('q-text').textContent=q.question;
+  document.getElementById('q-explanation').classList.remove('show');
+  document.getElementById('next-btn').style.display='none';
+  const optDiv=document.getElementById('q-options');
+  optDiv.innerHTML='';
+  const labels=['A','B','C','D'];
+  q.options.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="option-label">'+labels[i]+'.</span>'+escapeHtml(opt);
+    btn.onclick=()=>selectAnswer(i);
+    optDiv.appendChild(btn);
+  });
+}
+
+function escapeHtml(text){
+  const div=document.createElement('div');
+  div.textContent=text;
+  return div.innerHTML;
+}
+
+function selectAnswer(idx){
+  const q=quizState.questions[quizState.current];
+  const options=document.querySelectorAll('#q-options .option');
+  if(options[0].classList.contains('disabled'))return;
+  options.forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i===q.correct)o.classList.add('correct');
+    if(i===idx&&idx!==q.correct)o.classList.add('wrong');
+  });
+  const isCorrect=idx===q.correct;
+  quizState.answers.push({questionId:q.id,selected:idx,correct:isCorrect});
+  stats.answered[q.id]=(stats.answered[q.id]||0)+1;
+  if(isCorrect)stats.correct[q.id]=(stats.correct[q.id]||0)+1;
+  saveStats();
+  const exp=document.getElementById('q-explanation');
+  exp.innerHTML='<strong>解説:</strong> '+escapeHtml(q.explanation);
+  exp.classList.add('show');
+  document.getElementById('next-btn').style.display='block';
+  document.getElementById('next-btn').textContent=quizState.current<quizState.questions.length-1?'次の問題':'結果を見る';
+}
+
+function nextQuestion(){
+  quizState.current++;
+  if(quizState.current>=quizState.questions.length){showResult();}
+  else{renderQuestion();}
+}
+
+function quitQuiz(){goHome();}
+
+function showResult(){
+  showScreen('result');
+  const total=quizState.answers.length;
+  const correctCount=quizState.answers.filter(a=>a.correct).length;
+  const pct=Math.round(correctCount/total*100);
+  const circle=document.getElementById('score-circle');
+  circle.className='score-circle '+(pct>=60?'pass':'fail');
+  document.getElementById('score-pct').textContent=pct+'%';
+  document.getElementById('score-detail').textContent=correctCount+' / '+total;
+  document.getElementById('result-title').textContent=pct>=60?'合格ライン達成！':'もう少し頑張りましょう！';
+  document.getElementById('result-msg').textContent=pct>=60?'この調子で学習を続けましょう。':'苦手分野を重点的に復習しましょう。';
+  document.getElementById('review-section').classList.add('hidden');
+}
+
+function showReview(){
+  const section=document.getElementById('review-section');
+  section.classList.remove('hidden');
+  section.innerHTML='<h3 style="margin-bottom:12px">回答の振り返り</h3>';
+  const labels=['A','B','C','D'];
+  quizState.answers.forEach((a,i)=>{
+    const q=quizState.questions[i];
+    const div=document.createElement('div');
+    div.className='review-item';
+    const yourAnswer=a.correct
+      ?'<span class="correct-mark">正解: '+labels[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</span>'
+      :'<span class="wrong-mark">あなたの回答: '+labels[a.selected]+'. '+escapeHtml(q.options[a.selected])+'</span><br><span class="correct-mark">正解: '+labels[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</span>';
+    div.innerHTML='<div class="q-text">'+(i+1)+'. '+escapeHtml(q.question)+'</div><div class="answer-info">'+yourAnswer+'<br><em>'+escapeHtml(q.explanation)+'</em></div>';
+    section.appendChild(div);
+  });
+}
+
+function goHome(){showScreen('home');updateHome();}
+
+function addCustomQuestion(){
+  const domain=document.getElementById('add-domain').value;
+  const question=document.getElementById('add-question').value.trim();
+  const opts=[0,1,2,3].map(i=>document.getElementById('add-opt'+i).value.trim());
+  const correct=parseInt(document.querySelector('input[name="correct"]:checked').value);
+  const explanation=document.getElementById('add-explanation').value.trim();
+  if(!question||opts.some(o=>!o)){alert('問題文と全ての選択肢を入力してください。');return;}
+  const newId=Math.max(0,...questions.map(q=>q.id))+1;
+  questions.push({id:newId,domain,question,options:opts,correct,explanation:explanation||'解説なし'});
+  saveQuestions();
+  document.getElementById('add-question').value='';
+  [0,1,2,3].forEach(i=>document.getElementById('add-opt'+i).value='');
+  document.getElementById('add-explanation').value='';
+  document.querySelector('input[name="correct"][value="0"]').checked=true;
+  alert('問題を追加しました！');
+  updateHome();
+}
+
+function exportData(){
+  const data={questions,stats,exportDate:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='pmp-quiz-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+}
+
+function importData(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(data.questions){questions=data.questions;saveQuestions();}
+      if(data.stats){stats=data.stats;saveStats();}
+      alert('インポートが完了しました！');
+      updateHome();
+    }catch(err){alert('ファイルの読み込みに失敗しました。');}
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+function resetStats(){
+  if(!confirm('成績データをリセットしますか？問題データは残ります。'))return;
+  stats={answered:{},correct:{}};
+  saveStats();
+  updateHome();
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+loadData();
+updateHome();
+
+// Service Worker登録（PWA）
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js');
+}
+</script>
+</body>
+</html>
