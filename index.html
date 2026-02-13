@@ -136,6 +136,12 @@ gtag('config','G-EPQQE97M74');
   }
   .btn-outline:hover { background: #eff6ff; }
 
+  .quiz-count-btn {
+    padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border);
+    background: var(--card); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .quiz-count-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+
   .progress-bar {
     background: var(--border);
     border-radius: 20px;
@@ -315,6 +321,19 @@ gtag('config','G-EPQQE97M74');
           <div class="num" id="stat-rate">--%</div>
           <div class="label">正答率</div>
         </div>
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:14px;color:var(--text-light);display:block;margin-bottom:6px">出題数</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="quiz-count-btn" onclick="setQuizCount(10)" data-count="10">10問</button>
+          <button class="quiz-count-btn" onclick="setQuizCount(30)" data-count="30">30問</button>
+          <button class="quiz-count-btn" onclick="setQuizCount(50)" data-count="50">50問</button>
+          <button class="quiz-count-btn active" onclick="setQuizCount(0)" data-count="0">全問</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <input type="checkbox" id="unanswered-first" checked style="width:18px;height:18px;accent-color:var(--primary)">
+        <label for="unanswered-first" style="font-size:14px;color:var(--text)">未回答の問題を優先出題</label>
       </div>
       <button class="btn" onclick="startQuiz('all')" style="margin-bottom:12px">全分野からランダム出題</button>
       <button class="btn btn-outline" onclick="startQuiz('weak')" style="margin-bottom:12px">苦手問題を復習</button>
@@ -661,6 +680,14 @@ function showScreen(name){
   });
 }
 
+let selectedQuizCount=0; // 0=全問
+function setQuizCount(n){
+  selectedQuizCount=n;
+  document.querySelectorAll('.quiz-count-btn').forEach(b=>{
+    b.classList.toggle('active',parseInt(b.dataset.count)===n);
+  });
+}
+
 function startQuiz(mode){
   let pool=[];
   if(mode==='all'){pool=[...questions];}
@@ -672,7 +699,18 @@ function startQuiz(mode){
     });
     if(pool.length===0){alert('苦手問題がありません！素晴らしい成績です！');return;}
   }else{pool=questions.filter(q=>q.domain===mode);}
-  pool=shuffle(pool).slice(0,10);
+  // 未回答優先
+  const unansweredFirst=document.getElementById('unanswered-first').checked;
+  if(unansweredFirst && mode!=='weak'){
+    const unanswered=pool.filter(q=>!stats.answered[q.id]);
+    const answered=pool.filter(q=>stats.answered[q.id]);
+    pool=[...shuffle(unanswered),...shuffle(answered)];
+  }else{
+    pool=shuffle(pool);
+  }
+  // 出題数制限
+  const limit=selectedQuizCount;
+  if(limit>0) pool=pool.slice(0,limit);
   quizState={questions:pool,current:0,answers:[],mode};
   showScreen('quiz');
   renderQuestion();
