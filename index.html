@@ -376,8 +376,6 @@ gtag('config','G-EPQQE97M74');
       <div class="home-card">
         <h2 style="margin-bottom:16px">データ管理</h2>
         <button class="btn" onclick="exportData()" style="margin-bottom:10px">問題と成績をエクスポート</button>
-        <button class="btn btn-outline" onclick="document.getElementById('import-file').click()" style="margin-bottom:10px">インポート</button>
-        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
         <button class="btn btn-outline" onclick="resetStats()" style="border-color:var(--danger);color:var(--danger)">成績をリセット</button>
       </div>
     </div>
@@ -833,22 +831,6 @@ function exportData(){
   a.click();
 }
 
-function importData(e){
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    try{
-      const data=JSON.parse(ev.target.result);
-      if(data.questions){questions=data.questions;saveQuestions();}
-      if(data.stats){stats=data.stats;saveStats();}
-      alert('インポートが完了しました！');
-      updateHome();
-    }catch(err){alert('ファイルの読み込みに失敗しました。');}
-  };
-  reader.readAsText(file);
-  e.target.value='';
-}
 
 function resetStats(){
   if(!confirm('成績データをリセットしますか？問題データは残ります。'))return;
