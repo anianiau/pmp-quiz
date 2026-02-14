@@ -94,6 +94,7 @@ gtag('config','G-EPQQE97M74');
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
     width: 100%;
     background: var(--card);
     border: 1px solid var(--border);
@@ -105,14 +106,18 @@ gtag('config','G-EPQQE97M74');
     font-weight: 500;
     color: var(--text);
     transition: all 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .domain-btn:hover { border-color: var(--primary); background: #eff6ff; }
+  .domain-btn > span:first-child { flex: 1; min-width: 0; flex-wrap: wrap; }
   .domain-btn .badge {
     background: var(--primary);
     color: white;
     border-radius: 20px;
     padding: 2px 10px;
     font-size: 0.75rem;
+    flex-shrink: 0;
   }
 
   .btn {
@@ -127,6 +132,8 @@ gtag('config','G-EPQQE97M74');
     cursor: pointer;
     transition: background 0.2s;
     width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .btn:hover { background: var(--primary-dark); }
   .btn-outline {
@@ -139,6 +146,7 @@ gtag('config','G-EPQQE97M74');
   .quiz-count-btn {
     padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border);
     background: var(--card); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
   }
   .quiz-count-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
 
@@ -197,6 +205,8 @@ gtag('config','G-EPQQE97M74');
     line-height: 1.5;
     transition: all 0.2s;
     color: var(--text);
+    -webkit-appearance: none;
+    appearance: none;
   }
   .option:hover:not(.disabled) { border-color: var(--primary); background: #eff6ff; }
   .option.selected { border-color: var(--primary); background: #dbeafe; }
@@ -278,6 +288,8 @@ gtag('config','G-EPQQE97M74');
     font-size: 0.85rem;
     color: var(--text-light);
     transition: all 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .tab-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
 </style>
