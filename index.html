@@ -711,7 +711,7 @@ const defaultQuestions=[
   {id:297,domain:"Predictive",question:"予測型プロジェクトにおいて、プロジェクト計画の策定が完了した後、最初に取得すべき承認はどれですか？",options:["チームメンバー全員の承認","品質管理部門の承認","プロジェクトベースラインに対するスポンサーの承認","法務部門の承認"],correct:2,explanation:"プロジェクト計画策定後、スコープ、スケジュール、コストの各ベースラインを含むプロジェクトマネジメント計画書について、スポンサーの承認を得ることが重要です。これがプロジェクト実行の基準線となります。"},
   {id:298,domain:"Predictive",question:"予測型プロジェクトのスコープ検証（Validate Scope）プロセスの主な成果はどれですか？",options:["品質基準への適合確認","リスクの特定と評価","プロジェクトスケジュールの承認","ステークホルダーによる成果物の正式な受入れ"],correct:3,explanation:"スコープ検証は、完成した成果物をステークホルダー（主に顧客やスポンサー）が正式に検査し、受入れるプロセスです。品質管理（品質コントロール）が品質基準への適合を確認するのに対し、スコープ検証は成果物の受入れに焦点を当てます。"},
   {id:299,domain:"Predictive",question:"プロジェクトの終結プロセスで実施すべき活動として最も包括的なのはどれですか？",options:["成果物の引き渡し、教訓の文書化、契約の終結、リソースの解放を含む包括的な終結活動","最終報告書の作成のみ","チームの解散のみ","財務報告書の提出のみ"],correct:0,explanation:"プロジェクトの終結は包括的なプロセスであり、成果物の正式な引き渡し、教訓の文書化と共有、すべての契約の終結、組織プロセス資産の更新、リソースの解放等を含みます。"},
-  {id:300,domain:"Predictive",question:"予測型プロジェクトにおいて、マネジメント予備（Management Reserve）とコンティンジェンシー予備（Contingency Reserve）の違いは何ですか？",options:["マネジメント予備は特定のリスク用、コンティンジェンシー予備は未知のリスク用","マネジメント予備は未知の未知のリスク用で、コンティンジェンシー予備は既知のリスク用","マネジメント予備はプロジェクトマネージャーが管理し、コンティンジェンシー予備はスポンサーが管理する","両者に違いはない"],correct:1,explanation:"コンティンジェンシー予備は識別された既知のリスクに対する予備であり、プロジェクトコストベースラインに含まれます。マネジメント予備は未知の未知（Unknown-Unknowns）のリスクに対する予備で、プロジェクト予算に含まれますがベースラインには含まれません。"}
+  {id:300,domain:"Predictive",question:"予測型プロジェクトにおいて、マネジメント予備（Management Reserve）とコンティンジェンシー予備（Contingency Reserve）の違いは何ですか？",options:["マネジメント予備は特定のリスク用、コンティンジェンシー予備は未知のリスク用","マネジメント予備は未知の未知のリスク用で、コンティンジェンシー予備は既知の未知のリスク用","マネジメント予備はプロジェクトマネージャーが管理し、コンティンジェンシー予備はスポンサーが管理する","両者に違いはない"],correct:1,explanation:"コンティンジェンシー予備は識別された既知のリスクに対する予備であり、プロジェクトコストベースラインに含まれます。マネジメント予備は未知の未知（Unknown-Unknowns）のリスクに対する予備で、プロジェクト予算に含まれますがベースラインには含まれません。"}
 ];
 
 let questions=[];
@@ -784,27 +784,45 @@ function setQuizCount(n){
 
 function startQuiz(mode){
   let pool=[];
-  if(mode==='all'){pool=[...questions];}
-  else if(mode==='weak'){
+  const unansweredFirst=document.getElementById('unanswered-first').checked;
+  const limit=selectedQuizCount;
+  if(mode==='all'){
+    if(limit>0){
+      if(unansweredFirst){
+        const unanswered=questions.filter(q=>!stats.answered[q.id]);
+        pool=buildWeightedPool(unanswered,limit);
+        if(pool.length<limit){
+          const answered=questions.filter(q=>stats.answered[q.id]);
+          pool=[...pool,...buildWeightedPool(answered,limit-pool.length)];
+        }
+      }else{
+        pool=buildWeightedPool(questions,limit);
+      }
+    }else{
+      pool=unansweredFirst
+        ?[...shuffle(questions.filter(q=>!stats.answered[q.id])),...shuffle(questions.filter(q=>stats.answered[q.id]))]
+        :shuffle([...questions]);
+    }
+  }else if(mode==='weak'){
     pool=questions.filter(q=>{
       const a=stats.answered[q.id]||0;
       const c=stats.correct[q.id]||0;
       return a===0||(c/a)<0.6;
     });
     if(pool.length===0){alert('苦手問題がありません！素晴らしい成績です！');return;}
-  }else{pool=questions.filter(q=>q.domain===mode);}
-  // 未回答優先
-  const unansweredFirst=document.getElementById('unanswered-first').checked;
-  if(unansweredFirst && mode!=='weak'){
-    const unanswered=pool.filter(q=>!stats.answered[q.id]);
-    const answered=pool.filter(q=>stats.answered[q.id]);
-    pool=[...shuffle(unanswered),...shuffle(answered)];
-  }else{
     pool=shuffle(pool);
+    if(limit>0) pool=pool.slice(0,limit);
+  }else{
+    pool=questions.filter(q=>q.domain===mode);
+    if(unansweredFirst){
+      const unanswered=pool.filter(q=>!stats.answered[q.id]);
+      const answered=pool.filter(q=>stats.answered[q.id]);
+      pool=[...shuffle(unanswered),...shuffle(answered)];
+    }else{
+      pool=shuffle(pool);
+    }
+    if(limit>0) pool=pool.slice(0,limit);
   }
-  // 出題数制限
-  const limit=selectedQuizCount;
-  if(limit>0) pool=pool.slice(0,limit);
   quizState={questions:pool,current:0,answers:[],mode};
   showScreen('quiz');
   renderQuestion();
@@ -916,6 +934,22 @@ function resetStats(){
   stats={answered:{},correct:{}};
   saveStats();
   updateHome();
+}
+
+// PMP本番比率（People42%,Process50%,Business8%）に基づく重み付きサンプリング
+function buildWeightedPool(src,limit){
+  const weights={'People':42,'Process':21,'Predictive':13,'Agile':16,'Business':8};
+  const totalW=Object.values(weights).reduce((a,b)=>a+b,0);
+  const byDomain={};
+  Object.keys(weights).forEach(d=>{byDomain[d]=shuffle(src.filter(q=>q.domain===d));});
+  const counts={};
+  Object.keys(weights).forEach(d=>{counts[d]=Math.round(limit*weights[d]/totalW);});
+  const sum=Object.values(counts).reduce((a,b)=>a+b,0);
+  counts['Process']+=limit-sum;
+  Object.keys(counts).forEach(d=>{counts[d]=Math.min(counts[d]||0,byDomain[d]?byDomain[d].length:0);});
+  let result=[];
+  Object.keys(counts).forEach(d=>{result=result.concat((byDomain[d]||[]).slice(0,counts[d]));});
+  return shuffle(result);
 }
 
 function shuffle(arr){
