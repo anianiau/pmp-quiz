@@ -392,6 +392,7 @@ gtag('config','G-EPQQE97M74');
       <div id="q-options"></div>
       <div class="explanation" id="q-explanation"></div>
     </div>
+    <button class="btn" id="next-btn-bottom" onclick="nextQuestion()" style="display:none;margin-top:16px">次へ</button>
     <button class="btn btn-outline" onclick="quitQuiz()" style="margin-top:10px">中断してホームに戻る</button>
   </div>
 
@@ -840,6 +841,7 @@ function renderQuestion(){
   document.getElementById('q-text').textContent=q.question;
   document.getElementById('q-explanation').classList.remove('show');
   document.getElementById('next-btn').style.display='none';
+  document.getElementById('next-btn-bottom').style.display='none';
   const optDiv=document.getElementById('q-options');
   optDiv.innerHTML='';
   const labels=['A','B','C','D'];
@@ -875,8 +877,11 @@ function selectAnswer(idx){
   const exp=document.getElementById('q-explanation');
   exp.innerHTML='<strong>解説:</strong> '+escapeHtml(q.explanation);
   exp.classList.add('show');
+  const label=quizState.current<quizState.questions.length-1?'次へ':'結果を見る';
   document.getElementById('next-btn').style.display='block';
-  document.getElementById('next-btn').textContent=quizState.current<quizState.questions.length-1?'次へ':'結果を見る';
+  document.getElementById('next-btn').textContent=label;
+  document.getElementById('next-btn-bottom').style.display='block';
+  document.getElementById('next-btn-bottom').textContent=label;
 }
 
 function nextQuestion(){
