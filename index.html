@@ -894,6 +894,7 @@ function selectAnswer(idx){
   stats.answered[q.id]=(stats.answered[q.id]||0)+1;
   if(isCorrect)stats.correct[q.id]=(stats.correct[q.id]||0)+1;
   saveStats();
+  gtag('event','quiz_answer',{question_id:q.id,domain:q.domain,correct:isCorrect});
   const exp=document.getElementById('q-explanation');
   exp.innerHTML='<strong>解説:</strong> '+escapeHtml(q.explanation);
   exp.classList.add('show');
@@ -917,6 +918,7 @@ function showResult(){
   const total=quizState.answers.length;
   const correctCount=quizState.answers.filter(a=>a.correct).length;
   const pct=Math.round(correctCount/total*100);
+  gtag('event','quiz_complete',{total_questions:total,correct_count:correctCount,score_pct:pct,mode:quizState.mode});
   const circle=document.getElementById('score-circle');
   circle.className='score-circle '+(pct>=60?'pass':'fail');
   document.getElementById('score-pct').textContent=pct+'%';
