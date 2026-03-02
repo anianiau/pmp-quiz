@@ -913,6 +913,12 @@ function nextQuestion(){
 
 function quitQuiz(){if(confirm('中断してホームに戻りますか？'))goHome();}
 
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'&&document.getElementById('next-btn').style.display!=='none'){
+    nextQuestion();
+  }
+});
+
 function showResult(){
   showScreen('result');
   const total=quizState.answers.length;
