@@ -2,12 +2,13 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>PMP問題集 - 無料模擬試験アプリ</title>
 <meta name="description" content="PMP試験対策の無料問題集。320問収録、スマホ対応・オフライン利用可。シナリオ型の練習問題でPeople・Process・Business Environmentの頻出パターンを徹底対策。繰り返し学習で合格力を高めよう。">
 <meta name="keywords" content="PMP,問題集,無料,模擬試験,練習問題,Project Management Professional,PMP試験対策,PMP練習問題,シナリオ問題">
 <meta property="og:title" content="PMP問題集 - 無料模擬試験アプリ">
 <meta property="og:description" content="PMP試験対策の無料問題集。320問収録、スマホ対応・オフライン利用可。シナリオ型問題で頻出パターンを徹底対策。">
+<meta property="og:image" content="https://pmp-test.jp/ogp.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pmp-test.jp/">
 <link rel="canonical" href="https://pmp-test.jp/">
@@ -246,6 +247,11 @@ gtag('config','G-EPQQE97M74');
     display: none;
   }
   .explanation.show { display: block; }
+  .bookmark-btn {
+    background: none; border: none; cursor: pointer; font-size: 1.3rem; padding: 4px 8px;
+    color: var(--text-light); transition: color 0.2s; -webkit-appearance: none; appearance: none;
+  }
+  .bookmark-btn.active { color: #f59e0b; }
   .explanation strong { color: var(--warning); }
 
   .result-card {
@@ -312,13 +318,48 @@ gtag('config','G-EPQQE97M74');
     appearance: none;
   }
   .tab-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+
+  /* ダークモード */
+  .dark {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --text-light: #94a3b8;
+    --border: #334155;
+    --success: #22c55e;
+    --danger: #f87171;
+  }
+  .dark .home-card, .dark .question-card, .dark .result-card, .dark .review-item { box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  .dark .stat-box { background: #0f172a; }
+  .dark .option { background: #0f172a; }
+  .dark .option:hover:not(.disabled) { background: #334155; }
+  .dark .option.selected { background: #1e3a8a; border-color: #3b82f6; }
+  .dark .option.correct { background: #14532d; border-color: var(--success); }
+  .dark .option.wrong { background: #7f1d1d; border-color: var(--danger); }
+  .dark .explanation { background: #422006; border-left-color: var(--warning); }
+  .dark .explanation strong { color: #fbbf24; }
+  .dark .domain-btn:hover { background: #334155; }
+  .dark .tab-btn.active { background: #1e3a5f; }
+  .dark .question-info .domain-tag { background: #1e3a5f; }
+  .dark .btn-outline { border-color: #3b82f6; color: #93c5fd; }
+  .dark .btn-outline:hover { background: #1e3a5f; }
+  .dark .quiz-count-btn { background: var(--card); color: var(--text); border-color: var(--border); }
+  .dark .option.disabled { opacity: 1; }
+  .dark .score-circle.pass { background: linear-gradient(135deg, #22c55e, #16a34a); }
+  .dark .score-circle.fail { background: linear-gradient(135deg, #f87171, #dc2626); }
+  .dark-toggle {
+    background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px 8px;
+    color: rgba(255,255,255,0.85); position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    -webkit-appearance: none; appearance: none;
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
+<div class="header" style="position:relative">
   <h1>PMP問題集</h1>
   <p>Project Management Professional 試験対策</p>
+  <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" title="ダークモード切替">&#9790;</button>
 </div>
 
 <div class="container">
@@ -355,6 +396,7 @@ gtag('config','G-EPQQE97M74');
       </div>
       <button class="btn" onclick="startQuiz('all')" style="margin-bottom:12px">全分野からランダム出題</button>
       <button class="btn btn-outline" onclick="startQuiz('weak')" style="margin-bottom:12px">苦手問題を復習</button>
+      <button class="btn btn-outline" onclick="startQuiz('bookmark')" style="margin-bottom:12px">ブックマーク問題を復習</button>
     </div>
 
     <div class="tab-bar">
@@ -385,7 +427,10 @@ gtag('config','G-EPQQE97M74');
         <span id="q-counter">1 / 10</span>
         <span class="domain-tag" id="q-domain">People</span>
       </div>
-      <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;width:auto;padding:8px 22px;font-size:0.85rem">次へ</button>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button class="bookmark-btn" id="bookmark-btn" onclick="onBookmarkClick()" title="ブックマーク">&#9734;</button>
+        <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;width:auto;padding:8px 22px;font-size:0.85rem">次へ</button>
+      </div>
     </div>
     <div class="question-card">
       <h3 id="q-text"></h3>
@@ -737,8 +782,20 @@ const defaultQuestions=[
   {id:320,domain:"Process",question:"プロジェクト途中から影響力の大きい新しいステークホルダーが参加することになった。PMはまず何をすべきか？",options:["次回の定例報告会で他のステークホルダーと同様に紹介する","既存のステークホルダー管理計画にそのままの枠組みで組み込む","新ステークホルダーの要求を全て受け入れて関係を構築する","新ステークホルダーの関心・影響度・期待を分析し、エンゲージメント計画を更新する"],correct:3,explanation:"新たなステークホルダーが加わった際は、その関心事・影響度・期待値を分析することが先決です。ステークホルダー登録簿とエンゲージメント計画を更新し、適切なコミュニケーション戦略を立てます。定例報告まで待ったり、要求を無条件で受け入れるのは適切ではありません。"}
 ];
 
+// ダークモード（早期適用でフラッシュ防止）
+(function(){
+  const d=localStorage.getItem('pmp-dark');
+  if(d==='1'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');
+})();
+function toggleDark(){
+  const isDark=document.documentElement.classList.toggle('dark');
+  localStorage.setItem('pmp-dark',isDark?'1':'0');
+  document.getElementById('dark-toggle').innerHTML=isDark?'&#9788;':'&#9790;';
+}
+
 let questions=[];
 let stats={answered:{},correct:{}};
+let bookmarks=JSON.parse(localStorage.getItem('pmp-bookmarks')||'[]');
 let quizState={questions:[],current:0,answers:[],mode:''};
 
 function loadData(){
@@ -750,6 +807,19 @@ function loadData(){
   stats=savedStats?JSON.parse(savedStats):{answered:{},correct:{}};
 }
 function saveStats(){localStorage.setItem('pmp-stats',JSON.stringify(stats));}
+function toggleBookmark(id){
+  const i=bookmarks.indexOf(id);
+  if(i>=0)bookmarks.splice(i,1);else bookmarks.push(id);
+  localStorage.setItem('pmp-bookmarks',JSON.stringify(bookmarks));
+  return bookmarks.includes(id);
+}
+function saveQuizState(){localStorage.setItem('pmp-quiz-state',JSON.stringify({questions:quizState.questions.map(q=>q.id),current:quizState.current,answers:quizState.answers,mode:quizState.mode}));}
+function clearQuizState(){localStorage.removeItem('pmp-quiz-state');}
+function loadQuizState(){
+  const saved=localStorage.getItem('pmp-quiz-state');
+  if(!saved)return null;
+  try{return JSON.parse(saved);}catch(e){return null;}
+}
 
 function updateHome(){
   const totalQ=questions.length;
@@ -826,6 +896,11 @@ function startQuiz(mode){
         ?[...shuffle(questions.filter(q=>!stats.answered[q.id])),...shuffle(questions.filter(q=>stats.answered[q.id]))]
         :shuffle([...questions]);
     }
+  }else if(mode==='bookmark'){
+    pool=questions.filter(q=>bookmarks.includes(q.id));
+    if(pool.length===0){alert('ブックマークした問題がありません。');return;}
+    pool=shuffle(pool);
+    if(limit>0) pool=pool.slice(0,limit);
   }else if(mode==='weak'){
     pool=questions.filter(q=>{
       const a=stats.answered[q.id]||0;
@@ -852,6 +927,7 @@ function startQuiz(mode){
 }
 
 function renderQuestion(){
+  window.scrollTo(0,0);
   const q=quizState.questions[quizState.current];
   const total=quizState.questions.length;
   const idx=quizState.current;
@@ -862,6 +938,9 @@ function renderQuestion(){
   document.getElementById('q-explanation').classList.remove('show');
   document.getElementById('next-btn').style.display='none';
   document.getElementById('next-btn-bottom').style.display='none';
+  const bmBtn=document.getElementById('bookmark-btn');
+  bmBtn.innerHTML=bookmarks.includes(q.id)?'&#9733;':'&#9734;';
+  bmBtn.classList.toggle('active',bookmarks.includes(q.id));
   const optDiv=document.getElementById('q-options');
   optDiv.innerHTML='';
   const labels=['A','B','C','D'];
@@ -894,7 +973,7 @@ function selectAnswer(idx){
   stats.answered[q.id]=(stats.answered[q.id]||0)+1;
   if(isCorrect)stats.correct[q.id]=(stats.correct[q.id]||0)+1;
   saveStats();
-  gtag('event','quiz_answer',{question_id:q.id,domain:q.domain,correct:isCorrect});
+  if(typeof gtag==='function')gtag('event','quiz_answer',{question_id:q.id,domain:q.domain,correct:isCorrect});
   const exp=document.getElementById('q-explanation');
   exp.innerHTML='<strong>解説:</strong> '+escapeHtml(q.explanation);
   exp.classList.add('show');
@@ -903,19 +982,34 @@ function selectAnswer(idx){
   document.getElementById('next-btn').textContent=label;
   document.getElementById('next-btn-bottom').style.display='block';
   document.getElementById('next-btn-bottom').textContent=label;
+  saveQuizState();
 }
 
 function nextQuestion(){
   quizState.current++;
-  if(quizState.current>=quizState.questions.length){showResult();}
-  else{renderQuestion();}
+  if(quizState.current>=quizState.questions.length){clearQuizState();showResult();}
+  else{saveQuizState();renderQuestion();}
 }
 
 function quitQuiz(){if(confirm('中断してホームに戻りますか？'))goHome();}
 
+function onBookmarkClick(){
+  const q=quizState.questions[quizState.current];
+  const isNow=toggleBookmark(q.id);
+  const bmBtn=document.getElementById('bookmark-btn');
+  bmBtn.innerHTML=isNow?'&#9733;':'&#9734;';
+  bmBtn.classList.toggle('active',isNow);
+}
+
 document.addEventListener('keydown',e=>{
+  if(document.getElementById('quiz-screen').classList.contains('hidden'))return;
   if(e.key==='ArrowRight'&&document.getElementById('next-btn').style.display!=='none'){
     nextQuestion();
+  }
+  if(['1','2','3','4'].includes(e.key)){
+    const idx=parseInt(e.key)-1;
+    const options=document.querySelectorAll('#q-options .option');
+    if(options.length>idx&&!options[0].classList.contains('disabled'))selectAnswer(idx);
   }
 });
 
@@ -924,7 +1018,7 @@ function showResult(){
   const total=quizState.answers.length;
   const correctCount=quizState.answers.filter(a=>a.correct).length;
   const pct=Math.round(correctCount/total*100);
-  gtag('event','quiz_complete',{total_questions:total,correct_count:correctCount,score_pct:pct,mode:quizState.mode});
+  if(typeof gtag==='function')gtag('event','quiz_complete',{total_questions:total,correct_count:correctCount,score_pct:pct,mode:quizState.mode});
   const circle=document.getElementById('score-circle');
   circle.className='score-circle '+(pct>=60?'pass':'fail');
   document.getElementById('score-pct').textContent=pct+'%';
@@ -951,7 +1045,7 @@ function showReview(){
   });
 }
 
-function goHome(){showScreen('home');updateHome();}
+function goHome(){clearQuizState();showScreen('home');updateHome();}
 
 
 function exportData(){
@@ -998,6 +1092,17 @@ function shuffle(arr){
 
 loadData();
 updateHome();
+if(document.documentElement.classList.contains('dark'))document.getElementById('dark-toggle').innerHTML='&#9788;';
+(function resumeQuiz(){
+  const saved=loadQuizState();
+  if(!saved||!saved.questions||saved.questions.length===0)return;
+  if(!confirm('前回の続き（'+saved.answers.length+'/'+saved.questions.length+'問回答済み）を再開しますか？'))return clearQuizState();
+  const pool=saved.questions.map(id=>questions.find(q=>q.id===id)).filter(Boolean);
+  if(pool.length===0)return clearQuizState();
+  quizState={questions:pool,current:saved.current,answers:saved.answers||[],mode:saved.mode||'all'};
+  showScreen('quiz');
+  renderQuestion();
+})();
 
 // Service Worker登録（PWA）
 if('serviceWorker' in navigator){
