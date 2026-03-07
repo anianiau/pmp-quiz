@@ -1,9 +1,10 @@
-const CACHE_NAME = 'pmp-quiz-v5';
+const CACHE_NAME = 'pmp-quiz-v6';
 const ASSETS = [
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './ogp.png'
 ];
 
 self.addEventListener('install', e => {
