@@ -344,6 +344,7 @@ gtag('config','G-EPQQE97M74');
   .dark .btn-outline { border-color: #3b82f6; color: #93c5fd; }
   .dark .btn-outline:hover { background: #1e3a5f; }
   .dark .quiz-count-btn { background: var(--card); color: var(--text); border-color: var(--border); }
+  .dark .quiz-count-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
   .dark .option.disabled { opacity: 1; }
   .dark .score-circle.pass { background: linear-gradient(135deg, #22c55e, #16a34a); }
   .dark .score-circle.fail { background: linear-gradient(135deg, #f87171, #dc2626); }
@@ -352,37 +353,53 @@ gtag('config','G-EPQQE97M74');
     color: rgba(255,255,255,0.85); position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
     -webkit-appearance: none; appearance: none;
   }
+  .lang-switcher {
+    position: absolute; right: 52px; top: 50%; transform: translateY(-50%);
+    display: flex; gap: 4px;
+  }
+  .lang-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.7);
+    font-size: 0.68rem; font-weight: 700; padding: 3px 7px; border-radius: 4px; cursor: pointer;
+    line-height: 1.4; -webkit-appearance: none; appearance: none;
+  }
+  .lang-btn.active { background: rgba(255,255,255,0.25); color: #fff; border-color: rgba(255,255,255,0.7); }
+  .lang-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 </style>
 </head>
 <body>
 
 <div class="header" style="position:relative">
-  <h1>PMP問題集</h1>
-  <p>Project Management Professional 試験対策</p>
-  <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" title="ダークモード切替">&#9790;</button>
+  <h1 data-i18n="app.title">PMP問題集</h1>
+  <p data-i18n="app.subtitle">Project Management Professional 試験対策</p>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="ja" onclick="setLang('ja')">JA</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')" disabled>EN</button>
+    <button class="lang-btn" data-lang="ko" onclick="setLang('ko')" disabled>한</button>
+  </div>
+  <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" data-i18n-title="tooltip.dark" title="ダークモード切替">&#9790;</button>
 </div>
 
 <div class="container">
   <div id="home-screen">
     <div class="home-card">
-      <h2>学習ダッシュボード</h2>
-      <p>知識を深めてPMP合格を目指しましょう</p>
+      <h2 data-i18n="dashboard.title">学習ダッシュボード</h2>
+      <p data-i18n="dashboard.subtitle">知識を深めてPMP合格を目指しましょう</p>
       <div class="stats-grid">
         <div class="stat-box">
           <div class="num" id="stat-total">0</div>
-          <div class="label">総問題数</div>
+          <div class="label" data-i18n="stat.total">総問題数</div>
         </div>
         <div class="stat-box">
           <div class="num" id="stat-answered">0</div>
-          <div class="label">回答済み</div>
+          <div class="label" data-i18n="stat.answered">回答済み</div>
         </div>
         <div class="stat-box">
           <div class="num" id="stat-rate">--%</div>
-          <div class="label">正答率</div>
+          <div class="label" data-i18n="stat.rate">正答率</div>
         </div>
       </div>
       <div style="margin-bottom:12px">
-        <label style="font-size:14px;color:var(--text-light);display:block;margin-bottom:6px">出題数</label>
+        <label style="font-size:14px;color:var(--text-light);display:block;margin-bottom:6px" data-i18n="quiz.count.label">出題数</label>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="quiz-count-btn active" onclick="setQuizCount(10)" data-count="10">10問</button>
           <button class="quiz-count-btn" onclick="setQuizCount(20)" data-count="20">20問</button>
@@ -392,31 +409,31 @@ gtag('config','G-EPQQE97M74');
       </div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
         <input type="checkbox" id="unanswered-first" checked style="width:18px;height:18px;accent-color:var(--primary)">
-        <label for="unanswered-first" style="font-size:14px;color:var(--text)">未回答の問題を優先出題</label>
+        <label for="unanswered-first" style="font-size:14px;color:var(--text)" data-i18n="quiz.unanswered.priority">未回答の問題を優先出題</label>
       </div>
-      <button class="btn" onclick="startQuiz('all')" style="margin-bottom:12px">全分野からランダム出題</button>
-      <button class="btn btn-outline" onclick="startQuiz('weak')" style="margin-bottom:12px">苦手問題を復習</button>
-      <button class="btn btn-outline" onclick="startQuiz('bookmark')" style="margin-bottom:12px">ブックマーク問題を復習</button>
+      <button class="btn" onclick="startQuiz('all')" style="margin-bottom:12px" data-i18n="btn.start.all">全分野からランダム出題</button>
+      <button class="btn btn-outline" onclick="startQuiz('weak')" style="margin-bottom:12px" data-i18n="btn.start.weak">苦手問題を復習</button>
+      <button class="btn btn-outline" onclick="startQuiz('bookmark')" style="margin-bottom:12px" data-i18n="btn.start.bookmark">ブックマーク問題を復習</button>
     </div>
 
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('domains', this)">分野別</button>
-      <button class="tab-btn" onclick="switchTab('manage', this)">管理</button>
+      <button class="tab-btn active" onclick="switchTab('domains', this)" data-i18n="tab.domains">分野別</button>
+      <button class="tab-btn" onclick="switchTab('manage', this)" data-i18n="tab.manage">管理</button>
     </div>
 
     <div id="tab-domains" class="domain-list"></div>
 
     <div id="tab-manage" class="hidden">
       <div class="home-card">
-        <h2 style="margin-bottom:16px">データ管理</h2>
-        <button class="btn" onclick="exportData()" style="margin-bottom:10px">問題と成績をエクスポート</button>
-        <button class="btn btn-outline" onclick="resetStats()" style="border-color:var(--danger);color:var(--danger)">成績をリセット</button>
+        <h2 style="margin-bottom:16px" data-i18n="manage.title">データ管理</h2>
+        <button class="btn" onclick="exportData()" style="margin-bottom:10px" data-i18n="manage.export">問題と成績をエクスポート</button>
+        <button class="btn btn-outline" onclick="resetStats()" style="border-color:var(--danger);color:var(--danger)" data-i18n="manage.reset">成績をリセット</button>
       </div>
     </div>
 
     <div style="margin-top:24px;padding:20px 24px;border-top:1px solid var(--border);font-size:0.8rem;line-height:1.9;color:var(--text-light);text-align:left">
-      <p style="margin-bottom:4px">PMP試験対策 無料問題集について</p>
-      <p>PMP（Project Management Professional）はPMIが認定する国際的なプロジェクトマネジメント資格です。本アプリでは360問の練習問題を無料で提供。People・Process・Business Environment・Predictive・Agileの5分野を収録し、シナリオベース形式にも対応。スマホ対応・オフライン利用可能で、いつでもどこでもPMP合格を目指せます。</p>
+      <p style="margin-bottom:4px" data-i18n="about.title">PMP試験対策 無料問題集について</p>
+      <p data-i18n="about.text">PMP（Project Management Professional）はPMIが認定する国際的なプロジェクトマネジメント資格です。本アプリでは練習問題を無料で提供。People・Process・Business Environment・Predictive・Agileの5分野を収録し、シナリオベース形式にも対応。スマホ対応・オフライン利用可能で、いつでもどこでもPMP合格を目指せます。</p>
     </div>
   </div>
 
@@ -429,7 +446,7 @@ gtag('config','G-EPQQE97M74');
       </div>
       <div style="display:flex;align-items:center;gap:4px">
         <button class="bookmark-btn" id="bookmark-btn" onclick="onBookmarkClick()" title="ブックマーク">&#9734;</button>
-        <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;width:auto;padding:8px 22px;font-size:0.85rem">次へ</button>
+        <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;width:auto;padding:8px 22px;font-size:0.85rem" data-i18n="btn.next">次へ</button>
       </div>
     </div>
     <div class="question-card">
@@ -437,8 +454,8 @@ gtag('config','G-EPQQE97M74');
       <div id="q-options"></div>
       <div class="explanation" id="q-explanation"></div>
     </div>
-    <button class="btn" id="next-btn-bottom" onclick="nextQuestion()" style="display:none;margin-top:16px">次へ</button>
-    <button class="btn btn-outline" onclick="quitQuiz()" style="margin-top:10px">中断してホームに戻る</button>
+    <button class="btn" id="next-btn-bottom" onclick="nextQuestion()" style="display:none;margin-top:16px" data-i18n="btn.next">次へ</button>
+    <button class="btn btn-outline" onclick="quitQuiz()" style="margin-top:10px" data-i18n="btn.quit">中断してホームに戻る</button>
   </div>
 
   <div id="result-screen" class="hidden">
@@ -450,8 +467,8 @@ gtag('config','G-EPQQE97M74');
       <h2 id="result-title"></h2>
       <p id="result-msg"></p>
       <div class="btn-group">
-        <button class="btn" onclick="goHome()">ホームに戻る</button>
-        <button class="btn btn-outline" onclick="showReview()">復習する</button>
+        <button class="btn" onclick="goHome()" data-i18n="btn.home">ホームに戻る</button>
+        <button class="btn btn-outline" onclick="showReview()" data-i18n="btn.review">復習する</button>
       </div>
     </div>
     <div id="review-section" class="hidden"></div>
@@ -459,7 +476,7 @@ gtag('config','G-EPQQE97M74');
 </div>
 
 <script>
-const defaultQuestions=[
+const defaultQuestionsJa=[
   {id:1,domain:"People",question:"プロジェクトチームのメンバー間で意見の対立が生じています。プロジェクトマネージャーが最初に取るべきアプローチはどれですか？",options:["対立を無視し、作業の進行を優先する","対立の根本原因を特定するため、関係者と個別に話し合う","上位マネジメントにエスカレーションする","対立しているメンバーをチームから外す"],correct:1,explanation:"コンフリクトマネジメントでは、まず根本原因を理解することが重要です。協力的な問題解決（コラボレーション/対峙）が最も望ましいアプローチとされています。"},
   {id:2,domain:"People",question:"サーバントリーダーシップにおいて、プロジェクトマネージャーの主な役割はどれですか？",options:["チームメンバーに詳細な作業指示を出す","チームの障害を取り除き、メンバーの成長を支援する","すべての意思決定を自ら行う","進捗状況を上位マネジメントに報告する"],correct:1,explanation:"サーバントリーダーシップでは、リーダーはチームに奉仕する存在です。障害の除去、メンバーのエンパワーメント、成長支援が主な役割となります。"},
   {id:3,domain:"People",question:"タックマンモデルにおいて、チームが最も高いパフォーマンスを発揮する段階はどれですか？",options:["形成期（Forming）","混乱期（Storming）","統一期（Norming）","機能期（Performing）"],correct:3,explanation:"タックマンモデルでは、形成期→混乱期→統一期→機能期→解散期の順に進みます。機能期（Performing）でチームは最も効率的に機能し、高いパフォーマンスを発揮します。"},
@@ -822,6 +839,212 @@ const defaultQuestions=[
   {id:360,domain:"Business",question:"規制要件の変更により、プロジェクトの成果物に追加のコンプライアンス対応が必要になった。PMの最も適切な対応はどれか？",options:["コンプライアンスは法務部門の責任なので、対応を委任する","規制変更の影響をスコープ・コスト・スケジュールの観点で分析し、変更要求として処理する","規制要件は最優先なので、他のスコープを削減して対応する","次のフェーズでコンプライアンス対応をまとめて実施する"],correct:1,explanation:"規制要件の変更は無視できませんが、プロジェクトへの影響を正式に分析し、変更管理プロセスを通じて対応する必要があります。影響分析なしに他のスコープを削減したり、対応を先送りするのは不適切です。"}
 ];
 
+const defaultQuestionsEn=[
+  {id:1,domain:"People",question:"Conflict has arisen between project team members. What should the project manager do first?",options:["Ignore the conflict and prioritize work progress","Have individual conversations with the parties involved to identify the root cause","Escalate to senior management","Remove the conflicting members from the team"],correct:1,explanation:"In conflict management, understanding the root cause first is critical. Collaborative problem-solving (Collaboration/Confronting) is considered the most desirable approach."},
+  {id:2,domain:"People",question:"In servant leadership, what is the primary role of the project manager?",options:["Give detailed work instructions to team members","Remove obstacles for the team and support member growth","Make all decisions themselves","Report progress to senior management"],correct:1,explanation:"In servant leadership, the leader serves the team. Removing obstacles, empowering members, and supporting growth are the primary roles."},
+  {id:3,domain:"People",question:"In Tuckman's model, in which stage does the team perform at its highest level?",options:["Forming","Storming","Norming","Performing"],correct:3,explanation:"Tuckman's model progresses: Forming → Storming → Norming → Performing → Adjourning. The Performing stage is when the team functions most efficiently and delivers high performance."},
+  {id:4,domain:"People",question:"What is the most effective way for a project manager to move a stakeholder's engagement from 'Resistant' to 'Supportive'?",options:["Exclude the stakeholder from the project","Understand the stakeholder's concerns and explain the project's benefits","Have senior management apply pressure","Minimize information provided to the stakeholder"],correct:1,explanation:"Stakeholder engagement involves understanding concerns and increasing engagement through dialogue. Understanding the root causes of resistance and sharing project value helps gain support."},
+  {id:5,domain:"People",question:"In Maslow's hierarchy of needs, which is the highest-level need related to team member motivation?",options:["Safety needs","Belonging needs","Esteem needs","Self-actualization needs"],correct:3,explanation:"Maslow's hierarchy progresses: Physiological → Safety → Belonging → Esteem → Self-actualization. Self-actualization is the highest-level need."},
+  {id:6,domain:"People",question:"Which characteristic best describes a project manager with high EQ (Emotional Intelligence)?",options:["Can solve technical problems independently","Can understand and appropriately respond to their own and others' emotions","Can strictly manage schedules","Holds many certifications"],correct:1,explanation:"EQ (Emotional Intelligence) consists of four elements: self-awareness, self-management, social awareness, and relationship management. The ability to understand and appropriately respond to emotions is the essence of EQ."},
+  {id:7,domain:"People",question:"Which conflict resolution technique aims for a Win-Win outcome?",options:["Forcing","Withdrawal","Compromise","Collaboration"],correct:3,explanation:"Collaboration (Confronting) involves fully discussing both sides' views to find a Win-Win solution. It is considered the most desirable conflict resolution method. Compromise is Lose-Lose, Forcing is Win-Lose."},
+  {id:8,domain:"Process",question:"Which statement correctly describes the critical path of a project?",options:["The path with the most expensive activities","The path with the highest-risk activities","The longest path that determines the project's shortest completion time","The path related to the most important stakeholders"],correct:2,explanation:"The critical path is the longest path in the project network diagram and determines the project's shortest possible completion time. Any delay in activities on the critical path directly causes project delay."},
+  {id:9,domain:"Process",question:"In EVM (Earned Value Management), what does CPI = 0.8 mean?",options:["20% more cost-efficient than budget","20% cost overrun against budget","Schedule is delayed by 20%","Schedule is 20% ahead"],correct:1,explanation:"CPI (Cost Performance Index) = EV / AC. CPI = 0.8 means spending 1.25 units to earn 1 unit of value, indicating cost overrun. CPI < 1.0 means cost overrun; CPI > 1.0 means cost savings."},
+  {id:10,domain:"Process",question:"What is the lowest-level element of a WBS (Work Breakdown Structure) called?",options:["Activity","Work Package","Milestone","Deliverable"],correct:1,explanation:"The lowest-level element of a WBS is called a Work Package. Work packages are further decomposed into activities, but this occurs outside the WBS."},
+  {id:11,domain:"Process",question:"Which risk response strategy corresponds to 'Transfer'?",options:["Implement measures to reduce the probability of risk occurrence","Purchase insurance to shift the impact of risk to a third party","Accept the risk and address it if it occurs","Stop the work that is causing the risk"],correct:1,explanation:"Transfer shifts the impact of a risk to a third party. Examples include purchasing insurance, contracts, and warranties. It is one of the four response strategies for negative risks, along with Avoid, Mitigate, and Accept."},
+  {id:12,domain:"Process",question:"Who has the authority to formally approve a Project Charter?",options:["Project Manager","Project Sponsor","Project Team","PMO"],correct:1,explanation:"The Project Charter is approved by the project sponsor (or initiating authority). The project manager supports the creation of the charter, but approval authority typically rests with the sponsor."},
+  {id:13,domain:"Process",question:"If 2 new members join a team of 5, how many communication channels are added?",options:["7","11","12","21"],correct:1,explanation:"Communication channels = n(n-1)/2. For 5 people: 5×4/2=10; for 7 people: 7×6/2=21. The increase is 21-10=11 channels."},
+  {id:14,domain:"Process",question:"In quality management, which item falls under 'Prevention Costs'?",options:["Defect repair costs","Inspection and testing costs","Training costs","Customer complaint handling costs"],correct:2,explanation:"Quality costs divide into conformance costs (prevention + appraisal) and non-conformance costs (internal failure + external failure). Training is a prevention cost; inspection is an appraisal cost; repair is internal failure; complaints are external failure."},
+  {id:15,domain:"Process",question:"Which procurement contract type carries the highest risk for the seller?",options:["Cost Plus Fee (CPF)","Time and Materials (T&M)","Firm Fixed Price (FFP)","Cost Plus Incentive Fee (CPIF)"],correct:2,explanation:"Firm Fixed Price (FFP) fixes the price, so all cost overrun risk is borne by the seller. In contrast, Cost Plus contracts place most risk on the buyer."},
+  {id:16,domain:"Business",question:"What is the most important element that should be included in a project Business Case?",options:["Detailed project schedule","Team members' resumes","Return on Investment (ROI) analysis","Technical architecture diagram"],correct:2,explanation:"The business case is a document justifying investment in the project. ROI analysis, cost-benefit analysis, NPV and other financial metrics are the most important elements."},
+  {id:17,domain:"Business",question:"Among PMO types, which has the strongest authority, directly managing and controlling projects?",options:["Supportive PMO","Controlling PMO","Directive PMO","Agile PMO"],correct:2,explanation:"PMO types include Supportive (provides templates, etc.), Controlling (requires compliance), and Directive (directly manages). The Directive PMO has the strongest authority; project managers operate under PMO direction."},
+  {id:18,domain:"Business",question:"What is the primary purpose of a Benefits Management Plan?",options:["To minimize project costs","To define the expected benefits from project outcomes and track their realization","To evaluate team member performance","To calculate risk probabilities"],correct:1,explanation:"The Benefits Management Plan defines when and how project benefits will be realized. It includes the measurement method, target benefits, and timeframes."},
+  {id:19,domain:"Business",question:"Which statement correctly describes the VUCA environment?",options:["A framework showing project quality standards","An environment with high Volatility, Uncertainty, Complexity, and Ambiguity","The four principles of agile development","Stages of an organizational maturity model"],correct:1,explanation:"VUCA stands for Volatility, Uncertainty, Complexity, and Ambiguity. It describes the modern business environment and suggests the need for adaptive approaches."},
+  {id:20,domain:"Business",question:"Why should the project with the highest NPV (Net Present Value) be selected?",options:["Because it has the lowest risk","Because it completes in the shortest time","Because it delivers the greatest economic value on investment","Because it requires the most resources"],correct:2,explanation:"NPV discounts future cash flows to present value. The project with the highest NPV is expected to deliver the greatest economic return on investment, making it the most financially desirable choice."},
+  {id:21,domain:"Predictive",question:"In waterfall development, when a change occurs after the requirements phase, what is the most appropriate response?",options:["Ignore the change and proceed as planned","Evaluate the change request through the Integrated Change Control process","Restart the project from the beginning","Automatically approve the change"],correct:1,explanation:"Even in predictive (waterfall) approaches, changes occur. The Integrated Change Control process is used to analyze the impact and have the CCB (Change Control Board) approve or reject the change."},
+  {id:22,domain:"Predictive",question:"Using the three-point estimate method with Optimistic=4 days, Most Likely=6 days, Pessimistic=14 days, what is the PERT expected value?",options:["6 days","7 days","8 days","9 days"],correct:1,explanation:"PERT expected value = (O + 4M + P) / 6 = (4 + 4×6 + 14) / 6 = (4 + 24 + 14) / 6 = 42/6 = 7 days."},
+  {id:23,domain:"Predictive",question:"Which item is NOT included in a Project Scope Statement?",options:["Project exclusions","Deliverable acceptance criteria","Team members' salary information","Project constraints"],correct:2,explanation:"The Project Scope Statement includes deliverables, acceptance criteria, exclusions, constraints, and assumptions. Team members' salary information belongs to resource management plans or HR, not the scope statement."},
+  {id:24,domain:"Predictive",question:"With EVM indicators SPI=1.2 and CPI=0.9, what is the project status?",options:["Behind schedule and under budget","Ahead of schedule and over budget","Behind schedule and over budget","Ahead of schedule and under budget"],correct:1,explanation:"SPI > 1.0 means ahead of schedule; CPI < 1.0 means cost overrun. SPI=1.2 means 20% ahead of plan; CPI=0.9 means approximately 11% over budget."},
+  {id:25,domain:"Agile",question:"In Scrum, when a scope change is needed during a sprint, what is the most appropriate response?",options:["Cancel the sprint and start a new one","The Product Owner adds it to the Product Backlog and addresses it in the next sprint","The Scrum Master immediately changes the Sprint Backlog","Team members work overtime to handle it"],correct:1,explanation:"In Scrum, scope changes mid-sprint are not done as a rule. New requirements are added to the Product Backlog, prioritized by the Product Owner, and handled in subsequent sprints."},
+  {id:26,domain:"Agile",question:"Which is a core principle of the Kanban method?",options:["Strictly adhering to timeboxes","Setting WIP (Work In Progress) limits to optimize flow","Developing in 2-week iterations","Holding daily standups every day"],correct:1,explanation:"The core Kanban principle is optimizing flow through WIP (Work In Progress) limits. Timeboxes and iterations are Scrum concepts; Kanban emphasizes continuous flow."},
+  {id:27,domain:"Agile",question:"What is the purpose of an MVP (Minimum Viable Product) in Agile?",options:["To complete the product at the lowest cost","To release with minimal features and get early user feedback","To minimize quality and increase development speed","To develop with the minimum team size"],correct:1,explanation:"An MVP releases a product with minimal features to get real user feedback early. This allows quick hypothesis testing and validation of the product direction."},
+  {id:28,domain:"Agile",question:"What is the primary purpose of a Scrum Retrospective?",options:["To select backlog items for the next sprint","To demo completed deliverables to stakeholders","To reflect on team processes and identify improvements","To re-prioritize the Product Backlog"],correct:2,explanation:"The Retrospective is where the team reflects on the sprint process, discusses what went well and what should be improved. It is a practice of continuous improvement (Kaizen)."},
+  {id:29,domain:"Agile",question:"What does Velocity measure?",options:["Number of tasks completed by the team per day","Total story points completed by the team in one sprint","Number of remaining items in the Product Backlog","Days remaining until release"],correct:1,explanation:"Velocity is the total story points (or work units) completed by the team in one sprint. Past velocity is used as a reference for planning future sprints."},
+  {id:30,domain:"Agile",question:"Which format is appropriate for writing a good User Story?",options:["The system shall have the capability to do X","As a [role], I want [feature], so that [benefit]","Place a button on the screen","Test item: Verify that X works correctly"],correct:1,explanation:"User stories are written in the format: 'As a [role], I want [feature], so that [business value].' Writing from the user's perspective and clarifying business value is important."},
+  {id:31,domain:"People",question:"In Herzberg's Two-Factor Theory, which item is a 'Motivating Factor'?",options:["Salary","Work environment","Achievement","Company policy"],correct:2,explanation:"Herzberg's Two-Factor Theory distinguishes between Motivating Factors (achievement, recognition, responsibility, growth, etc.) and Hygiene Factors (salary, work environment, policy, etc.). Motivating factors bring satisfaction; absence of hygiene factors causes dissatisfaction."},
+  {id:32,domain:"People",question:"In a RACI chart, which correctly describes the role of 'A (Accountable)'?",options:["The person who actually performs the work","The person who holds ultimate accountability","The person consulted for input","The person informed of results"],correct:1,explanation:"In a RACI chart, A (Accountable) is the person with ultimate accountability — there is only one per task. R (Responsible) performs the work; C (Consulted) provides input; I (Informed) receives information."},
+  {id:33,domain:"People",question:"Which management style is based on McGregor's Theory X?",options:["Delegating authority to the team and emphasizing autonomy","Strictly supervising and controlling subordinates","Supporting member self-actualization","Promoting growth through coaching"],correct:1,explanation:"Theory X assumes 'people are inherently lazy and won't work without management and coercion.' Theory Y assumes 'people naturally like to work and can self-direct.' Modern PM recommends Theory Y-based management."},
+  {id:34,domain:"People",question:"What is the most important element for managing a virtual team?",options:["Hold face-to-face meetings every day","Establish a clear communication plan and the right tools","Place all team members in the same time zone","Conduct all interactions via email only"],correct:1,explanation:"For virtual teams, a clear communication plan, appropriate collaboration tools, regular check-ins, and consideration of cultural differences are key to success."},
+  {id:35,domain:"People",question:"When delegating authority, what should a project manager retain?",options:["The authority to execute tasks","Accountability","Approval authority for all tasks","Authority to evaluate team members"],correct:1,explanation:"Delegation transfers task execution authority, but the project manager retains ultimate accountability. 'Authority can be delegated; accountability cannot' is the principle."},
+  {id:36,domain:"People",question:"What is 'Fist of Five' as a team decision-making technique?",options:["A method of deciding by majority vote","A method of showing consensus level with 0-5 fingers simultaneously","A method of discussing in groups of 5 or fewer","A method of voting on 5 options"],correct:1,explanation:"Fist of Five is a technique where all team members simultaneously show 0 (oppose) to 5 (strongly agree) fingers to indicate their consensus level. It quickly visualizes agreement and is popular in agile teams."},
+  {id:37,domain:"People",question:"Which type of 'influence' used by project managers is based on expert knowledge?",options:["Reward power","Coercive power","Expert power","Legitimate power"],correct:2,explanation:"Types of power include legitimate power (formal authority), reward power (ability to give rewards), coercive power (ability to punish), expert power (expertise), and referent power (personality). Expert and referent power are considered most effective."},
+  {id:38,domain:"People",question:"In stakeholder analysis using the Power/Interest Grid, what is the strategy for stakeholders with high power and high interest?",options:["Monitor","Keep Informed","Keep Satisfied","Manage Closely"],correct:3,explanation:"In the Power/Interest Grid: High Power/High Interest → 'Manage Closely'; High Power/Low Interest → 'Keep Satisfied'; Low Power/High Interest → 'Keep Informed'; Low Power/Low Interest → 'Monitor'."},
+  {id:39,domain:"People",question:"In Daniel Goleman's leadership styles, which style is most appropriate in a crisis situation?",options:["Visionary","Coaching","Coercive","Democratic"],correct:2,explanation:"Among Goleman's 6 leadership styles, Coercive is not usually recommended, but is effective in crises or emergencies when immediate action is needed. Visionary and Coaching styles are typically most effective."},
+  {id:40,domain:"People",question:"Which behavior best describes a project manager with high Cultural Intelligence?",options:["Apply one's own cultural values to the entire team","Understand different cultural backgrounds and adapt communication styles","Ignore cultural differences and standardize processes","Place members from different cultures in separate teams"],correct:1,explanation:"Cultural Intelligence is the ability to understand and adapt to different cultures. In global projects, respecting cultural differences and adapting your communication style is essential."},
+  {id:41,domain:"People",question:"Which team-building activity is most effective early in a project?",options:["Conduct performance evaluations","Jointly create a team charter","Point out each other's weaknesses","Engage in competitive games"],correct:1,explanation:"Early in a project, jointly creating a team charter (ground rules) helps share expectations, establish communication norms, and foster team cohesion."},
+  {id:42,domain:"People",question:"Which correctly describes the difference between coaching and mentoring?",options:["Coaching is long-term, mentoring is short-term","Coaching focuses on specific skill improvement; mentoring supports overall career development","Only superiors can coach; anyone can mentor","Coaching and mentoring are the same thing"],correct:1,explanation:"Coaching is short-term support focused on improving specific skills or performance. Mentoring is a long-term relationship supporting broader career development and personal growth."},
+  {id:43,domain:"People",question:"In negotiation, what is BATNA (Best Alternative to a Negotiated Agreement)?",options:["The initial offer in negotiation","The best alternative if negotiation fails","The minimum line both parties can agree to","The final deadline for negotiation"],correct:1,explanation:"BATNA is 'the best alternative course of action if the negotiation does not reach agreement.' Knowing your BATNA helps avoid agreeing to unfavorable terms and strengthens your negotiating position."},
+  {id:44,domain:"People",question:"When a project team is 'siloed,' what is the most effective countermeasure?",options:["Further increase independence of each team","Promote cross-functional activities and communication","Restrict information sharing between teams","Allow only team leaders to communicate with each other"],correct:1,explanation:"Siloing occurs when walls form between teams and information stops flowing. Cross-functional activities, shared meetings, and use of communication tools help break down barriers."},
+  {id:45,domain:"Process",question:"Which correctly describes rolling wave planning?",options:["Plan all work in detail at the beginning","Plan near-term work in detail and far-future work at a summary level","Handle everything reactively without any planning","Have the team vote to determine the level of planning detail"],correct:1,explanation:"Rolling wave planning is a form of progressive elaboration where near-term work is planned in detail and future work is planned at a high level. The plan is refined as more information becomes available."},
+  {id:46,domain:"Process",question:"Which correctly describes the difference between fast-tracking and crashing?",options:["Both require additional cost","Fast-tracking runs activities in parallel; crashing adds resources","Both have the same risk level","Crashing runs activities in parallel; fast-tracking adds resources"],correct:1,explanation:"Fast-tracking runs activities that were originally sequential in parallel (increases rework risk). Crashing adds resources to shorten the schedule (increases cost)."},
+  {id:47,domain:"Process",question:"Which is a characteristic of the Delphi Method?",options:["The team discusses face-to-face to reach consensus","Anonymous surveys are repeated iteratively to converge expert opinions","The most vocal person's opinion is adopted","Computer simulation predicts the outcome"],correct:1,explanation:"The Delphi Method involves repeating anonymous surveys with an expert panel to converge opinions. Anonymity prevents groupthink and anchoring bias."},
+  {id:48,domain:"Process",question:"What is the primary use of Monte Carlo Simulation?",options:["Team member selection","Quantitative analysis of project risks and uncertainty","Quality inspection sampling","Stakeholder identification"],correct:1,explanation:"Monte Carlo Simulation runs thousands of simulations using probability distributions to calculate probability distributions for project schedule and cost — a quantitative risk analysis technique."},
+  {id:49,domain:"Process",question:"When should the Lessons Learned Register be updated?",options:["Only at project closure","Only at the end of each phase","Continuously throughout the project","Only when requested by the sponsor"],correct:2,explanation:"The Lessons Learned Register should be updated continuously throughout the project. Recording insights in real time after important events or decisions allows knowledge to accumulate proactively."},
+  {id:50,domain:"Process",question:"If a project has 100 stakeholders, how many communication channels exist?",options:["100","4,950","9,900","10,000"],correct:1,explanation:"Communication channels = n(n-1)/2 = 100×99/2 = 4,950. The number of channels grows exponentially with stakeholder count, making proper communication management critical."},
+  {id:51,domain:"Process",question:"In Theory of Constraints (TOC) bottleneck management, what should be done first?",options:["Eliminate the bottleneck","Identify the bottleneck","Distribute all resources equally","Add new resources"],correct:1,explanation:"TOC's five steps are: ① Identify the bottleneck → ② Exploit it to the maximum → ③ Subordinate everything else to the bottleneck → ④ Elevate the bottleneck's capacity → ⑤ Identify the new bottleneck. Identification always comes first."},
+  {id:52,domain:"Process",question:"In EMV (Expected Monetary Value) analysis, what is the EMV of a risk with a 30% probability and an impact of -$1,000,000?",options:["-$300,000","-$700,000","-$1,000,000","-$1,300,000"],correct:0,explanation:"EMV = Probability × Impact = 0.30 × (-$1,000,000) = -$300,000. EMV is used for quantitative risk evaluation; summing all EMVs helps calculate the contingency reserve."},
+  {id:53,domain:"Process",question:"What is the primary use of an Affinity Diagram?",options:["Visualize the project schedule","Group and organize large volumes of ideas or data","Calculate project costs","Quantify the probability of risks"],correct:1,explanation:"An Affinity Diagram (also called a KJ Diagram) organizes large amounts of ideas or information generated by brainstorming into natural groupings based on their affinity or similarity."},
+  {id:54,domain:"Process",question:"What is the difference between 'lag' and 'lead' in a project schedule?",options:["Lag is a delay of the predecessor; lead is an early start of the successor","Lag is a waiting time for the successor; lead is an early start of the successor","Lag and lead are the same thing","Lag is only on the critical path; lead applies to all paths"],correct:1,explanation:"Lag is a delay added to the start of a successor activity (e.g., waiting for concrete to cure). Lead allows a successor to start earlier than the predecessor finishes (e.g., starting coding before design is complete)."},
+  {id:55,domain:"Process",question:"What is the primary purpose of Configuration Management?",options:["Define team member roles","Systematically manage versions and changes of deliverables","Manage the project budget","Manage stakeholder expectations"],correct:1,explanation:"Configuration management systematically controls versions, tracks changes, and maintains the integrity of project deliverables and documents. It is closely related to change management."},
+  {id:56,domain:"Process",question:"Which statement is correct about a project activity with zero float?",options:["It is the least important activity","It is on the critical path","Canceling it has no impact on the project","It is always the first activity executed"],correct:1,explanation:"An activity with zero float (slack) is on the critical path. Any delay in these activities directly causes a delay in the overall project and must be closely monitored."},
+  {id:57,domain:"Process",question:"What is the purpose of a Requirements Traceability Matrix?",options:["Track team productivity","Ensure each requirement is traced throughout the project lifecycle","Show the cost breakdown of the project","Determine risk priorities"],correct:1,explanation:"A Requirements Traceability Matrix ensures traceability from the origin of each requirement through to deliverables and testing. It helps prevent scope creep and detect missing requirements."},
+  {id:58,domain:"Process",question:"What does a SIPOC diagram represent?",options:["Project organizational structure","Supplier, Input, Process, Output, Customer","Schedule, Investment, Plan, Outcome, Constraint","Stakeholder, Issue, Priority, Overview, Category"],correct:1,explanation:"SIPOC stands for Supplier, Input, Process, Output, and Customer. It is a high-level tool used to visualize the overall flow of a process."},
+  {id:59,domain:"Business",question:"In organizational change management, what does the 'A' in the ADKAR model represent?",options:["Approval","Awareness","Action","Assessment"],correct:1,explanation:"The ADKAR model progresses through Awareness → Desire → Knowledge → Ability → Reinforcement. Awareness of the need for change is always the first step."},
+  {id:60,domain:"Business",question:"What is the primary purpose of portfolio management?",options:["Manage the schedule of individual projects","Optimize a collection of projects aligned with the organization's strategic goals","Evaluate team members","Set quality standards"],correct:1,explanation:"Portfolio management centrally manages projects, programs, and operations to achieve organizational strategic goals, optimizing resource allocation and investment returns."},
+  {id:61,domain:"Business",question:"What is the key difference between a project and operations?",options:["Projects have budgets; operations do not","Projects are temporary and produce unique results; operations are ongoing and repetitive","Projects have managers; operations do not","Projects are small; operations are large"],correct:1,explanation:"A project is a 'temporary' endeavor that produces a 'unique result.' Operations are 'ongoing' and 'repetitive' activities. This is the most fundamental distinction in the PMBOK."},
+  {id:62,domain:"Process",question:"Which of the following is an example of Enterprise Environmental Factors (EEF)?",options:["Lessons learned from past projects","Templates and forms","Laws, regulations, and market conditions","Organizational process assets"],correct:2,explanation:"Enterprise Environmental Factors are internal or external conditions that the team cannot control, including laws, regulations, market conditions, organizational culture, and infrastructure. Templates and lessons learned are Organizational Process Assets (OPA)."},
+  {id:63,domain:"Business",question:"If a project's IRR (Internal Rate of Return) exceeds the organization's hurdle rate, the project should be:",options:["Cancelled","Invested in","Investigated further","Considered too risky"],correct:1,explanation:"When the IRR exceeds the hurdle rate (minimum required return), the project is considered worthy of investment. A higher IRR indicates greater investment attractiveness."},
+  {id:64,domain:"Business",question:"What is the difference between program management and project management?",options:["Programs are smaller; projects are larger","Programs manage a group of related projects to realize greater benefits","Programs and projects are synonymous","Programs are only used in IT"],correct:1,explanation:"A program coordinates and manages related projects, sub-programs, and activities to realize greater benefits and control than managing them individually."},
+  {id:65,domain:"Business",question:"What is the greatest risk of ignoring compliance requirements in a project?",options:["A slight schedule delay","Legal sanctions and damage to organizational reputation","Lower team morale","A slight cost increase"],correct:1,explanation:"Ignoring compliance (regulatory) requirements can lead to serious consequences: legal penalties, fines, project termination, and reputational damage. PMs must always prioritize compliance."},
+  {id:66,domain:"Business",question:"Which of the following is NOT one of the nine elements of the Business Model Canvas?",options:["Customer Segments","Value Propositions","Project Schedule","Revenue Streams"],correct:2,explanation:"The nine elements of the Business Model Canvas are: Customer Segments, Value Propositions, Channels, Customer Relationships, Revenue Streams, Key Resources, Key Activities, Key Partnerships, and Cost Structure. Project Schedule is not included."},
+  {id:67,domain:"Business",question:"Which of the following is NOT an aspect evaluated in a Feasibility Study?",options:["Technical feasibility","Economic feasibility","Team members' hobbies","Legal feasibility"],correct:2,explanation:"A Feasibility Study evaluates technical, economic, legal, operational, and scheduling feasibility. Personal hobbies are not an evaluation criterion."},
+  {id:68,domain:"Business",question:"What is the primary purpose of a Governance Framework?",options:["Micromanage daily team tasks","Define decision-making authority, processes, and standards","Design technical architecture","Measure individual performance"],correct:1,explanation:"A Governance Framework defines project decision-making authority, reporting structures, approval processes, and escalation paths to ensure proper oversight and control."},
+  {id:69,domain:"Predictive",question:"Which process belongs to the Initiating Process Group?",options:["Define Scope","Develop Project Charter","Control Quality","Close Procurements"],correct:1,explanation:"The Initiating Process Group includes 'Develop Project Charter' and 'Identify Stakeholders.' Define Scope belongs to Planning, and Control Quality belongs to Monitoring and Controlling."},
+  {id:70,domain:"Predictive",question:"In Reserve Analysis, what is the difference between Management Reserve and Contingency Reserve?",options:["They are the same thing","Contingency Reserve is for known risks; Management Reserve is for unknown risks","Management Reserve is managed by the PM; Contingency Reserve is managed by the sponsor","Contingency Reserve is always larger"],correct:1,explanation:"Contingency Reserve is for identified (known) risks and is included in the cost baseline. Management Reserve is for unknown risks; it is in the budget but not in the baseline."},
+  {id:71,domain:"Predictive",question:"What is 'Gold Plating' in project management?",options:["Raising the project's quality standards","Adding extra features not included in the approved scope","Reducing project costs","Implementing stakeholder requirements accurately"],correct:1,explanation:"Gold Plating is adding extra features or work beyond the approved scope, often with good intentions. It leads to scope creep and increases risk, so it is not recommended."},
+  {id:72,domain:"Predictive",question:"Which of the following is NOT part of the project closure process?",options:["Documenting lessons learned","Formal acceptance of deliverables","Planning the next project","Closing contracts"],correct:2,explanation:"Project closure includes formal acceptance of deliverables, documenting lessons learned, closing contracts, releasing resources, and creating the final report. Planning the next project is a separate activity."},
+  {id:73,domain:"Predictive",question:"What is a characteristic of the Critical Chain Project Management (CCPM) method?",options:["Adds buffer time to each individual activity","Removes safety margin from individual activities and aggregates them as project buffers","Ignores the critical path","Does not consider resource constraints"],correct:1,explanation:"CCPM removes the individual safety margins from activities and aggregates them as buffers (project buffer, feeding buffer) at the end of the project or at merge points. It also accounts for resource constraints."},
+  {id:74,domain:"Predictive",question:"On a Control Chart, what does a data point exceeding the Upper Control Limit (UCL) indicate?",options:["The process is functioning normally","The process is out of control (possible special cause)","Quality is within acceptable range","A data collection error"],correct:1,explanation:"A data point beyond the control limit indicates the process is Out of Control, suggesting special cause variation. Investigation and corrective action are required."},
+  {id:75,domain:"Predictive",question:"What is the difference between scope creep and a scope change?",options:["They are the same","Scope creep is unapproved scope expansion; a scope change has gone through formal change management","Scope creep is a small change; a scope change is a large one","Scope creep only occurs in Agile; scope changes only in Predictive"],correct:1,explanation:"Scope creep is the gradual expansion of scope without going through the change management process. A formal scope change has been evaluated and approved through the Integrated Change Control process — it is a managed change."},
+  {id:76,domain:"Predictive",question:"Which is an example of a mandatory dependency between activities?",options:["Starting testing before design is complete","Building a structure only after the foundation is complete","Sequencing work based on team preference","Waiting for an external vendor delivery"],correct:1,explanation:"Mandatory dependencies (hard logic) are inherent to the nature of the work — a building cannot be erected without a foundation. Discretionary dependencies (soft logic) are chosen based on best practice."},
+  {id:77,domain:"Predictive",question:"Which EAC formula applies when the remaining work can be completed at the originally planned rate?",options:["EAC = AC + (BAC - EV)","EAC = BAC / CPI","EAC = AC + ETC (bottom-up)","EAC = AC + (BAC - EV) / (CPI × SPI)"],correct:0,explanation:"When remaining work will be performed at the original planned rate, EAC = AC + (BAC - EV). If the current CPI is expected to continue, use EAC = BAC / CPI. If both CPI and SPI are considered, use EAC = AC + (BAC - EV) / (CPI × SPI)."},
+  {id:78,domain:"Agile",question:"What are the three pillars of Scrum?",options:["Planning, Execution, Closure","Transparency, Inspection, Adaptation","Sprint, Backlog, Retrospective","Scrum Master, PO, Development Team"],correct:1,explanation:"The three pillars of Scrum are Transparency, Inspection, and Adaptation. These form the empirical foundation of Scrum and are reflected in all Scrum events."},
+  {id:79,domain:"Agile",question:"What is the purpose of Product Backlog Refinement (Grooming)?",options:["Review sprint deliverables","Clarify backlog item details, estimate, and revisit priorities","Evaluate team performance","Determine the sprint goal"],correct:1,explanation:"Backlog refinement is a continuous activity that clarifies Product Backlog Item details, performs estimation, and revisits priorities. It typically consumes no more than 10% of the team's time."},
+  {id:80,domain:"Agile",question:"In Scrum, who decides the Definition of Done (DoD)?",options:["The Product Owner alone","The Scrum Master alone","The Development Team (the entire Scrum Team)","Stakeholders"],correct:2,explanation:"The Definition of Done is agreed upon by the entire Scrum Team. The DoD defines quality standards for the increment and is consistently applied to all backlog items."},
+  {id:81,domain:"Agile",question:"What is an Agile 'Information Radiator'?",options:["A detailed project report","A visible board displaying the team's work status for anyone to see","Email notifications to team members","A tool for sharing confidential project information"],correct:1,explanation:"An Information Radiator is a visible tool such as a task board or burndown chart that 'radiates' team status so anyone can see it at a glance. It promotes transparency and makes status easy to check."},
+  {id:82,domain:"Agile",question:"On a Burndown Chart, what does it mean when the actual line is above the planned line?",options:["The team is ahead of schedule","The team is behind schedule","The budget is being exceeded","Quality is declining"],correct:1,explanation:"A Burndown Chart shows remaining work. When the actual line is above the planned line, more work remains than planned — the team is behind schedule. If below the planned line, the team is ahead."},
+  {id:83,domain:"Agile",question:"What is the primary benefit of Pair Programming?",options:["Development costs are cut in half","Improved code quality and real-time knowledge sharing","Development speed doubles","Documentation becomes unnecessary"],correct:1,explanation:"In Pair Programming, two developers work at one workstation. Key benefits include real-time code review, knowledge sharing, and early bug detection. Short-term costs increase, but quality and knowledge transfer improve."},
+  {id:84,domain:"Agile",question:"Which of the following is NOT an XP (Extreme Programming) practice?",options:["Test-Driven Development (TDD)","Continuous Integration","Progress management using Gantt charts","Refactoring"],correct:2,explanation:"XP practices include TDD, Continuous Integration, Pair Programming, Refactoring, Simple Design, and Coding Standards. Gantt charts are a tool of the predictive approach, not XP."},
+  {id:85,domain:"Agile",question:"What two things are decided in Sprint Planning?",options:["Budget and staffing","Sprint Goal and Sprint Backlog","Release date and quality standards","Contract terms and deliverables"],correct:1,explanation:"Sprint Planning determines 'what to achieve' (Sprint Goal + selected backlog items) and 'how to achieve it' (Sprint Backlog = detailed work plan)."},
+  {id:86,domain:"Agile",question:"What is the purpose of timeboxing in Agile?",options:["Reduce costs","Limit work time to ensure focus and discipline","Monitor team member work hours","Define contract conditions with customers"],correct:1,explanation:"A timebox sets a fixed maximum time for an activity or event, increasing focus and preventing endless discussions or scope expansion. All Scrum events — Sprints, Daily Scrums, etc. — are timeboxed."},
+  {id:87,domain:"People",question:"In the Thomas-Kilmann conflict model, what characterizes the 'Compromise' approach?",options:["One party fully concedes","Both parties concede somewhat and find a middle ground","The issue is discussed until fully resolved","The conflict is avoided and deferred"],correct:1,explanation:"Compromise involves both parties making some sacrifice to reach a middle-ground solution. It is not Win-Win, but it is useful when time is limited or as an interim resolution."},
+  {id:88,domain:"People",question:"In Situational Leadership, what style is appropriate for a team member who has high skill but low motivation?",options:["Directing","Coaching","Supporting","Delegating"],correct:2,explanation:"Situational Leadership adapts style to the member's skill and motivation. For a high-skill, low-motivation member, Supporting focuses on building the relationship and increasing motivation."},
+  {id:89,domain:"People",question:"What are the three elements of Victor Vroom's Expectancy Theory?",options:["Planning, Execution, Control","Expectancy, Instrumentality, Valence","Motivation, Hygiene, Satisfaction","Power, Affiliation, Achievement"],correct:1,explanation:"Vroom's Expectancy Theory: Motivation = Expectancy (effort → performance) × Instrumentality (performance → reward) × Valence (desirability of the reward). Motivation is maximized when all three are high."},
+  {id:90,domain:"People",question:"What are the three questions addressed in a Daily Standup?",options:["What's the problem, who is responsible, what's the punishment","What did I do yesterday, what will I do today, what obstacles do I have","This month's goal, next month's goal, annual goal","Status of budget, schedule, and scope"],correct:1,explanation:"The Daily Standup (Daily Scrum) covers: ① what was accomplished yesterday, ② what will be done today, and ③ any obstacles or blockers. It is timeboxed to 15 minutes."},
+  {id:91,domain:"Process",question:"How is the Pareto Chart (80/20 rule) used in project management?",options:["Optimize the schedule","Identify the few causes responsible for the most quality problems","Select team members","Transfer risk"],correct:1,explanation:"The Pareto Chart is based on the principle that 80% of problems come from 20% of causes. It is a quality tool used to prioritize the most impactful root causes for action. It combines a bar chart with a cumulative line."},
+  {id:92,domain:"Process",question:"What is the role of the Change Control Board (CCB)?",options:["Manage daily project operations","Review change requests and decide to approve, reject, or defer","Hire team members","Set the project budget"],correct:1,explanation:"The CCB (Change Control Board) is a formally authorized group with the authority to review, approve, reject, or defer change requests based on impact analysis."},
+  {id:93,domain:"Process",question:"Which statement correctly describes a milestone?",options:["It typically spans more than one week","It is a significant point or event with zero duration","It must always be on the critical path","It is the most expensive activity"],correct:1,explanation:"A milestone represents a significant point or event in a project and has zero duration. It is used as a progress marker and may represent phase completion or key approvals."},
+  {id:94,domain:"Process",question:"What does the 'Check' phase of the PDCA (Plan-Do-Check-Act) cycle involve?",options:["Create the plan","Execute the plan","Verify and evaluate results","Implement improvements"],correct:2,explanation:"The Check phase of PDCA involves comparing actual results against the plan, verifying and evaluating what was achieved. Repeating Plan → Do → Check → Act enables continuous improvement."},
+  {id:95,domain:"Predictive",question:"When Estimate at Completion (EAC) equals BAC, what does it mean?",options:["The project is failing","The current variance is temporary and the rest will be completed as planned","The project is complete","Cost overruns will continue"],correct:1,explanation:"EAC = BAC means the current variance is considered a temporary anomaly, and the remaining work is expected to be completed at the originally planned cost rate (result of EAC = AC + BAC - EV)."},
+  {id:96,domain:"Predictive",question:"Which statement correctly describes Analogous Estimating?",options:["The most accurate estimating method","A rough estimate based on data from past similar projects","A bottom-up detailed calculation","The same as three-point estimating"],correct:1,explanation:"Analogous Estimating (top-down estimating) is based on historical data from similar past projects. It is used in early project stages when information is limited — fast but less accurate."},
+  {id:97,domain:"Agile",question:"What is the most important responsibility of the Product Owner?",options:["Provide technical guidance to the team","Manage the Product Backlog and maximize product value","Manage sprint progress","Remove impediments"],correct:1,explanation:"The Product Owner's most critical responsibility is managing the Product Backlog and maximizing product value. This includes prioritizing items, clarifying requirements, and serving as the interface with stakeholders."},
+  {id:98,domain:"Agile",question:"What is the most appropriate way to address Technical Debt?",options:["Ignore it and focus on new features","Include it regularly in the backlog and pay it down systematically","Address it all at project end","Delegate it to another team"],correct:1,explanation:"Technical debt, if left unaddressed, accumulates like interest. Including it regularly in the Product Backlog and addressing it systematically in sprints (refactoring) is the recommended approach."},
+  {id:99,domain:"Agile",question:"What is the purpose of Scrum of Scrums?",options:["Evaluate individual performance","Coordinate multiple Scrum teams and manage dependencies","Create the Product Backlog","Replace the Sprint Review"],correct:1,explanation:"Scrum of Scrums is a scaled Agile technique where representatives from multiple Scrum teams meet regularly to coordinate, manage dependencies, and share impediments."},
+  {id:100,domain:"Process",question:"In a RACI chart, assigning multiple 'R (Responsible)' roles to one task is:",options:["Absolutely not allowed","Possible, but exactly one 'A (Accountable)' is always required","The recommended standard practice","Makes the 'A' role unnecessary"],correct:1,explanation:"Multiple R (Responsible) parties can be assigned to one task. However, exactly one A (Accountable) must be assigned. Having multiple A roles creates ambiguity in accountability."},
+  {id:101,domain:"People",question:"What should a project manager prioritize most when onboarding a new team member?",options:["Assign tasks immediately","Share team goals, rules, and culture","Conduct a technical test","Review past performance evaluations"],correct:1,explanation:"When onboarding a new member, the top priority is sharing team goals, ground rules, communication norms, and culture, and ensuring psychological safety is established."},
+  {id:102,domain:"People",question:"According to McClelland's Acquired Needs Theory, what characterizes a person with a high need for achievement?",options:["Wants to control and dominate others","Seeks belonging and harmonious relationships","Pursues moderately challenging goals and strongly desires feedback","Avoids risk entirely"],correct:2,explanation:"In McClelland's theory, people with a high Achievement need set moderately challenging goals and strongly seek feedback on results. The three needs are Achievement, Power, and Affiliation."},
+  {id:103,domain:"People",question:"Which statement best describes a team with high psychological safety?",options:["Members can speak up and share ideas without fear of mistakes","Members always follow the leader's opinion","There are strict penalties for failure","Competition among members is intense"],correct:0,explanation:"In a psychologically safe team, members can share opinions and ideas without fear of failure or criticism. Google's Project Aristotle identified this as the most critical factor for team success."},
+  {id:104,domain:"People",question:"Which of the following is NOT a technique of Active Listening?",options:["Paraphrasing the speaker's words to confirm understanding","Interrupting to share your own opinion","Paying attention to nonverbal messages","Asking clarifying questions"],correct:1,explanation:"Active Listening involves paraphrasing, noticing nonverbal cues, and asking appropriate questions. Interrupting the speaker undermines active listening."},
+  {id:105,domain:"People",question:"What is an effective way to prevent Groupthink in a project?",options:["Encourage everyone to hold the same view","Appoint a 'devil's advocate' to voice opposing views","Minimize discussion time","Have the leader state their opinion first"],correct:1,explanation:"Groupthink occurs when group harmony suppresses critical thinking. Countermeasures include appointing a devil's advocate, using anonymous voting, inviting outside opinions, and having the leader speak last."},
+  {id:106,domain:"People",question:"In the Johari Window, what is the 'Blind Spot'?",options:["Area known to self and others","Area unknown to self but known to others","Area known to self but unknown to others","Area unknown to both self and others"],correct:1,explanation:"The Johari Window is a self-awareness framework. The Blind Spot contains traits visible to others but not to oneself. Receiving feedback helps shrink this area and improve self-awareness."},
+  {id:107,domain:"People",question:"When multicultural team members have different concepts of time, what is the PM's best response?",options:["Impose your own cultural time norms on everyone","Understand cultural differences and set clear deadlines and expectations","Remove time-flexible members from the team","Set no deadlines at all"],correct:1,explanation:"Understanding the difference between monochronic and polychronic cultures, then establishing clear deadlines and expectations with team agreement, is the appropriate approach."},
+  {id:108,domain:"People",question:"What does the SBI model for effective feedback stand for?",options:["Strategy-Budget-Implementation","Situation-Behavior-Impact","Scope-Baseline-Integration","Schedule-Buffer-Iteration"],correct:1,explanation:"The SBI model stands for Situation-Behavior-Impact. Describing the specific situation, the observed behavior, and its impact enables constructive and objective feedback."},
+  {id:109,domain:"People",question:"What is the primary benefit of team colocation?",options:["Promotes remote work","Energizes informal communication and enables faster problem resolution","Reduces costs","Improves individual concentration"],correct:1,explanation:"Colocation activates informal conversations (osmotic communication) among team members, speeds information sharing, and promotes early detection and resolution of problems."},
+  {id:110,domain:"People",question:"What is 'Referent Power' as a source of power?",options:["Power based on formal position","Power based on the ability to reward","Influence based on personality and respect","Power based on the ability to punish"],correct:2,explanation:"Referent Power is influence derived from a person's personality, charisma, and trustworthiness. Because members respect and voluntarily follow the leader, it is considered one of the most effective forms of power."},
+  {id:111,domain:"People",question:"To promote team self-organization, what behavior should the PM avoid?",options:["Delegate decision-making authority to the team","Dictate detailed procedures for every task","Remove obstacles","Clarify team goals"],correct:1,explanation:"In a self-organizing team, the team itself decides 'how' to do the work. If the PM dictates every detail (micromanagement), autonomy is undermined and self-organization is inhibited."},
+  {id:112,domain:"People",question:"In negotiation, what is 'ZOPA'?",options:["The opening offer in a negotiation","The Zone of Possible Agreement","The alternative if negotiation fails","The negotiation deadline"],correct:1,explanation:"ZOPA (Zone of Possible Agreement) is the range where both parties' acceptable terms overlap. If a ZOPA exists, agreement is possible; if not, negotiation cannot succeed."},
+  {id:113,domain:"Process",question:"What is the purpose of an Assumption Log?",options:["Record confirmed facts","Track assumptions and constraints throughout the project","Record team member attendance","Manage meeting minutes"],correct:1,explanation:"The Assumption Log records and tracks project assumptions (things treated as true but not yet verified) and constraints. If an assumption proves wrong, it can become a risk."},
+  {id:114,domain:"Process",question:"Which of the following is NOT one of the four dependency types used in the Precedence Diagramming Method (PDM)?",options:["FS (Finish-to-Start)","SS (Start-to-Start)","FF (Finish-to-Finish)","FE (Finish-to-Evaluate)"],correct:3,explanation:"The four PDM dependency types are FS (Finish-to-Start), SS (Start-to-Start), FF (Finish-to-Finish), and SF (Start-to-Finish). FE does not exist. FS is the most commonly used."},
+  {id:115,domain:"Process",question:"Which statement correctly describes the difference between quality and grade?",options:["Quality and grade are the same thing","Low quality is always a problem, but low grade is not necessarily a problem","High grade makes quality unnecessary","Low grade automatically means low quality"],correct:1,explanation:"Quality is conformance to requirements — low quality is always a problem. Grade refers to the range of features; a low-grade product can still be high quality (e.g., a simple but well-made product)."},
+  {id:116,domain:"Process",question:"What is a likely result of performing Resource Leveling?",options:["The project duration is shortened","The critical path may change","Costs are always reduced","Quality improves"],correct:1,explanation:"Resource Leveling adjusts activity schedules to resolve resource overloads. This may alter the critical path and potentially extend the project duration."},
+  {id:117,domain:"Process",question:"What is another name for the Ishikawa Diagram?",options:["Pareto Chart","Fishbone Diagram","Scatter Diagram","Control Chart"],correct:1,explanation:"The Ishikawa Diagram is also called a Fishbone Diagram because of its shape. It systematically categorizes and visualizes root causes of a problem and is one of the seven basic quality tools."},
+  {id:118,domain:"Process",question:"What does the project performance measurement baseline consist of?",options:["Scope baseline, schedule baseline, and cost baseline","Risk register only","Team charter only","Stakeholder register only"],correct:0,explanation:"The project performance measurement baseline consists of the scope baseline (WBS + WBS dictionary + scope statement), the schedule baseline, and the cost baseline."},
+  {id:119,domain:"Process",question:"What is the purpose of a Make-or-Buy Analysis?",options:["Decide whether to promote internally or hire externally","Decide whether to produce a deliverable in-house or procure it externally","Decide whether to continue or terminate the project","Decide whether to automate or perform testing manually"],correct:1,explanation:"Make-or-Buy Analysis compares the cost, capability, and risk of producing project deliverables in-house versus procuring them from external vendors."},
+  {id:120,domain:"Process",question:"When is a Time and Materials (T&M) contract most appropriate?",options:["When the scope is clearly defined","When the scope is unclear and the duration is uncertain","For long, large-scale projects","When the cost must be completely fixed"],correct:1,explanation:"T&M contracts are appropriate when the work scope is unclear and cannot be defined upfront. Payment is based on time rates and material costs, making it a hybrid between FFP and cost-reimbursable contracts."},
+  {id:121,domain:"Process",question:"What is the primary purpose of Project Integration Management?",options:["Solve technical problems","Unify, coordinate, and integrate processes across all knowledge areas","Determine team member salaries","Set quality standards"],correct:1,explanation:"Integration Management unifies, coordinates, and integrates processes and activities across all knowledge areas (scope, schedule, cost, etc.) to achieve overall project optimization. It is the PM's central responsibility."},
+  {id:122,domain:"Process",question:"How is a Flowchart used in quality management?",options:["Decide budget allocation","Visualize process steps and decision points to identify where defects occur","Create an organizational chart","Develop the project schedule"],correct:1,explanation:"A Flowchart diagrams the flow, steps, and branches (decision points) of a process. In quality management, it is used to identify where inefficiencies or defects occur."},
+  {id:123,domain:"Process",question:"What is the difference between Validate Scope and Control Quality?",options:["They are the same process","Validate Scope is formal acceptance of deliverables by stakeholders; Control Quality verifies accuracy internally","Control Quality is done by the customer; Validate Scope is done internally","Order does not matter"],correct:1,explanation:"Control Quality verifies internally whether deliverables meet quality requirements. Validate Scope is the process by which customers or sponsors formally accept deliverables. Control Quality typically precedes Validate Scope."},
+  {id:124,domain:"Process",question:"Which of the following is an example of 'push' communication?",options:["A face-to-face meeting","Sending an email or memo","Posting information on a web portal","A conference call"],correct:1,explanation:"Push communication sends information to specific recipients (email, memos, faxes). Pull communication requires recipients to retrieve it (websites, notice boards). Interactive communication is two-way (meetings, video calls)."},
+  {id:125,domain:"Business",question:"What is the difference between OKRs (Objectives and Key Results) and KPIs?",options:["They are the same thing","OKRs set ambitious aspirational goals; KPIs continuously measure ongoing performance","OKRs are short-term only; KPIs are long-term only","KPIs are more ambitious"],correct:1,explanation:"OKRs set ambitious Objectives with quantifiable Key Results. KPIs are metrics used to continuously measure important aspects of organizational or project performance."},
+  {id:126,domain:"Process",question:"Which of the following is an example of an Organizational Process Asset (OPA)?",options:["Competitive market conditions","Laws and regulations","Lessons learned repositories and templates","Exchange rates"],correct:2,explanation:"OPAs are processes, templates, lessons learned, and historical project information accumulated by the organization. Market conditions, laws, and exchange rates are Enterprise Environmental Factors (EEF)."},
+  {id:127,domain:"Process",question:"What is the first step in the five phases of Design Thinking?",options:["Prototype","Test","Empathize","Define"],correct:2,explanation:"The five phases of Design Thinking are Empathize → Define → Ideate → Prototype → Test. Empathizing with users is always the starting point."},
+  {id:128,domain:"Business",question:"Which of the following is NOT one of the factors assessed in a PESTLE analysis?",options:["Political","Economic","Sprint","Legal"],correct:2,explanation:"PESTLE analyzes six external factors: Political, Economic, Social, Technological, Legal, and Environmental. 'Sprint' is an Agile term, not a PESTLE factor."},
+  {id:129,domain:"Process",question:"What is 'Opportunity Cost' in project management?",options:["The direct cost of a project","The value of the next-best alternative foregone by choosing this project","The project's profit","Marketing expenditure"],correct:1,explanation:"Opportunity cost is the value that could have been gained from the next-best alternative that was not chosen. It is an important concept in project selection decisions."},
+  {id:130,domain:"Business",question:"In a SWOT analysis, which of the following falls under 'Threats'?",options:["High technical skill of the team","New market opportunities","A competitor launching a similar product","Efficient internal processes"],correct:2,explanation:"SWOT Threats are unfavorable external factors. Strengths and Weaknesses are internal; Opportunities and Threats are external. A competitor's new product is a classic external threat."},
+  {id:131,domain:"Process",question:"What is the purpose of an MVE (Minimum Viable Experiment)?",options:["Complete the product","Validate a business hypothesis with minimal investment","Measure team capability","Reduce the budget"],correct:1,explanation:"An MVE validates a business hypothesis with minimal cost and effort. Unlike an MVP which focuses on a product, an MVE focuses on hypothesis validation before building the product."},
+  {id:132,domain:"Business",question:"What is a key limitation of the Payback Period method?",options:["It is too complex to calculate","It ignores cash flows after payback and the time value of money","It is always more accurate than NPV","It overestimates risk"],correct:1,explanation:"The Payback Period is simple but ignores cash flows after the payback period and does not account for the time value of money (discounting). It should be used alongside NPV or IRR."},
+  {id:133,domain:"Predictive",question:"What information is contained in a WBS Dictionary?",options:["Personal information of team members","Detailed description, acceptance criteria, resource requirements, etc. for each work package","Project total budget only","Stakeholder contact information"],correct:1,explanation:"The WBS Dictionary contains detailed information for each WBS element: work description, deliverables, acceptance criteria, responsible parties, schedule, cost estimates, and resource requirements."},
+  {id:134,domain:"Predictive",question:"What is the purpose of a Phase Gate Review?",options:["Evaluate team members","Decide whether to proceed to the next phase","Daily progress check","Technical design review"],correct:1,explanation:"A Phase Gate (Stage Gate) review evaluates deliverables and progress at the end of each phase and decides whether to proceed (Go), revise and re-review (Conditional Go), or terminate (Kill) the project."},
+  {id:135,domain:"Predictive",question:"What does the Cost Aggregation process involve?",options:["Distribute project budget top-down","Roll up work package cost estimates to higher WBS levels to create the cost baseline","Spread costs evenly across months","Include only the most expensive activities"],correct:1,explanation:"Cost Aggregation rolls up work package cost estimates bottom-up through WBS levels to control accounts and ultimately to the project cost baseline."},
+  {id:136,domain:"Predictive",question:"What does 'Progressive Elaboration' mean in a predictive project?",options:["Cancel the project midway","Progressively detail the plan as more information becomes available","Complete all planning upfront","Never change the plan"],correct:1,explanation:"Progressive Elaboration is the iterative process of detailing the project plan as more information becomes available. Even in predictive projects, plans are refined over time."},
+  {id:137,domain:"Predictive",question:"What should be accomplished at a project Kickoff Meeting?",options:["Detailed technical design","Share project goals, roles, and expectations, and build relationships","Finalize the budget","Sign contracts"],correct:1,explanation:"The Kickoff Meeting shares project objectives, scope, roles and responsibilities, the communication plan, and expectations, while building relationships among the team and stakeholders."},
+  {id:138,domain:"Predictive",question:"In Earned Value Management, what does a negative VAC (Variance at Completion) indicate?",options:["The project will finish within budget","The project is expected to finish over budget","The schedule is ahead","Quality is improving"],correct:1,explanation:"VAC = BAC - EAC. A negative VAC means EAC > BAC, indicating the project is expected to finish over budget. A positive VAC means the project is expected to finish under budget."},
+  {id:139,domain:"Predictive",question:"What is the purpose of a Tornado Diagram (Sensitivity Analysis)?",options:["Analyze team emotions","Compare the impact of each risk factor on project objectives","Calculate project completion probability","Visualize quality inspection results"],correct:1,explanation:"A Tornado Diagram compares the relative impact of individual risk factors on project objectives (cost, schedule, etc.). Factors are displayed in order of magnitude — the widest bar at the top."},
+  {id:140,domain:"Predictive",question:"Which Organizational Process Assets are updated during project closure?",options:["Laws and regulations","Market conditions","Lessons learned repository and project files","Exchange rates"],correct:2,explanation:"At project closure, the lessons learned register is transferred to the repository, and project files (plans, reports, documents) are archived as OPAs for use in future projects."},
+  {id:141,domain:"Agile",question:"Which statement best describes the Scrum Master's role?",options:["Assign tasks to the team","Facilitate the Scrum framework and remove team impediments","Prioritize the Product Backlog","Manage customer contracts"],correct:1,explanation:"The Scrum Master is a servant-leader who facilitates Scrum theory and practice and removes impediments for the team. Task assignment and prioritization belong to the PM or Product Owner."},
+  {id:142,domain:"Agile",question:"What is the purpose of Planning Poker?",options:["Determine the project budget","Estimate story points through team consensus","Set the sprint schedule","Assign task owners"],correct:1,explanation:"Planning Poker is an Agile estimating technique where all team members simultaneously reveal estimates using Fibonacci-numbered cards. It prevents anchoring bias and promotes discussion."},
+  {id:143,domain:"Agile",question:"Which of the following should NOT occur in a Sprint Review?",options:["Demo the completed increment","Gather stakeholder feedback","Update the Product Backlog","Evaluate individual team member performance"],correct:3,explanation:"The Sprint Review demonstrates the completed increment to stakeholders, collects feedback, and adjusts the Product Backlog. It is not a forum for evaluating individual performance."},
+  {id:144,domain:"Agile",question:"What is the purpose of PI Planning in SAFe (Scaled Agile Framework)?",options:["Set individual goals","Multiple teams synchronize to plan the Program Increment together","Develop the annual budget","Select Product Owners"],correct:1,explanation:"PI (Program Increment) Planning is a core SAFe event where multiple Agile teams gather to jointly plan goals, dependencies, and risks for the next PI (typically 8-12 weeks)."},
+  {id:145,domain:"Agile",question:"Which of the following is NOT one of the seven principles of Lean Development?",options:["Eliminate waste","Build quality in","Create detailed upfront plans","Deliver fast"],correct:2,explanation:"The seven Lean principles are: Eliminate Waste, Build Quality In, Create Knowledge, Defer Commitment, Deliver Fast, Respect People, and Optimize the Whole. Detailed upfront planning contradicts Lean thinking."},
+  {id:146,domain:"Agile",question:"In the INVEST criteria for user stories, what does the 'S' stand for?",options:["Simple","Small","Stable","Specific"],correct:1,explanation:"INVEST stands for Independent, Negotiable, Valuable, Estimable, Small, and Testable — the characteristics of a good user story. 'S' stands for Small."},
+  {id:147,domain:"Agile",question:"When a Kanban team reaches its WIP (Work In Progress) limit, what should they do?",options:["Ignore the WIP limit and start new work","Finish current in-progress work before starting new work","Raise the WIP limit","Add more team members"],correct:1,explanation:"When the WIP limit is reached, the team must focus on completing current work before starting anything new. This optimizes flow and avoids the drawbacks of multitasking."},
+  {id:148,domain:"Agile",question:"What does an Agile Inception Deck define?",options:["Detailed technical specifications","The overall vision, scope, trade-offs, and context of the project","Individual KPIs","Detailed budget breakdown"],correct:1,explanation:"An Inception Deck is a set of 10 questions and activities used at the start of a project to align the entire team on the 'why,' 'what,' and 'how' of the project."},
+  {id:149,domain:"Process",question:"What is the purpose of Decision Tree Analysis?",options:["Create an organizational chart","Evaluate decisions under uncertainty using probability and EMV","Create the project WBS","Define quality inspection procedures"],correct:1,explanation:"Decision Tree Analysis uses a branching diagram to represent choices and outcomes, calculating the EMV (Expected Monetary Value) of each path to support optimal decision-making in quantitative risk analysis."},
+  {id:150,domain:"Process",question:"How many subsidiary plans does a Project Management Plan typically contain?",options:["3","5","10 or more","Just 1"],correct:2,explanation:"The Project Management Plan contains many subsidiary plans including: Scope, Schedule, Cost, Quality, Resource, Communications, Risk, Procurement, and Stakeholder Engagement Management Plans, among others."}
+];
+
+const defaultQuestionsKo=[
+  {id:1,domain:"People",question:"프로젝트 팀원 간에 의견 충돌이 발생했습니다. 프로젝트 매니저가 처음 취해야 할 접근 방법은 무엇입니까?",options:["충돌을 무시하고 작업 진행을 우선시한다","충돌의 근본 원인을 파악하기 위해 관계자와 개별적으로 대화한다","상위 관리자에게 에스컬레이션한다","충돌하는 팀원을 팀에서 제외한다"],correct:1,explanation:"갈등 관리에서는 먼저 근본 원인을 이해하는 것이 중요합니다. 협력적 문제 해결(콜라보레이션/직면)이 가장 바람직한 접근 방법으로 여겨집니다."},
+  {id:2,domain:"People",question:"서번트 리더십에서 프로젝트 매니저의 주요 역할은 무엇입니까?",options:["팀원에게 세부적인 작업 지시를 내린다","팀의 장애물을 제거하고 팀원의 성장을 지원한다","모든 의사결정을 스스로 내린다","진행 상황을 상위 관리자에게 보고한다"],correct:1,explanation:"서번트 리더십에서 리더는 팀을 섬기는 존재입니다. 장애물 제거, 팀원 권한 부여, 성장 지원이 주요 역할입니다."},
+  {id:3,domain:"People",question:"터크만 모델에서 팀이 가장 높은 성과를 발휘하는 단계는 어느 것입니까?",options:["형성기(Forming)","혼란기(Storming)","규범기(Norming)","수행기(Performing)"],correct:3,explanation:"터크만 모델은 형성기→혼란기→규범기→수행기→해산기 순으로 진행됩니다. 수행기(Performing)에서 팀은 가장 효율적으로 기능하고 높은 성과를 발휘합니다."},
+  {id:4,domain:"People",question:"프로젝트 매니저가 이해관계자의 참여도를 '저항'에서 '지지'로 바꾸기 위한 가장 효과적인 방법은 무엇입니까?",options:["이해관계자를 프로젝트에서 배제한다","이해관계자의 우려를 이해하고 프로젝트의 이점을 설명한다","상위 관리자에게 압력을 가해달라고 한다","이해관계자에 대한 정보 제공을 최소화한다"],correct:1,explanation:"이해관계자 참여에서는 우려 사항을 이해하고 대화를 통해 참여도를 높이는 것이 중요합니다. 저항의 근본 원인을 이해하고 프로젝트 가치를 공유함으로써 지지를 얻을 수 있습니다."},
+  {id:5,domain:"People",question:"팀원의 동기 부여에 관해, 매슬로의 욕구 계층 이론에서 가장 높은 단계의 욕구는 무엇입니까?",options:["안전의 욕구","소속의 욕구","존중의 욕구","자아실현의 욕구"],correct:3,explanation:"매슬로의 욕구 계층 이론은 생리적 욕구→안전의 욕구→소속의 욕구→존중의 욕구→자아실현의 욕구 순으로 높아집니다. 자아실현의 욕구가 가장 높은 단계입니다."},
+  {id:6,domain:"People",question:"EQ(감성 지능)가 높은 프로젝트 매니저의 특징으로 가장 적절한 것은 무엇입니까?",options:["기술적인 문제를 스스로 해결할 수 있다","자신과 타인의 감정을 이해하고 적절하게 대응할 수 있다","엄격한 일정 관리를 할 수 있다","많은 자격증을 보유하고 있다"],correct:1,explanation:"EQ(Emotional Intelligence)는 자기 인식, 자기 관리, 사회적 인식, 관계 관리의 네 가지 요소로 구성됩니다. 자신과 타인의 감정을 이해하고 적절하게 대응하는 능력이 EQ의 본질입니다."},
+  {id:7,domain:"People",question:"갈등 해소 기법 중 Win-Win 해결을 목표로 하는 것은 무엇입니까?",options:["강제(Forcing)","철수(Withdrawal)","타협(Compromise)","협력(Collaboration)"],correct:3,explanation:"협력(콜라보레이션/직면)은 양측의 의견을 충분히 논의하여 Win-Win 해결책을 찾는 기법입니다. 가장 바람직한 갈등 해소 방법으로 여겨집니다. 타협은 Lose-Lose, 강제는 Win-Lose입니다."},
+  {id:8,domain:"Process",question:"프로젝트의 주경로(Critical Path)에 대한 올바른 설명은 무엇입니까?",options:["가장 비용이 많이 드는 활동의 경로","가장 위험도가 높은 활동의 경로","프로젝트의 최단 완료 기간을 결정하는 가장 긴 경로","가장 중요한 이해관계자와 관련된 경로"],correct:2,explanation:"주경로는 프로젝트 네트워크 다이어그램에서 가장 긴 경로이며 프로젝트의 최단 완료 기간을 결정합니다. 주경로 상의 활동이 지연되면 프로젝트 전체의 지연으로 직결됩니다."},
+  {id:9,domain:"Process",question:"EVM(획득 가치 관리)에서 CPI=0.8의 경우 무엇을 의미합니까?",options:["예산보다 20% 비용 효율이 좋다","예산보다 20% 비용이 초과되고 있다","일정이 20% 지연되고 있다","일정이 20% 앞당겨지고 있다"],correct:1,explanation:"CPI(비용 효율 지수) = EV / AC입니다. CPI=0.8은 1의 가치를 얻기 위해 1.25를 지출하고 있음을 의미하며 비용을 초과하고 있습니다. CPI<1.0은 비용 초과, CPI>1.0은 비용 절감을 나타냅니다."},
+  {id:10,domain:"Process",question:"WBS(업무 분류 체계)의 최하위 요소를 무엇이라고 합니까?",options:["활동(Activity)","작업 패키지(Work Package)","마일스톤(Milestone)","산출물(Deliverable)"],correct:1,explanation:"WBS의 최하위 요소는 작업 패키지(Work Package)라고 합니다. 작업 패키지는 더 나아가 활동으로 분해되지만, 이는 WBS 외부에서 이루어집니다."},
+  {id:11,domain:"Process",question:"프로젝트 리스크 대응 전략에서 '전가(Transfer)'에 해당하는 것은 무엇입니까?",options:["리스크 발생 확률을 낮추는 대책을 실시한다","보험을 구매하여 리스크의 영향을 제3자에게 이전한다","리스크를 수용하고 발생 시 대처한다","리스크의 원인이 되는 작업을 중단한다"],correct:1,explanation:"전가(Transfer)는 리스크의 영향을 제3자에게 이전하는 전략입니다. 보험 구매, 계약, 보증 등이 해당합니다. 회피, 완화, 수용과 함께 부정적 리스크의 4가지 대응 전략 중 하나입니다."},
+  {id:12,domain:"Process",question:"프로젝트 헌장(Project Charter)을 공식적으로 승인할 권한을 가진 사람은 누구입니까?",options:["프로젝트 매니저","프로젝트 스폰서","프로젝트 팀","PMO"],correct:1,explanation:"프로젝트 헌장은 프로젝트 스폰서(또는 발기인)가 승인합니다. 프로젝트 매니저는 헌장 작성을 지원하지만 승인 권한은 일반적으로 스폰서에게 있습니다."},
+  {id:13,domain:"Process",question:"5인 팀에 새로 2명이 추가된 경우, 커뮤니케이션 채널 수는 몇 개 증가합니까?",options:["7개","11개","12개","21개"],correct:1,explanation:"커뮤니케이션 채널 수 = n(n-1)/2. 5명: 5×4/2=10개, 7명: 7×6/2=21개. 증가분은 21-10=11채널입니다."},
+  {id:14,domain:"Process",question:"품질 관리에서 '예방 비용'에 해당하는 것은 무엇입니까?",options:["결함 수정 비용","검사·테스트 비용","교육 훈련 비용","고객 불만 처리 비용"],correct:2,explanation:"품질 비용은 적합 비용(예방 비용+평가 비용)과 부적합 비용(내부 실패+외부 실패)으로 나뉩니다. 교육 훈련은 예방 비용, 검사는 평가 비용, 수정은 내부 실패 비용, 불만 처리는 외부 실패 비용입니다."},
+  {id:15,domain:"Process",question:"조달 계약 유형 중 판매자의 리스크가 가장 높은 것은 무엇입니까?",options:["비용 플러스 수수료(CPF)","시간 및 자재(T&M)","확정 고정가 계약(FFP)","비용 플러스 인센티브 수수료(CPIF)"],correct:2,explanation:"확정 고정가 계약(Firm Fixed Price)은 가격이 고정되므로 비용 초과 리스크는 모두 판매자가 부담합니다. 반면 비용 플러스 계약은 구매자가 리스크를 더 많이 부담합니다."},
+  {id:16,domain:"Business",question:"프로젝트 비즈니스 케이스에 포함되어야 할 가장 중요한 요소는 무엇입니까?",options:["상세한 프로젝트 일정","팀원의 이력서","투자 수익률(ROI) 분석","기술 아키텍처 다이어그램"],correct:2,explanation:"비즈니스 케이스는 프로젝트 투자를 정당화하는 문서입니다. 투자 수익률(ROI) 분석, 비용편익 분석, NPV 등의 재무 지표가 가장 중요한 요소입니다."},
+  {id:17,domain:"Business",question:"조직의 PMO 유형 중 프로젝트를 직접 관리·통제하는 가장 권한이 강한 유형은 무엇입니까?",options:["지원형 PMO","통제형 PMO","지시형 PMO","애자일 PMO"],correct:2,explanation:"PMO에는 지원형(템플릿 제공 등), 통제형(준수 요구), 지시형(직접 관리)의 세 종류가 있습니다. 지시형 PMO가 가장 권한이 강하며, 프로젝트 매니저는 PMO 지시하에 활동합니다."},
+  {id:18,domain:"Business",question:"편익 관리 계획서(Benefits Management Plan)의 주요 목적은 무엇입니까?",options:["프로젝트 비용을 최소화하는 것","프로젝트 성과물에서 기대되는 편익을 정의하고 실현을 추적하는 것","팀원의 성과를 평가하는 것","리스크 발생 확률을 계산하는 것"],correct:1,explanation:"편익 관리 계획서는 프로젝트의 편익이 언제, 어떻게 실현될지를 정의합니다. 편익의 측정 방법, 목표 편익, 시간 프레임 등이 포함됩니다."},
+  {id:19,domain:"Business",question:"VUCA 환경에 대한 올바른 설명은 무엇입니까?",options:["프로젝트의 품질 기준을 나타내는 프레임워크","변동성·불확실성·복잡성·모호성이 높은 환경","애자일 개발의 4가지 원칙","조직의 성숙도 모델 단계"],correct:1,explanation:"VUCA는 Volatility(변동성), Uncertainty(불확실성), Complexity(복잡성), Ambiguity(모호성)의 머리글자입니다. 현대 비즈니스 환경을 나타내는 개념으로 적응형 접근 방식의 필요성을 시사합니다."},
+  {id:20,domain:"Business",question:"NPV(순현재가치)가 가장 높은 프로젝트를 선택해야 하는 이유는 무엇입니까?",options:["리스크가 가장 낮기 때문에","가장 단기간에 완료되기 때문에","투자에 대해 최대의 경제적 가치를 가져다 주기 때문에","가장 많은 리소스를 필요로 하기 때문에"],correct:2,explanation:"NPV는 미래의 현금 흐름을 현재 가치로 할인한 것입니다. NPV가 가장 높은 프로젝트는 투자에 대해 최대의 경제적 수익을 기대할 수 있으므로 재무적 관점에서 가장 바람직한 선택입니다."},
+  {id:21,domain:"Predictive",question:"워터폴 개발에서 요건 정의 단계 후에 변경이 발생한 경우, 가장 적절한 대응은 무엇입니까?",options:["변경을 무시하고 계획대로 진행한다","통합 변경 관리 프로세스를 통해 변경 요청을 평가한다","프로젝트를 처음부터 다시 시작한다","변경을 자동으로 승인한다"],correct:1,explanation:"예측형(워터폴) 접근법에서도 변경은 발생합니다. 통합 변경 관리 프로세스를 통해 변경의 영향을 분석하고 CCB(변경 관리 위원회)에서 승인/거부를 결정합니다."},
+  {id:22,domain:"Predictive",question:"3점 추정법에서 낙관값=4일, 최빈값=6일, 비관값=14일인 경우, PERT 기대값은 얼마입니까?",options:["6일","7일","8일","9일"],correct:1,explanation:"PERT 기대값 = (낙관값 + 4×최빈값 + 비관값) / 6 = (4 + 4×6 + 14) / 6 = (4 + 24 + 14) / 6 = 42/6 = 7일입니다."},
+  {id:23,domain:"Predictive",question:"프로젝트 범위 기술서(Project Scope Statement)에 포함되지 않는 것은 무엇입니까?",options:["프로젝트 제외 사항","산출물 인수 기준","팀원의 급여 정보","프로젝트 제약 조건"],correct:2,explanation:"프로젝트 범위 기술서에는 산출물, 인수 기준, 제외 사항, 제약 조건, 가정 사항 등이 포함됩니다. 팀원의 급여 정보는 자원 관리 계획 또는 HR 영역에 해당하며 범위 기술서에는 포함되지 않습니다."},
+  {id:24,domain:"Predictive",question:"EVM 지표에서 SPI=1.2, CPI=0.9인 경우 프로젝트 상태는 어떻습니까?",options:["일정 지연·비용 절감","일정 선행·비용 초과","일정 지연·비용 초과","일정 선행·비용 절감"],correct:1,explanation:"SPI>1.0은 일정 선행, CPI<1.0은 비용 초과를 의미합니다. SPI=1.2는 계획보다 20% 앞서 있고, CPI=0.9는 예산을 약 11% 초과하고 있는 상태입니다."},
+  {id:25,domain:"Agile",question:"스크럼에서 스프린트 중에 범위 변경이 필요한 경우, 가장 적절한 대응은 무엇입니까?",options:["스프린트를 중단하고 새로운 스프린트를 시작한다","프로덕트 오너가 프로덕트 백로그에 추가하고 다음 스프린트에서 대응한다","스크럼 마스터가 즉시 스프린트 백로그를 변경한다","팀원이 초과 근무하여 대응한다"],correct:1,explanation:"스크럼에서는 스프린트 중 범위 변경은 원칙적으로 하지 않습니다. 새로운 요건은 프로덕트 백로그에 추가하고 프로덕트 오너가 우선순위를 정해 다음 스프린트 이후에 대응합니다."},
+  {id:26,domain:"Agile",question:"칸반 방식의 핵심 원칙으로 올바른 것은 무엇입니까?",options:["타임박스를 엄격하게 지키는 것","WIP(진행 중 작업) 제한을 설정하여 흐름을 최적화하는 것","2주 이터레이션으로 개발하는 것","데일리 스탠드업을 매일 실시하는 것"],correct:1,explanation:"칸반의 핵심 원칙은 WIP(Work In Progress) 제한으로 흐름을 최적화하는 것입니다. 타임박스와 이터레이션은 스크럼의 개념이며 칸반은 지속적인 흐름을 중시합니다."},
+  {id:27,domain:"Agile",question:"애자일에서 MVP(Minimum Viable Product)의 목적은 무엇입니까?",options:["가장 저렴한 비용으로 제품을 완성하는 것","최소한의 기능으로 조기에 사용자 피드백을 얻는 것","품질을 최소화하여 개발 속도를 높이는 것","팀의 최소 구성으로 개발하는 것"],correct:1,explanation:"MVP는 최소한의 기능 세트로 제품을 출시하여 실제 사용자로부터 피드백을 얻는 것이 목적입니다. 이를 통해 가설 검증을 빠르게 수행하고 제품 방향을 확인·조정할 수 있습니다."},
+  {id:28,domain:"Agile",question:"스크럼의 레트로스펙티브(회고)의 주요 목적은 무엇입니까?",options:["다음 스프린트의 백로그 아이템을 선택한다","완성된 산출물을 이해관계자에게 데모한다","팀의 프로세스를 되돌아보고 개선점을 파악한다","프로덕트 백로그의 우선순위를 재검토한다"],correct:2,explanation:"레트로스펙티브(스프린트 회고)는 팀이 스프린트 프로세스를 되돌아보고 잘된 점과 개선해야 할 점을 논의하는 장입니다. 지속적 개선(카이젠)의 실천입니다."},
+  {id:29,domain:"Agile",question:"벨로시티는 무엇을 측정하는 지표입니까?",options:["팀이 하루에 소화하는 태스크 수","팀이 한 스프린트에서 완료하는 스토리 포인트의 합계","프로덕트 백로그의 남은 아이템 수","릴리즈까지의 남은 일수"],correct:1,explanation:"벨로시티는 팀이 한 스프린트에서 완료하는 스토리 포인트(또는 작업량의 단위)의 합계입니다. 과거의 벨로시티를 참고하여 미래 스프린트 계획에 활용합니다."},
+  {id:30,domain:"Agile",question:"사용자 스토리의 좋은 작성 방법으로 적절한 형식은 무엇입니까?",options:["시스템은 ○○ 기능을 갖는다","○○로서 △△하고 싶다. 왜냐하면 □□이기 때문이다","○○ 화면에 △△ 버튼을 배치한다","테스트 항목: ○○가 정상적으로 동작하는 것"],correct:1,explanation:"사용자 스토리는 '[역할]로서 [기능]하고 싶다. 왜냐하면 [비즈니스 가치]이기 때문이다'라는 형식으로 작성합니다. 사용자의 관점에서 비즈니스 가치를 명확히 하는 것이 중요합니다."},
+  {id:31,domain:"People",question:"허즈버그의 2요인 이론에서 '동기 부여 요인'에 해당하는 것은 무엇입니까?",options:["급여","작업 환경","성취감","회사 방침"],correct:2,explanation:"허즈버그의 2요인 이론에서는 동기 부여 요인(성취감, 인정, 책임, 성장 등)과 위생 요인(급여, 작업 환경, 방침 등)을 구별합니다. 동기 부여 요인은 만족을 가져오고, 위생 요인의 결여는 불만을 유발합니다."},
+  {id:32,domain:"People",question:"RACI 표에서 'A(Accountable)'의 역할에 대해 올바른 것은 무엇입니까?",options:["작업을 실제로 수행하는 담당자","최종적인 설명 책임을 지는 사람","상담을 받는 사람","보고를 받는 사람"],correct:1,explanation:"RACI 표에서 A(Accountable)는 최종적인 설명 책임자로 각 태스크에 한 명만 배정합니다. R(Responsible)이 실행자, C(Consulted)가 상담 상대, I(Informed)가 정보 제공 대상입니다."},
+  {id:33,domain:"People",question:"맥그리거의 X이론에 기반한 관리 스타일은 무엇입니까?",options:["팀에 권한을 위임하고 자주성을 중시한다","엄격한 감독과 관리로 부하를 통제한다","팀원의 자아실현을 지원한다","코칭을 통해 성장을 촉진한다"],correct:1,explanation:"X이론은 '사람은 본래 게으르며 관리·강제하지 않으면 일하지 않는다'는 전제에 기반합니다. 반대로 Y이론은 '사람은 본래 일하는 것을 좋아하며 자기 관리가 가능하다'는 전제입니다. 현대 PM에서는 Y이론 기반의 관리를 권장합니다."},
+  {id:34,domain:"People",question:"가상 팀(Virtual Team)을 관리할 때 가장 중요한 요소는 무엇입니까?",options:["대면 회의를 매일 실시한다","명확한 커뮤니케이션 계획과 도구를 정비한다","팀원 전원을 같은 시간대에 배치한다","모든 소통을 이메일로만 수행한다"],correct:1,explanation:"가상 팀에서는 명확한 커뮤니케이션 계획, 적절한 협업 도구, 정기적인 체크인, 문화적 차이에 대한 배려가 성공의 열쇠입니다."},
+  {id:35,domain:"People",question:"권한 위임(Delegation)을 할 때 프로젝트 매니저가 유지해야 하는 것은 무엇입니까?",options:["작업의 실행 권한","설명 책임(Accountability)","모든 태스크의 승인 권한","팀원의 평가 권한"],correct:1,explanation:"권한 위임에서는 작업의 실행 권한을 이전하지만 최종적인 설명 책임(Accountability)은 프로젝트 매니저가 유지합니다. '권한은 위임할 수 있지만 설명 책임은 위임할 수 없다'가 원칙입니다."},
+  {id:36,domain:"People",question:"팀의 의사결정 기법 중 '피스트 오브 파이브(Fist of Five)'는 무엇입니까?",options:["다수결로 결정하는 방법","0~5개의 손가락 수로 합의 수준을 나타내는 방법","5명 이하의 그룹으로 논의하는 방법","5가지 선택지에서 투표하는 방법"],correct:1,explanation:"피스트 오브 파이브는 0(반대)~5(강력 찬성)의 손가락 수로 팀 전원이 합의 수준을 동시에 나타내는 기법입니다. 합의 정도를 빠르게 시각화할 수 있는 애자일에서 인기 있는 기법입니다."},
+  {id:37,domain:"People",question:"프로젝트 매니저가 사용하는 '영향력'의 종류 중 전문 지식에 기반한 것은 무엇입니까?",options:["보상 파워(Reward Power)","강제 파워(Coercive Power)","전문 파워(Expert Power)","지위 파워(Legitimate Power)"],correct:2,explanation:"파워의 종류에는 지위 파워(공식적 권한), 보상 파워(보상을 줄 수 있는 힘), 강제 파워(처벌을 줄 수 있는 힘), 전문 파워(전문 지식), 참조 파워(인품) 등이 있습니다. 전문 파워와 참조 파워가 가장 효과적인 것으로 여겨집니다."},
+  {id:38,domain:"People",question:"이해관계자 분석에서 '권력/관심 매트릭스'에서 높은 권력과 높은 관심을 가진 이해관계자에 대한 전략은 무엇입니까?",options:["모니터링한다","정보를 제공한다","만족시킨다","밀접하게 관리한다"],correct:3,explanation:"권력/관심 매트릭스에서 높은 권력·높은 관심은 '밀접하게 관리', 높은 권력·낮은 관심은 '만족시키기', 낮은 권력·높은 관심은 '정보 제공', 낮은 권력·낮은 관심은 '모니터링'이 적절한 전략입니다."},
+  {id:39,domain:"People",question:"다니엘 골먼의 리더십 스타일 중 위기 상황에 가장 적합한 것은 무엇입니까?",options:["비전형(Visionary)","코치형(Coaching)","강제형(Coercive)","민주형(Democratic)"],correct:2,explanation:"골먼의 6가지 리더십 스타일 중 강제형(Coercive)은 일반적으로 권장되지 않지만, 위기 상황이나 긴급 시 즉각적인 행동이 필요한 경우에 효과적입니다. 일반적으로는 비전형이나 코치형이 효과적입니다."},
+  {id:40,domain:"People",question:"문화적 지능(Cultural Intelligence)이 높은 프로젝트 매니저의 행동으로 가장 적절한 것은 무엇입니까?",options:["자신의 문화적 가치관을 팀 전체에 적용한다","다양한 문화적 배경을 이해하고 커뮤니케이션 방법을 적응시킨다","문화적 차이를 무시하고 프로세스를 통일한다","각 문화권의 팀원을 별도의 팀으로 나눈다"],correct:1,explanation:"문화적 지능은 다양한 문화를 이해하고 적응하는 능력입니다. 글로벌 프로젝트에서는 문화적 차이를 존중하고 커뮤니케이션 스타일을 상대에 맞게 조정하는 것이 중요합니다."},
+  {id:41,domain:"People",question:"팀 빌딩 활동 중 프로젝트 초기에 가장 효과적인 것은 무엇입니까?",options:["성과 평가를 실시한다","팀 헌장을 공동으로 작성한다","서로의 약점을 지적한다","경쟁적인 게임을 한다"],correct:1,explanation:"프로젝트 초기에는 팀 헌장(그라운드 룰)을 공동으로 작성함으로써 기대치 공유, 커뮤니케이션 규범 수립, 팀의 일체감 형성이 이루어집니다."},
+  {id:42,domain:"People",question:"코칭과 멘토링의 차이로 올바른 것은 무엇입니까?",options:["코칭은 장기적, 멘토링은 단기적","코칭은 특정 스킬 향상, 멘토링은 커리어 전반의 지원","코칭은 상위자만이 할 수 있고 멘토링은 누구나 할 수 있다","코칭과 멘토링은 같은 것이다"],correct:1,explanation:"코칭은 특정 스킬이나 성과 향상에 초점을 맞춘 단기적인 지원입니다. 멘토링은 보다 광범위한 커리어 개발이나 개인 성장을 지원하는 장기적인 관계입니다."},
+  {id:43,domain:"People",question:"협상에서 BATNA(Best Alternative to a Negotiated Agreement)란 무엇입니까?",options:["협상에서 처음에 제시하는 조건","협상이 결렬된 경우의 최선의 대안","양측이 합의할 수 있는 최소 라인","협상의 최종 기한"],correct:1,explanation:"BATNA는 '협상이 합의에 이르지 못했을 경우의 최선의 대안'입니다. BATNA를 파악해 두면 불리한 조건으로 합의하는 것을 피하고 협상력을 높일 수 있습니다."},
+  {id:44,domain:"People",question:"프로젝트 팀이 '사일로화'되어 있는 경우, 가장 효과적인 대책은 무엇입니까?",options:["각 팀의 독립성을 더욱 높인다","크로스 펑셔널 활동과 커뮤니케이션을 촉진한다","팀 간 정보 공유를 제한한다","팀 리더만이 연락을 취하도록 한다"],correct:1,explanation:"사일로화는 팀 간에 벽이 생겨 정보가 흐르지 않는 상태입니다. 크로스 펑셔널 활동, 공유 회의, 커뮤니케이션 도구 활용으로 벽을 없애는 것이 효과적입니다."},
+  {id:45,domain:"Process",question:"롤링 웨이브 계획법(Rolling Wave Planning)에 대한 올바른 설명은 무엇입니까?",options:["모든 작업을 처음에 상세히 계획한다","가까운 미래의 작업은 상세하게, 먼 미래의 작업은 개요 수준으로 계획한다","계획을 일절 하지 않고 수시로 대응한다","팀의 투표로 계획의 상세도를 결정한다"],correct:1,explanation:"롤링 웨이브 계획법은 단계적 상세화의 일종으로, 근접한 작업은 상세하게 계획하고 미래의 작업은 상위 수준으로 계획합니다. 정보가 이용 가능해지면서 상세화해 나가는 실용적인 접근 방식입니다."},
+  {id:46,domain:"Process",question:"패스트 트래킹(Fast-Tracking)과 크래싱(Crashing)의 차이에 대해 올바른 것은 무엇입니까?",options:["두 방법 모두 추가 비용이 필요하다","패스트 트래킹은 활동의 병행 실시, 크래싱은 리소스 추가","두 방법 모두 리스크는 동일하다","크래싱은 활동의 병행 실시, 패스트 트래킹은 리소스 추가"],correct:1,explanation:"패스트 트래킹은 원래 순차적으로 실행하는 활동을 병행 실행하는 기법(재작업 리스크 증가). 크래싱은 추가 리소스를 투입하여 일정을 단축하는 기법(비용 증가)입니다."},
+  {id:47,domain:"Process",question:"델파이 기법(Delphi Method)의 특징으로 올바른 것은 무엇입니까?",options:["팀이 대면으로 논의하여 합의에 이른다","익명 설문을 반복하여 전문가의 의견을 수렴한다","가장 목소리가 큰 사람의 의견을 채택한다","컴퓨터 시뮬레이션으로 결과를 예측한다"],correct:1,explanation:"델파이 기법은 전문가 패널에 익명으로 설문을 반복하여 의견을 수렴하는 기법입니다. 익명성으로 집단 사고(그룹싱크)와 앵커링 편향을 방지합니다."},
+  {id:48,domain:"Process",question:"몬테카를로 시뮬레이션(Monte Carlo Simulation)의 주요 용도는 무엇입니까?",options:["팀원 선정","프로젝트의 리스크와 불확실성의 정량적 분석","품질 검사 샘플링","이해관계자 파악"],correct:1,explanation:"몬테카를로 시뮬레이션은 확률 분포를 사용하여 수천 번의 시뮬레이션을 실행하고 프로젝트의 일정 및 비용의 확률 분포를 산출하는 정량적 리스크 분석 기법입니다."},
+  {id:49,domain:"Process",question:"프로젝트의 교훈 등록부(Lessons Learned Register)를 업데이트해야 할 타이밍은 무엇입니까?",options:["프로젝트 종료 시에만","각 단계의 종료 시에만","프로젝트 전체를 통해 지속적으로","스폰서가 요청했을 때에만"],correct:2,explanation:"교훈 등록부는 프로젝트 전체를 통해 지속적으로 업데이트해야 합니다. 프로젝트 종료 시뿐만 아니라 중요한 이벤트나 판단 후에 즉시 기록함으로써 실시간으로 지식을 축적할 수 있습니다."},
+  {id:50,domain:"Process",question:"프로젝트의 이해관계자가 100명인 경우 커뮤니케이션 채널 수는 몇 개입니까?",options:["100개","4,950개","9,900개","10,000개"],correct:1,explanation:"커뮤니케이션 채널 수 = n(n-1)/2 = 100×99/2 = 4,950개입니다. 이해관계자의 증가에 따라 채널 수가 급증하므로 적절한 커뮤니케이션 관리가 중요합니다."}
+];
+
 // ダークモード（早期適用でフラッシュ防止）
 (function(){
   const d=localStorage.getItem('pmp-dark');
@@ -833,14 +1056,132 @@ function toggleDark(){
   document.getElementById('dark-toggle').innerHTML=isDark?'&#9788;':'&#9790;';
 }
 
+// 多言語対応
+const i18n={
+  ja:{
+    'app.title':'PMP問題集','app.subtitle':'Project Management Professional 試験対策',
+    'dashboard.title':'学習ダッシュボード','dashboard.subtitle':'知識を深めてPMP合格を目指しましょう',
+    'stat.total':'総問題数','stat.answered':'回答済み','stat.rate':'正答率',
+    'quiz.count.label':'出題数','quiz.count.all':'全問','quiz.q.unit':'問',
+    'quiz.unanswered.priority':'未回答の問題を優先出題',
+    'btn.start.all':'全分野からランダム出題','btn.start.weak':'苦手問題を復習','btn.start.bookmark':'ブックマーク問題を復習',
+    'tab.domains':'分野別','tab.manage':'管理',
+    'manage.title':'データ管理','manage.export':'問題と成績をエクスポート','manage.reset':'成績をリセット',
+    'about.title':'PMP試験対策 無料問題集について',
+    'about.text':'PMP（Project Management Professional）はPMIが認定する国際的なプロジェクトマネジメント資格です。本アプリでは練習問題を無料で提供。People・Process・Business Environment・Predictive・Agileの5分野を収録し、シナリオベース形式にも対応。スマホ対応・オフライン利用可能で、いつでもどこでもPMP合格を目指せます。',
+    'btn.next':'次へ','btn.finish':'結果を見る','btn.quit':'中断してホームに戻る',
+    'btn.home':'ホームに戻る','btn.review':'復習する',
+    'result.pass.title':'合格ライン達成！','result.fail.title':'もう少し頑張りましょう！',
+    'result.pass.msg':'この調子で学習を続けましょう。','result.fail.msg':'苦手分野を重点的に復習しましょう。',
+    'review.title':'回答の振り返り','review.explanation':'解説:',
+    'review.your.answer':'あなたの回答:','review.correct.answer':'正解:',
+    'alert.no.bookmark':'ブックマークした問題がありません。',
+    'alert.no.weak':'苦手問題がありません！素晴らしい成績です！',
+    'confirm.quit':'中断してホームに戻りますか？',
+    'confirm.reset':'成績データをリセットしますか？問題データは残ります。',
+    'confirm.resume_pre':'前回の続き（','confirm.resume_suf':'問回答済み）を再開しますか？',
+    'rate.label':'正答率','tooltip.dark':'ダークモード切替',
+    'domain.People':'People（人）','domain.Process':'Process（プロセス）',
+    'domain.Business':'Business Environment（ビジネス環境）',
+    'domain.Predictive':'Predictive（予測型）','domain.Agile':'Agile（アジャイル）',
+  },
+  en:{
+    'app.title':'PMP Quiz','app.subtitle':'Project Management Professional Exam Prep',
+    'dashboard.title':'Study Dashboard','dashboard.subtitle':'Deepen your knowledge and pass the PMP exam.',
+    'stat.total':'Total Questions','stat.answered':'Answered','stat.rate':'Correct Rate',
+    'quiz.count.label':'Question Count','quiz.count.all':'All','quiz.q.unit':' Qs',
+    'quiz.unanswered.priority':'Prioritize unanswered questions',
+    'btn.start.all':'Random from All Topics','btn.start.weak':'Review Weak Areas','btn.start.bookmark':'Review Bookmarked Questions',
+    'tab.domains':'By Domain','tab.manage':'Manage',
+    'manage.title':'Data Management','manage.export':'Export Questions & Results','manage.reset':'Reset Stats',
+    'about.title':'About This Free PMP Quiz App',
+    'about.text':'PMP (Project Management Professional) is a globally recognized project management certification by PMI. This free app offers practice questions covering all 5 domains: People, Process, Business Environment, Predictive, and Agile — in scenario-based format. Works offline and on mobile.',
+    'btn.next':'Next','btn.finish':'See Results','btn.quit':'Quit and Return Home',
+    'btn.home':'Return Home','btn.review':'Review Answers',
+    'result.pass.title':'Pass Line Achieved!','result.fail.title':'Keep Going!',
+    'result.pass.msg':'Keep up the great work!','result.fail.msg':'Focus on reviewing your weak areas.',
+    'review.title':'Answer Review','review.explanation':'Explanation:',
+    'review.your.answer':'Your Answer:','review.correct.answer':'Correct Answer:',
+    'alert.no.bookmark':'No bookmarked questions.',
+    'alert.no.weak':'No weak questions! Excellent performance!',
+    'confirm.quit':'Quit and return home?',
+    'confirm.reset':'Reset stats? Your question data will remain.',
+    'confirm.resume_pre':'Resume previous quiz (','confirm.resume_suf':' answered). Continue?',
+    'rate.label':'Correct Rate','tooltip.dark':'Toggle Dark Mode',
+    'domain.People':'People','domain.Process':'Process',
+    'domain.Business':'Business Environment',
+    'domain.Predictive':'Predictive','domain.Agile':'Agile',
+  },
+  ko:{
+    'app.title':'PMP 문제집','app.subtitle':'Project Management Professional 시험 대비',
+    'dashboard.title':'학습 대시보드','dashboard.subtitle':'지식을 쌓고 PMP 합격을 목표로 합시다.',
+    'stat.total':'총 문제 수','stat.answered':'답변 완료','stat.rate':'정답률',
+    'quiz.count.label':'출제 수','quiz.count.all':'전체','quiz.q.unit':'문',
+    'quiz.unanswered.priority':'미답변 문제 우선 출제',
+    'btn.start.all':'전 분야에서 랜덤 출제','btn.start.weak':'취약 문제 복습','btn.start.bookmark':'북마크 문제 복습',
+    'tab.domains':'분야별','tab.manage':'관리',
+    'manage.title':'데이터 관리','manage.export':'문제 및 성적 내보내기','manage.reset':'성적 초기화',
+    'about.title':'무료 PMP 문제집 소개',
+    'about.text':'PMP(Project Management Professional)는 PMI가 인증하는 국제적인 프로젝트 관리 자격증입니다. 이 앱은 People·Process·Business Environment·Predictive·Agile 5개 분야의 연습 문제를 무료로 제공합니다. 시나리오형 문제 대응, 스마트폰·오프라인 지원.',
+    'btn.next':'다음','btn.finish':'결과 보기','btn.quit':'중단하고 홈으로 돌아가기',
+    'btn.home':'홈으로 돌아가기','btn.review':'복습하기',
+    'result.pass.title':'합격 기준 달성!','result.fail.title':'조금 더 노력합시다!',
+    'result.pass.msg':'이 기세로 계속 학습합시다.','result.fail.msg':'취약 분야를 중점적으로 복습합시다.',
+    'review.title':'답안 복습','review.explanation':'해설:',
+    'review.your.answer':'귀하의 답변:','review.correct.answer':'정답:',
+    'alert.no.bookmark':'북마크한 문제가 없습니다.',
+    'alert.no.weak':'취약 문제가 없습니다! 훌륭한 성적입니다!',
+    'confirm.quit':'중단하고 홈으로 돌아가시겠습니까?',
+    'confirm.reset':'성적 데이터를 초기화하시겠습니까? 문제 데이터는 유지됩니다.',
+    'confirm.resume_pre':'이전 퀴즈를 재개합니까 (','confirm.resume_suf':'개 답변 완료). 계속하시겠습니까?',
+    'rate.label':'정답률','tooltip.dark':'다크 모드 전환',
+    'domain.People':'People（사람）','domain.Process':'Process（프로세스）',
+    'domain.Business':'Business Environment（비즈니스 환경）',
+    'domain.Predictive':'Predictive（예측형）','domain.Agile':'Agile（애자일）',
+  }
+};
+
+let lang=(function(){
+  const l=localStorage.getItem('pmp-lang')||'ja';
+  return ['ja','en','ko'].includes(l)?l:'ja';
+})();
+function t(k){return (i18n[lang]&&i18n[lang][k])||i18n.ja[k]||k;}
+function setLang(l){
+  lang=l;
+  localStorage.setItem('pmp-lang',l);
+  loadData();
+  applyLang();
+  const isQuizScreen=!document.getElementById('quiz-screen').classList.contains('hidden');
+  if(isQuizScreen&&quizState.questions.length>0){
+    const newQMap={};
+    questions.forEach(q=>{newQMap[q.id]=q;});
+    quizState.questions=quizState.questions.map(q=>newQMap[q.id]||q);
+    renderQuestion();
+  }else{
+    updateHome();
+  }
+}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{el.title=t(el.dataset.i18nTitle);});
+  document.querySelectorAll('.quiz-count-btn').forEach(b=>{
+    const n=b.dataset.count;
+    b.textContent=n==='0'?t('quiz.count.all'):n+t('quiz.q.unit');
+  });
+  document.querySelectorAll('.lang-btn').forEach(b=>{b.classList.toggle('active',b.dataset.lang===lang);});
+  document.title=t('app.title')+' - '+t('app.subtitle');
+  document.documentElement.lang=lang;
+}
+
 let questions=[];
 let stats={answered:{},correct:{}};
 let bookmarks=JSON.parse(localStorage.getItem('pmp-bookmarks')||'[]');
 let quizState={questions:[],current:0,answers:[],mode:''};
 
 function loadData(){
-  // 常に最新のdefaultQuestionsを使用（問題修正が即反映される）
-  questions=[...defaultQuestions];
+  // 言語に応じた問題セットを使用
+  const qMap={ja:defaultQuestionsJa,en:defaultQuestionsEn,ko:defaultQuestionsKo};
+  questions=[...(qMap[lang]||defaultQuestionsJa)];
   // 旧形式のlocalStorageデータを削除
   localStorage.removeItem('pmp-questions');
   const savedStats=localStorage.getItem('pmp-stats');
@@ -881,17 +1222,14 @@ function updateHome(){
     const dRate=dAnswered>0?Math.round(dCorrect/dAnswered*100):-1;
     const btn=document.createElement('button');
     btn.className='domain-btn';
-    const rateHtml=dRate>=0?' <span style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px;background:'+(dRate>=60?'#dcfce7;color:var(--success)':'#fee2e2;color:var(--danger)')+'">正答率'+dRate+'%</span>':'';
-    btn.innerHTML='<span>'+getDomainLabel(d)+rateHtml+'</span><span class="badge">'+count+'問</span>';
+    const rateHtml=dRate>=0?' <span style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px;background:'+(dRate>=60?'#dcfce7;color:var(--success)':'#fee2e2;color:var(--danger)')+'">'+t('rate.label')+dRate+'%</span>':'';
+    btn.innerHTML='<span>'+getDomainLabel(d)+rateHtml+'</span><span class="badge">'+count+t('quiz.q.unit')+'</span>';
     btn.onclick=()=>startQuiz(d);
     domainList.appendChild(btn);
   });
 }
 
-function getDomainLabel(d){
-  const labels={People:'People（人）',Process:'Process（プロセス）',Business:'Business Environment（ビジネス環境）',Predictive:'Predictive（予測型）',Agile:'Agile（アジャイル）'};
-  return labels[d]||d;
-}
+function getDomainLabel(d){return t('domain.'+d)||d;}
 
 function switchTab(name,el){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -938,7 +1276,7 @@ function startQuiz(mode){
     }
   }else if(mode==='bookmark'){
     pool=questions.filter(q=>bookmarks.includes(q.id));
-    if(pool.length===0){alert('ブックマークした問題がありません。');return;}
+    if(pool.length===0){alert(t('alert.no.bookmark'));return;}
     pool=shuffle(pool);
     if(limit>0) pool=pool.slice(0,limit);
   }else if(mode==='weak'){
@@ -947,7 +1285,7 @@ function startQuiz(mode){
       const c=stats.correct[q.id]||0;
       return a===0||(c/a)<0.6;
     });
-    if(pool.length===0){alert('苦手問題がありません！素晴らしい成績です！');return;}
+    if(pool.length===0){alert(t('alert.no.weak'));return;}
     pool=shuffle(pool);
     if(limit>0) pool=pool.slice(0,limit);
   }else{
@@ -1013,11 +1351,11 @@ function selectAnswer(idx){
   stats.answered[q.id]=(stats.answered[q.id]||0)+1;
   if(isCorrect)stats.correct[q.id]=(stats.correct[q.id]||0)+1;
   saveStats();
-  if(typeof gtag==='function')gtag('event','quiz_answer',{question_id:q.id,domain:q.domain,correct:isCorrect});
+  if(typeof gtag==='function')gtag('event','quiz_answer',{question_id:q.id,domain:q.domain,correct:isCorrect,lang:lang});
   const exp=document.getElementById('q-explanation');
-  exp.innerHTML='<strong>解説:</strong> '+escapeHtml(q.explanation);
+  exp.innerHTML='<strong>'+t('review.explanation')+'</strong> '+escapeHtml(q.explanation);
   exp.classList.add('show');
-  const label=quizState.current<quizState.questions.length-1?'次へ':'結果を見る';
+  const label=quizState.current<quizState.questions.length-1?t('btn.next'):t('btn.finish');
   document.getElementById('next-btn').style.display='block';
   document.getElementById('next-btn').textContent=label;
   document.getElementById('next-btn-bottom').style.display='block';
@@ -1031,7 +1369,7 @@ function nextQuestion(){
   else{saveQuizState();renderQuestion();}
 }
 
-function quitQuiz(){if(confirm('中断してホームに戻りますか？'))goHome();}
+function quitQuiz(){if(confirm(t('confirm.quit')))goHome();}
 
 function onBookmarkClick(){
   const q=quizState.questions[quizState.current];
@@ -1058,28 +1396,28 @@ function showResult(){
   const total=quizState.answers.length;
   const correctCount=quizState.answers.filter(a=>a.correct).length;
   const pct=Math.round(correctCount/total*100);
-  if(typeof gtag==='function')gtag('event','quiz_complete',{total_questions:total,correct_count:correctCount,score_pct:pct,mode:quizState.mode});
+  if(typeof gtag==='function')gtag('event','quiz_complete',{total_questions:total,correct_count:correctCount,score_pct:pct,mode:quizState.mode,lang:lang});
   const circle=document.getElementById('score-circle');
   circle.className='score-circle '+(pct>=60?'pass':'fail');
   document.getElementById('score-pct').textContent=pct+'%';
   document.getElementById('score-detail').textContent=correctCount+' / '+total;
-  document.getElementById('result-title').textContent=pct>=60?'合格ライン達成！':'もう少し頑張りましょう！';
-  document.getElementById('result-msg').textContent=pct>=60?'この調子で学習を続けましょう。':'苦手分野を重点的に復習しましょう。';
+  document.getElementById('result-title').textContent=pct>=60?t('result.pass.title'):t('result.fail.title');
+  document.getElementById('result-msg').textContent=pct>=60?t('result.pass.msg'):t('result.fail.msg');
   document.getElementById('review-section').classList.add('hidden');
 }
 
 function showReview(){
   const section=document.getElementById('review-section');
   section.classList.remove('hidden');
-  section.innerHTML='<h3 style="margin-bottom:12px">回答の振り返り</h3>';
+  section.innerHTML='<h3 style="margin-bottom:12px">'+t('review.title')+'</h3>';
   const labels=['A','B','C','D'];
   quizState.answers.forEach((a,i)=>{
     const q=quizState.questions[i];
     const div=document.createElement('div');
     div.className='review-item';
     const yourAnswer=a.correct
-      ?'<span class="correct-mark">正解: '+labels[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</span>'
-      :'<span class="wrong-mark">あなたの回答: '+labels[a.selected]+'. '+escapeHtml(q.options[a.selected])+'</span><br><span class="correct-mark">正解: '+labels[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</span>';
+      ?'<span class="correct-mark">'+t('review.correct.answer')+' '+labels[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</span>'
+      :'<span class="wrong-mark">'+t('review.your.answer')+' '+labels[a.selected]+'. '+escapeHtml(q.options[a.selected])+'</span><br><span class="correct-mark">'+t('review.correct.answer')+' '+labels[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</span>';
     div.innerHTML='<div class="q-text">'+(i+1)+'. <span style="color:var(--text-light);font-size:0.8rem">[ID:'+q.id+']</span> '+escapeHtml(q.question)+'</div><div class="answer-info">'+yourAnswer+'<br><em>'+escapeHtml(q.explanation)+'</em></div>';
     section.appendChild(div);
   });
@@ -1099,7 +1437,7 @@ function exportData(){
 
 
 function resetStats(){
-  if(!confirm('成績データをリセットしますか？問題データは残ります。'))return;
+  if(!confirm(t('confirm.reset')))return;
   stats={answered:{},correct:{}};
   saveStats();
   updateHome();
@@ -1131,12 +1469,13 @@ function shuffle(arr){
 }
 
 loadData();
+applyLang();
 updateHome();
 if(document.documentElement.classList.contains('dark'))document.getElementById('dark-toggle').innerHTML='&#9788;';
 (function resumeQuiz(){
   const saved=loadQuizState();
   if(!saved||!saved.questions||saved.questions.length===0)return;
-  if(!confirm('前回の続き（'+saved.answers.length+'/'+saved.questions.length+'問回答済み）を再開しますか？'))return clearQuizState();
+  if(!confirm(t('confirm.resume_pre')+saved.answers.length+'/'+saved.questions.length+t('confirm.resume_suf')))return clearQuizState();
   const pool=saved.questions.map(id=>questions.find(q=>q.id===id)).filter(Boolean);
   if(pool.length===0)return clearQuizState();
   quizState={questions:pool,current:saved.current,answers:saved.answers||[],mode:saved.mode||'all'};
