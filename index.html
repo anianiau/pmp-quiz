@@ -297,27 +297,85 @@ gtag('config','G-EPQQE97M74');
 
   .hidden { display: none !important; }
 
+  /* 画面フェード */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .screen-fade { animation: fadeIn 0.22s ease; }
 
-  .tab-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
+  /* ヘッダーコンパクト */
+  .header.compact { padding: 10px 24px; padding-top: calc(10px + env(safe-area-inset-top)); }
+  .header.compact p { display: none; }
+  .header.compact h1 { font-size: 1.1rem; }
+
+  /* 中断ボタン */
+  .quit-link {
+    display: block; width: 100%; background: none; border: none; cursor: pointer;
+    color: var(--text-light); font-size: 0.85rem; padding: 12px; margin-top: 4px;
+    text-decoration: underline; text-underline-offset: 3px;
   }
-  .tab-btn {
-    flex: 1;
-    padding: 10px;
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    background: var(--card);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--text-light);
-    transition: all 0.2s;
-    -webkit-appearance: none;
-    appearance: none;
+  .quit-link:hover { color: var(--danger); }
+
+  /* 統計進捗バー */
+  .stat-progress { margin-top: 12px; }
+  .stat-progress-track {
+    background: var(--border); border-radius: 20px; height: 6px; overflow: hidden;
   }
-  .tab-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+  .stat-progress-fill {
+    background: linear-gradient(90deg, var(--primary), #7c3aed);
+    height: 100%; border-radius: 20px; transition: width 0.6s ease;
+  }
+  .stat-progress-label { font-size: 0.75rem; color: var(--text-light); }
+
+  /* ドメイン別内訳 */
+  .domain-breakdown { margin-top: 20px; text-align: left; }
+  .domain-breakdown h4 { font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px; font-weight: 600; }
+  .breakdown-row { margin-bottom: 10px; }
+  .breakdown-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text); margin-bottom: 4px; }
+  .breakdown-track { background: var(--border); border-radius: 20px; height: 8px; overflow: hidden; }
+  .breakdown-fill { height: 100%; border-radius: 20px; transition: width 0.6s ease; }
+  .breakdown-fill.pass { background: var(--success); }
+  .breakdown-fill.fail { background: var(--danger); }
+  .breakdown-fill.none { background: var(--border); }
+
+
+  .stats-card { padding: 16px 20px 12px; }
+  .stats-card .stats-grid { margin-bottom: 0; }
+  .reset-link {
+    background: none; border: none; cursor: pointer; font-size: 0.78rem;
+    color: var(--text-light); text-decoration: underline; padding: 0;
+  }
+  .reset-link:hover { color: var(--danger); }
+  .section-label {
+    font-size: 0.78rem; font-weight: 600; color: var(--text-light);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin: 4px 0 10px 4px;
+  }
+  .about-section {
+    margin-top: 16px; border-top: 1px solid var(--border);
+  }
+  .about-toggle {
+    width: 100%; background: none; border: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 4px; font-size: 0.82rem; color: var(--text-light);
+    font-weight: 500; text-align: left;
+  }
+  .about-toggle:hover { color: var(--text); }
+  .about-arrow { transition: transform 0.2s; font-size: 0.65rem; }
+  .about-toggle[aria-expanded="true"] .about-arrow { transform: rotate(90deg); }
+  .about-body { padding: 0 4px 16px; font-size: 0.82rem; line-height: 1.8; color: var(--text-light); }
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 24px;
+  }
+  .modal-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 28px 24px; max-width: 380px; width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .modal-card h3 { margin-bottom: 12px; font-size: 1.1rem; }
+  .modal-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; margin-bottom: 24px; }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btns .btn { flex: 1; }
 
   /* ダークモード */
   .dark {
@@ -339,7 +397,6 @@ gtag('config','G-EPQQE97M74');
   .dark .explanation { background: #422006; border-left-color: var(--warning); }
   .dark .explanation strong { color: #fbbf24; }
   .dark .domain-btn:hover { background: #334155; }
-  .dark .tab-btn.active { background: #1e3a5f; }
   .dark .question-info .domain-tag { background: #1e3a5f; }
   .dark .btn-outline { border-color: #3b82f6; color: #93c5fd; }
   .dark .btn-outline:hover { background: #1e3a5f; }
@@ -364,7 +421,19 @@ gtag('config','G-EPQQE97M74');
   }
   .lang-btn.active { background: rgba(255,255,255,0.25); color: #fff; border-color: rgba(255,255,255,0.7); }
   .lang-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  /* ダークモード初期フラッシュ防止: bodyが見える前に適用 */
+  html.dark body { background: #0f172a; }
+  .toast {
+    position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(16px);
+    background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 500; white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25); z-index: 9999;
+    opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .dark .toast { background: #334155; }
 </style>
+<script>(function(){var d=localStorage.getItem('pmp-dark');if(d==='1'||(d===null&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');})();</script>
 </head>
 <body>
 
@@ -381,9 +450,7 @@ gtag('config','G-EPQQE97M74');
 
 <div class="container">
   <div id="home-screen">
-    <div class="home-card">
-      <h2 data-i18n="dashboard.title">学習ダッシュボード</h2>
-      <p data-i18n="dashboard.subtitle">知識を深めてPMP合格を目指しましょう</p>
+    <div class="home-card stats-card">
       <div class="stats-grid">
         <div class="stat-box">
           <div class="num" id="stat-total">0</div>
@@ -398,42 +465,46 @@ gtag('config','G-EPQQE97M74');
           <div class="label" data-i18n="stat.rate">正答率</div>
         </div>
       </div>
-      <div style="margin-bottom:12px">
-        <label style="font-size:14px;color:var(--text-light);display:block;margin-bottom:6px" data-i18n="quiz.count.label">出題数</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="stat-progress">
+        <div class="stat-progress-track"><div class="stat-progress-fill" id="stat-progress-fill" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px">
+          <span class="stat-progress-label" id="stat-progress-label"></span>
+          <button class="reset-link" onclick="openResetModal()" data-i18n="manage.reset">成績をリセット</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-card">
+      <div style="margin-bottom:14px;text-align:center">
+        <label style="font-size:13px;color:var(--text-light);display:block;margin-bottom:8px" data-i18n="quiz.count.label">出題数</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
           <button class="quiz-count-btn active" onclick="setQuizCount(10)" data-count="10">10問</button>
           <button class="quiz-count-btn" onclick="setQuizCount(20)" data-count="20">20問</button>
           <button class="quiz-count-btn" onclick="setQuizCount(60)" data-count="60">60問</button>
           <button class="quiz-count-btn" onclick="setQuizCount(0)" data-count="0">全問</button>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px">
         <input type="checkbox" id="unanswered-first" checked style="width:18px;height:18px;accent-color:var(--primary)">
         <label for="unanswered-first" style="font-size:14px;color:var(--text)" data-i18n="quiz.unanswered.priority">未回答の問題を優先出題</label>
       </div>
-      <button class="btn" onclick="startQuiz('all')" style="margin-bottom:12px" data-i18n="btn.start.all">全分野からランダム出題</button>
-      <button class="btn btn-outline" onclick="startQuiz('weak')" style="margin-bottom:12px" data-i18n="btn.start.weak">苦手問題を復習</button>
-      <button class="btn btn-outline" onclick="startQuiz('bookmark')" style="margin-bottom:12px" data-i18n="btn.start.bookmark">ブックマーク問題を復習</button>
-    </div>
-
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('domains', this)" data-i18n="tab.domains">分野別</button>
-      <button class="tab-btn" onclick="switchTab('manage', this)" data-i18n="tab.manage">管理</button>
-    </div>
-
-    <div id="tab-domains" class="domain-list"></div>
-
-    <div id="tab-manage" class="hidden">
-      <div class="home-card">
-        <h2 style="margin-bottom:16px" data-i18n="manage.title">データ管理</h2>
-        <button class="btn" onclick="exportData()" style="margin-bottom:10px" data-i18n="manage.export">問題と成績をエクスポート</button>
-        <button class="btn btn-outline" onclick="resetStats()" style="border-color:var(--danger);color:var(--danger)" data-i18n="manage.reset">成績をリセット</button>
+      <button class="btn" onclick="startQuiz('all')" style="margin-bottom:10px" data-i18n="btn.start.all">全分野からランダム出題</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" onclick="startQuiz('weak')" style="flex:1" data-i18n="btn.start.weak">弱点を復習</button>
+        <button class="btn btn-outline" onclick="startQuiz('bookmark')" style="flex:1" data-i18n="btn.start.bookmark">ブックマーク</button>
       </div>
     </div>
 
-    <div style="margin-top:24px;padding:20px 24px;border-top:1px solid var(--border);font-size:0.8rem;line-height:1.9;color:var(--text-light);text-align:left">
-      <p style="margin-bottom:4px" data-i18n="about.title">PMP試験対策 無料問題集について</p>
-      <p data-i18n="about.text">PMP（Project Management Professional）はPMIが認定する国際的なプロジェクトマネジメント資格です。本アプリでは練習問題を無料で提供。People・Process・Business Environment・Predictive・Agileの5分野を収録し、シナリオベース形式にも対応。スマホ対応・オフライン利用可能で、いつでもどこでもPMP合格を目指せます。</p>
+    <div id="domain-list" class="domain-list"></div>
+
+    <div class="about-section">
+      <button class="about-toggle" onclick="toggleAbout(this)" aria-expanded="false">
+        <span data-i18n="about.title">PMP試験対策 無料問題集について</span>
+        <span class="about-arrow">▶</span>
+      </button>
+      <div class="about-body hidden">
+        <p data-i18n="about.text">PMP（Project Management Professional）はPMIが認定する国際的なプロジェクトマネジメント資格です。本アプリでは練習問題を無料で提供。People・Process・Business Environment・Predictive・Agileの5分野を収録し、シナリオベース形式にも対応。スマホ対応・オフライン利用可能で、いつでもどこでもPMP合格を目指せます。</p>
+      </div>
     </div>
   </div>
 
@@ -446,7 +517,6 @@ gtag('config','G-EPQQE97M74');
       </div>
       <div style="display:flex;align-items:center;gap:4px">
         <button class="bookmark-btn" id="bookmark-btn" onclick="onBookmarkClick()" title="ブックマーク">&#9734;</button>
-        <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;width:auto;padding:8px 22px;font-size:0.85rem" data-i18n="btn.next">次へ</button>
       </div>
     </div>
     <div class="question-card">
@@ -455,7 +525,7 @@ gtag('config','G-EPQQE97M74');
       <div class="explanation" id="q-explanation"></div>
     </div>
     <button class="btn" id="next-btn-bottom" onclick="nextQuestion()" style="display:none;margin-top:16px" data-i18n="btn.next">次へ</button>
-    <button class="btn btn-outline" onclick="quitQuiz()" style="margin-top:10px" data-i18n="btn.quit">中断してホームに戻る</button>
+    <button class="quit-link" onclick="quitQuiz()" data-i18n="btn.quit">中断してホームに戻る</button>
   </div>
 
   <div id="result-screen" class="hidden">
@@ -466,12 +536,25 @@ gtag('config','G-EPQQE97M74');
       </div>
       <h2 id="result-title"></h2>
       <p id="result-msg"></p>
+      <div id="domain-breakdown" class="domain-breakdown"></div>
       <div class="btn-group">
         <button class="btn" onclick="goHome()" data-i18n="btn.home">ホームに戻る</button>
         <button class="btn btn-outline" onclick="showReview()" data-i18n="btn.review">復習する</button>
       </div>
     </div>
     <div id="review-section" class="hidden"></div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<div id="reset-modal" class="modal-overlay hidden" onclick="closeResetModal(event)">
+  <div class="modal-card">
+    <h3 data-i18n="modal.reset.title">成績をリセット</h3>
+    <p data-i18n="modal.reset.body">これまでの回答履歴・正答率がすべて削除されます。この操作は元に戻せません。</p>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeResetModal()" data-i18n="btn.cancel">キャンセル</button>
+      <button class="btn" style="background:var(--danger)" onclick="confirmReset()" data-i18n="modal.reset.confirm">リセットする</button>
+    </div>
   </div>
 </div>
 
@@ -1315,6 +1398,14 @@ function toggleDark(){
   localStorage.setItem('pmp-dark',isDark?'1':'0');
   document.getElementById('dark-toggle').innerHTML=isDark?'&#9788;':'&#9790;';
 }
+let _toastTimer=null;
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  if(_toastTimer)clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>el.classList.remove('show'),2500);
+}
 
 // 多言語対応
 const i18n={
@@ -1333,10 +1424,17 @@ const i18n={
     'btn.home':'ホームに戻る','btn.review':'復習する',
     'result.pass.title':'合格ライン達成！','result.fail.title':'もう少し頑張りましょう！',
     'result.pass.msg':'この調子で学習を続けましょう。','result.fail.msg':'苦手分野を重点的に復習しましょう。',
+    'result.domain.breakdown':'分野別スコア',
     'review.title':'回答の振り返り','review.explanation':'解説:',
     'review.your.answer':'あなたの回答:','review.correct.answer':'正解:',
     'alert.no.bookmark':'ブックマークした問題がありません。',
     'alert.no.weak':'苦手問題がありません！素晴らしい成績です！',
+    'btn.cancel':'キャンセル',
+    'modal.reset.title':'成績をリセット',
+    'modal.reset.body':'これまでの回答履歴・正答率がすべて削除されます。この操作は元に戻せません。',
+    'modal.reset.confirm':'リセットする',
+    'toast.reset.done':'成績をリセットしました',
+    'btn.start.weak':'弱点を復習','btn.start.bookmark':'ブックマーク',
     'confirm.quit':'中断してホームに戻りますか？',
     'confirm.reset':'成績データをリセットしますか？問題データは残ります。',
     'confirm.resume_pre':'前回の続き（','confirm.resume_suf':'問回答済み）を再開しますか？',
@@ -1360,10 +1458,16 @@ const i18n={
     'btn.home':'Return Home','btn.review':'Review Answers',
     'result.pass.title':'Pass Line Achieved!','result.fail.title':'Keep Going!',
     'result.pass.msg':'Keep up the great work!','result.fail.msg':'Focus on reviewing your weak areas.',
+    'result.domain.breakdown':'Score by Domain',
     'review.title':'Answer Review','review.explanation':'Explanation:',
     'review.your.answer':'Your Answer:','review.correct.answer':'Correct Answer:',
     'alert.no.bookmark':'No bookmarked questions.',
     'alert.no.weak':'No weak questions! Excellent performance!',
+    'btn.cancel':'Cancel',
+    'modal.reset.title':'Reset Stats',
+    'modal.reset.body':'All your answer history and correct rate will be deleted. This cannot be undone.',
+    'modal.reset.confirm':'Reset',
+    'toast.reset.done':'Stats have been reset',
     'confirm.quit':'Quit and return home?',
     'confirm.reset':'Reset stats? Your question data will remain.',
     'confirm.resume_pre':'Resume previous quiz (','confirm.resume_suf':' answered). Continue?',
@@ -1387,10 +1491,16 @@ const i18n={
     'btn.home':'홈으로 돌아가기','btn.review':'복습하기',
     'result.pass.title':'합격 기준 달성!','result.fail.title':'조금 더 노력합시다!',
     'result.pass.msg':'이 기세로 계속 학습합시다.','result.fail.msg':'취약 분야를 중점적으로 복습합시다.',
+    'result.domain.breakdown':'분야별 점수',
     'review.title':'답안 복습','review.explanation':'해설:',
     'review.your.answer':'귀하의 답변:','review.correct.answer':'정답:',
     'alert.no.bookmark':'북마크한 문제가 없습니다.',
     'alert.no.weak':'취약 문제가 없습니다! 훌륭한 성적입니다!',
+    'btn.cancel':'취소',
+    'modal.reset.title':'성적 초기화',
+    'modal.reset.body':'지금까지의 답변 기록과 정답률이 모두 삭제됩니다. 이 작업은 되돌릴 수 없습니다.',
+    'modal.reset.confirm':'초기화',
+    'toast.reset.done':'성적을 초기화했습니다',
     'confirm.quit':'중단하고 홈으로 돌아가시겠습니까?',
     'confirm.reset':'성적 데이터를 초기화하시겠습니까? 문제 데이터는 유지됩니다.',
     'confirm.resume_pre':'이전 퀴즈를 재개합니까 (','confirm.resume_suf':'개 답변 완료). 계속하시겠습니까?',
@@ -1409,7 +1519,9 @@ function t(k){return (i18n[lang]&&i18n[lang][k])||i18n.ja[k]||k;}
 function setLang(l){
   lang=l;
   localStorage.setItem('pmp-lang',l);
+  const currentStats=stats;
   loadData();
+  stats=currentStats;
   applyLang();
   const isQuizScreen=!document.getElementById('quiz-screen').classList.contains('hidden');
   if(isQuizScreen&&quizState.questions.length>0){
@@ -1447,14 +1559,15 @@ function loadData(){
   const savedStats=localStorage.getItem('pmp-stats');
   stats=savedStats?JSON.parse(savedStats):{answered:{},correct:{}};
 }
-function saveStats(){localStorage.setItem('pmp-stats',JSON.stringify(stats));}
+function safeSetItem(key,value){try{localStorage.setItem(key,value);}catch(e){console.warn('localStorage save failed:',key,e);}}
+function saveStats(){safeSetItem('pmp-stats',JSON.stringify(stats));}
 function toggleBookmark(id){
   const i=bookmarks.indexOf(id);
   if(i>=0)bookmarks.splice(i,1);else bookmarks.push(id);
-  localStorage.setItem('pmp-bookmarks',JSON.stringify(bookmarks));
+  safeSetItem('pmp-bookmarks',JSON.stringify(bookmarks));
   return bookmarks.includes(id);
 }
-function saveQuizState(){localStorage.setItem('pmp-quiz-state',JSON.stringify({questions:quizState.questions.map(q=>q.id),current:quizState.current,answers:quizState.answers,mode:quizState.mode}));}
+function saveQuizState(){safeSetItem('pmp-quiz-state',JSON.stringify({questions:quizState.questions.map(q=>q.id),current:quizState.current,answers:quizState.answers,mode:quizState.mode}));}
 function clearQuizState(){localStorage.removeItem('pmp-quiz-state');}
 function loadQuizState(){
   const saved=localStorage.getItem('pmp-quiz-state');
@@ -1465,21 +1578,20 @@ function loadQuizState(){
 function updateHome(){
   const totalQ=questions.length;
   const answeredIds=Object.keys(stats.answered).length;
-  const totalCorrect=Object.values(stats.correct).reduce((a,b)=>a+b,0);
-  const totalAnswered=Object.values(stats.answered).reduce((a,b)=>a+b,0);
-  const rate=totalAnswered>0?Math.round(totalCorrect/totalAnswered*100):'--';
+  const correctIds=Object.keys(stats.correct).filter(id=>(stats.correct[id]||0)>0).length;
+  const rate=answeredIds>0?Math.round(correctIds/answeredIds*100):'--';
   document.getElementById('stat-total').textContent=totalQ;
   document.getElementById('stat-answered').textContent=answeredIds;
   document.getElementById('stat-rate').textContent=rate+'%';
   const domains=[...new Set(questions.map(q=>q.domain))];
-  const domainList=document.getElementById('tab-domains');
+  const domainList=document.getElementById('domain-list');
   domainList.innerHTML='';
   domains.forEach(d=>{
     const dqs=questions.filter(q=>q.domain===d);
     const count=dqs.length;
-    const dAnswered=dqs.reduce((s,q)=>(stats.answered[q.id]||0)+s,0);
-    const dCorrect=dqs.reduce((s,q)=>(stats.correct[q.id]||0)+s,0);
-    const dRate=dAnswered>0?Math.round(dCorrect/dAnswered*100):-1;
+    const dAnsweredIds=dqs.filter(q=>(stats.answered[q.id]||0)>0).length;
+    const dCorrectIds=dqs.filter(q=>(stats.correct[q.id]||0)>0).length;
+    const dRate=dAnsweredIds>0?Math.round(dCorrectIds/dAnsweredIds*100):-1;
     const btn=document.createElement('button');
     btn.className='domain-btn';
     const rateHtml=dRate>=0?' <span style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px;background:'+(dRate>=60?'#dcfce7;color:var(--success)':'#fee2e2;color:var(--danger)')+'">'+t('rate.label')+dRate+'%</span>':'';
@@ -1487,22 +1599,38 @@ function updateHome(){
     btn.onclick=()=>startQuiz(d);
     domainList.appendChild(btn);
   });
+  const pct=totalQ>0?Math.round(answeredIds/totalQ*100):0;
+  document.getElementById('stat-progress-fill').style.width=pct+'%';
+  document.getElementById('stat-progress-label').textContent=answeredIds+' / '+totalQ+t('quiz.q.unit')+' ('+pct+'%)';
 }
 
 function getDomainLabel(d){return t('domain.'+d)||d;}
 
-function switchTab(name,el){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  ['domains','manage'].forEach(t=>{
-    document.getElementById('tab-'+t).classList.toggle('hidden',t!==name);
-  });
+function toggleAbout(btn){
+  const body=btn.nextElementSibling;
+  const expanded=btn.getAttribute('aria-expanded')==='true';
+  btn.setAttribute('aria-expanded',String(!expanded));
+  body.classList.toggle('hidden',expanded);
+}
+function openResetModal(){document.getElementById('reset-modal').classList.remove('hidden');}
+function closeResetModal(e){if(!e||e.target===e.currentTarget)document.getElementById('reset-modal').classList.add('hidden');}
+function confirmReset(){
+  stats={answered:{},correct:{}};
+  saveStats();
+  updateHome();
+  closeResetModal();
+  showToast(t('toast.reset.done'));
 }
 
 function showScreen(name){
   ['home-screen','quiz-screen','result-screen'].forEach(s=>{
-    document.getElementById(s).classList.toggle('hidden',s!==name+'-screen');
+    const el=document.getElementById(s);
+    const isTarget=s===name+'-screen';
+    el.classList.toggle('hidden',!isTarget);
+    if(isTarget){el.classList.remove('screen-fade');void el.offsetWidth;el.classList.add('screen-fade');}
   });
+  const header=document.querySelector('.header');
+  header.classList.toggle('compact',name!=='home');
 }
 
 let selectedQuizCount=10; // 0=全問
@@ -1536,7 +1664,7 @@ function startQuiz(mode){
     }
   }else if(mode==='bookmark'){
     pool=questions.filter(q=>bookmarks.includes(q.id));
-    if(pool.length===0){alert(t('alert.no.bookmark'));return;}
+    if(pool.length===0){showToast(t('alert.no.bookmark'));return;}
     pool=shuffle(pool);
     if(limit>0) pool=pool.slice(0,limit);
   }else if(mode==='weak'){
@@ -1545,7 +1673,7 @@ function startQuiz(mode){
       const c=stats.correct[q.id]||0;
       return a===0||(c/a)<0.6;
     });
-    if(pool.length===0){alert(t('alert.no.weak'));return;}
+    if(pool.length===0){showToast(t('alert.no.weak'));return;}
     pool=shuffle(pool);
     if(limit>0) pool=pool.slice(0,limit);
   }else{
@@ -1574,7 +1702,6 @@ function renderQuestion(){
   document.getElementById('q-domain').textContent=getDomainLabel(q.domain);
   document.getElementById('q-text').textContent=q.question;
   document.getElementById('q-explanation').classList.remove('show');
-  document.getElementById('next-btn').style.display='none';
   document.getElementById('next-btn-bottom').style.display='none';
   const bmBtn=document.getElementById('bookmark-btn');
   bmBtn.innerHTML=bookmarks.includes(q.id)?'&#9733;':'&#9734;';
@@ -1616,8 +1743,6 @@ function selectAnswer(idx){
   exp.innerHTML='<strong>'+t('review.explanation')+'</strong> '+escapeHtml(q.explanation);
   exp.classList.add('show');
   const label=quizState.current<quizState.questions.length-1?t('btn.next'):t('btn.finish');
-  document.getElementById('next-btn').style.display='block';
-  document.getElementById('next-btn').textContent=label;
   document.getElementById('next-btn-bottom').style.display='block';
   document.getElementById('next-btn-bottom').textContent=label;
   saveQuizState();
@@ -1641,7 +1766,7 @@ function onBookmarkClick(){
 
 document.addEventListener('keydown',e=>{
   if(document.getElementById('quiz-screen').classList.contains('hidden'))return;
-  if(e.key==='ArrowRight'&&document.getElementById('next-btn').style.display!=='none'){
+  if(e.key==='ArrowRight'&&document.getElementById('next-btn-bottom').style.display!=='none'){
     nextQuestion();
   }
   if(['1','2','3','4'].includes(e.key)){
@@ -1664,6 +1789,28 @@ function showResult(){
   document.getElementById('result-title').textContent=pct>=60?t('result.pass.title'):t('result.fail.title');
   document.getElementById('result-msg').textContent=pct>=60?t('result.pass.msg'):t('result.fail.msg');
   document.getElementById('review-section').classList.add('hidden');
+  const bd=document.getElementById('domain-breakdown');
+  bd.innerHTML='';
+  const domainAnswers={};
+  quizState.answers.forEach((a,i)=>{
+    const d=quizState.questions[i].domain;
+    if(!domainAnswers[d])domainAnswers[d]={correct:0,total:0};
+    domainAnswers[d].total++;
+    if(a.correct)domainAnswers[d].correct++;
+  });
+  const domains=Object.keys(domainAnswers);
+  if(domains.length>1){
+    bd.innerHTML='<h4>'+t('result.domain.breakdown')+'</h4>';
+    domains.forEach(d=>{
+      const {correct,total}=domainAnswers[d];
+      const p=Math.round(correct/total*100);
+      const row=document.createElement('div');
+      row.className='breakdown-row';
+      row.innerHTML='<div class="breakdown-label"><span>'+getDomainLabel(d)+'</span><span>'+correct+'/'+total+' ('+p+'%)</span></div>'
+        +'<div class="breakdown-track"><div class="breakdown-fill '+(p>=60?'pass':'fail')+'" style="width:'+p+'%"></div></div>';
+      bd.appendChild(row);
+    });
+  }
 }
 
 function showReview(){
@@ -1686,22 +1833,6 @@ function showReview(){
 function goHome(){clearQuizState();showScreen('home');updateHome();}
 
 
-function exportData(){
-  const data={questions,stats,exportDate:new Date().toISOString()};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='pmp-quiz-backup-'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();
-}
-
-
-function resetStats(){
-  if(!confirm(t('confirm.reset')))return;
-  stats={answered:{},correct:{}};
-  saveStats();
-  updateHome();
-}
 
 // PMP本番比率（People42%,Process50%,Business8%）に基づく重み付きサンプリング
 function buildWeightedPool(src,limit){
