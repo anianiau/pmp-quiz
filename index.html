@@ -414,6 +414,15 @@ gtag('config','G-EPQQE97M74');
     position: absolute; right: 52px; top: 50%; transform: translateY(-50%);
     display: flex; gap: 4px;
   }
+  @media (max-width: 480px) {
+    .lang-switcher {
+      position: static; transform: none;
+      justify-content: center;
+      margin-top: 6px;
+    }
+    .btn { padding: 14px 16px; font-size: 0.9rem; }
+    .domain-btn { font-size: 0.88rem; padding: 14px 14px; }
+  }
   .lang-btn {
     background: transparent; border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.7);
     font-size: 0.68rem; font-weight: 700; padding: 3px 7px; border-radius: 4px; cursor: pointer;
@@ -1700,7 +1709,7 @@ const i18n={
     'confirm.resume_pre':'前回の続き（','confirm.resume_suf':'問回答済み）を再開しますか？',
     'rate.label':'正答率','tooltip.dark':'ダークモード切替',
     'domain.People':'People（人）','domain.Process':'Process（プロセス）',
-    'domain.Business':'Business Environment（ビジネス環境）',
+    'domain.Business':'Business Env.（ビジネス環境）',
     'domain.Predictive':'Predictive（予測型）','domain.Agile':'Agile（アジャイル）',
   },
   en:{
@@ -1766,7 +1775,7 @@ const i18n={
     'confirm.resume_pre':'이전 퀴즈를 재개합니까 (','confirm.resume_suf':'개 답변 완료). 계속하시겠습니까?',
     'rate.label':'정답률','tooltip.dark':'다크 모드 전환',
     'domain.People':'People（사람）','domain.Process':'Process（프로세스）',
-    'domain.Business':'Business Environment（비즈니스 환경）',
+    'domain.Business':'Business Env.（비즈니스 환경）',
     'domain.Predictive':'Predictive（예측형）','domain.Agile':'Agile（애자일）',
   }
 };
