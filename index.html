@@ -1803,6 +1803,14 @@ function applyLang(){
   document.querySelectorAll('.lang-btn').forEach(b=>{b.classList.toggle('active',b.dataset.lang===lang);});
   document.title=t('app.title')+' - '+t('app.subtitle');
   document.documentElement.lang=lang;
+  const descMap={
+    ja:'PMP試験対策の無料問題集。日本語・英語・韓国語の360問収録、スマホ対応・オフライン利用可。シナリオ型の練習問題でPeople・Process・Business Environmentの頻出パターンを徹底対策。',
+    en:'Free PMP exam prep quiz. 360 scenario-based questions in English, Japanese & Korean. Mobile-friendly, offline-capable. Master People, Process & Business Environment patterns to pass the PMP.',
+    ko:'PMP 시험 대비 무료 문제집. 한국어・일본어・영어 360문항 수록, 모바일 대응・오프라인 이용 가능. 시나리오형 문제로 People・Process・Business Environment 빈출 패턴을 완벽 대비.'
+  };
+  const desc=descMap[lang]||descMap.ja;
+  document.querySelector('meta[name="description"]').setAttribute('content',desc);
+  document.querySelector('meta[property="og:description"]').setAttribute('content',desc);
 }
 
 let questions=[];
