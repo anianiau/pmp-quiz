@@ -2,7 +2,7 @@
   "name": "pmp-quiz",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy --config wrangler.jsonc"
+    "deploy": "wrangler deploy --config wrangler.jsonc && wrangler deploy --config wrangler.site.jsonc"
   },
   "devDependencies": {
     "wrangler": "^3"
