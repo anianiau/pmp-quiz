@@ -1,0 +1,10 @@
+{
+  "name": "pmp-quiz",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy --config wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "^3"
+  }
+}
