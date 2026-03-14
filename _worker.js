@@ -3,14 +3,14 @@ const CONFIG = {
     lang: 'ja',
     origin: 'https://pmp-test.jp',
     title: 'PMP問題集 - 無料模擬試験アプリ',
-    description: 'PMP試験対策の無料問題集。日本語・英語・韓国語の360問収録、スマホ対応・オフライン利用可。シナリオ型の練習問題でPeople・Process・Business Environmentの頻出パターンを徹底対策。',
+    description: 'PMP試験対策の無料問題集。スマホ対応・オフライン利用可。シナリオ型の練習問題でPeople・Process・Business Environmentの頻出パターンを徹底対策。',
     manifest: { name: 'PMP問題集', short_name: 'PMP問題集', description: 'Project Management Professional 試験対策アプリ' },
   },
   'pmp-test.site': {
     lang: 'en',
     origin: 'https://pmp-test.site',
-    title: 'PMP Quiz - Free Exam Prep App',
-    description: 'Free PMP exam prep quiz. 360 scenario-based questions in English, Japanese & Korean. Mobile-friendly, offline-capable. Master People, Process & Business Environment patterns to pass the PMP.',
+    title: 'Free PMP Practice Questions | Exam Prep Quiz',
+    description: '360+ free PMP practice questions covering all PMI exam domains. Scenario-based, mobile-friendly, works offline. No sign-up required — start studying now.',
     manifest: { name: 'PMP Quiz', short_name: 'PMP Quiz', description: 'Project Management Professional exam prep app. Free, offline-ready.' },
   },
 };
@@ -81,11 +81,16 @@ export default {
       .on('script[type="application/ld+json"]', {
         text(chunk) {
           if (chunk.lastInTextNode) {
-            chunk.replace(
-              chunk.text
-                .replace(/https:\/\/pmp-test\.(jp|site)\//g, cfg.origin + '/')
-                .replace(/"inLanguage"\s*:\s*"\w+"/, `"inLanguage": "${cfg.lang}"`)
-            );
+            let json = chunk.text
+              .replace(/https:\/\/pmp-test\.(jp|site)\//g, cfg.origin + '/')
+              .replace(/"inLanguage"\s*:\s*"\w+"/, `"inLanguage": "${cfg.lang}"`);
+            if (cfg.lang !== 'ja') {
+              json = json
+                .replace(/"name"\s*:\s*"[^"]*"/, `"name": "${cfg.title}"`)
+                .replace(/"description"\s*:\s*"[^"]*"/, `"description": "${cfg.description}"`)
+                .replace(/"priceCurrency"\s*:\s*"[^"]*"/, `"priceCurrency": "USD"`);
+            }
+            chunk.replace(json);
           } else {
             chunk.remove();
           }
