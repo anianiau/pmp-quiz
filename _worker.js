@@ -17,6 +17,14 @@ const CONFIG = {
 
 const FALLBACK = CONFIG['pmp-test.jp'];
 
+// トップページ以外のページ固有メタ情報
+const PAGE_META = {
+  '/what-is-pmp': {
+    ja: { title: 'PMP資格とは？完全ガイド2026 | PMP問題集', description: 'PMP試験の概要・受験資格・試験構成（180問・230分）・難易度・勉強法を徹底解説。無料練習問題付き。' },
+    en: null, // HTMLに埋め込み済み
+  },
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -54,23 +62,25 @@ export default {
 
     // HTMLRewriter でメタタグ・言語を書き換え
     const isTopPage = url.pathname === '/' || url.pathname === '/index.html';
+    const pageMeta = PAGE_META[url.pathname]?.[cfg.lang] || null;
+    const overrideMeta = isTopPage ? cfg : pageMeta;
     let rewriter = new HTMLRewriter()
       .on('html', {
         element(el) { el.setAttribute('lang', cfg.lang); },
       });
-    if (isTopPage) {
+    if (overrideMeta) {
       rewriter = rewriter
         .on('title', {
-          element(el) { el.setInnerContent(cfg.title); },
+          element(el) { el.setInnerContent(overrideMeta.title); },
         })
         .on('meta[name="description"]', {
-          element(el) { el.setAttribute('content', cfg.description); },
+          element(el) { el.setAttribute('content', overrideMeta.description); },
         })
         .on('meta[property="og:title"]', {
-          element(el) { el.setAttribute('content', cfg.title); },
+          element(el) { el.setAttribute('content', overrideMeta.title); },
         })
         .on('meta[property="og:description"]', {
-          element(el) { el.setAttribute('content', cfg.description); },
+          element(el) { el.setAttribute('content', overrideMeta.description); },
         });
     }
     return rewriter
