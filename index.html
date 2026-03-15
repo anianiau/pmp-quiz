@@ -2576,7 +2576,8 @@ const i18n={
 };
 
 let lang=(function(){
-  const l=localStorage.getItem('pmp-lang')||(window.__DEFAULT_LANG||document.documentElement.lang||'ja');
+  const _hostLang=location.hostname==='pmp-test.site'?'en':'ja';
+  const l=localStorage.getItem('pmp-lang')||(window.__DEFAULT_LANG||document.documentElement.lang||_hostLang);
   return ['ja','en','ko','zh','es'].includes(l)?l:'ja';
 })();
 function t(k){return (i18n[lang]&&i18n[lang][k])||i18n.ja[k]||k;}
