@@ -164,6 +164,14 @@ gtag('config','G-EPQQE97M74');
     border: 2px solid var(--primary);
   }
   .btn-outline:hover { background: #eff6ff; }
+  .btn-share-x {
+    display: block; margin: 12px auto 0; padding: 9px 20px;
+    background: #000; color: #fff; border: none; border-radius: 20px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em;
+    cursor: pointer; transition: opacity 0.2s; width: auto;
+  }
+  .btn-share-x:hover { opacity: 0.75; }
+  .dark .btn-share-x { background: #fff; color: #000; }
 
   .quiz-count-btn {
     padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border);
@@ -552,8 +560,9 @@ gtag('config','G-EPQQE97M74');
       <div class="btn-group">
         <button class="btn" onclick="goHome()" data-i18n="btn.home">ホームに戻る</button>
         <button class="btn btn-outline" onclick="showReview()" data-i18n="btn.review">復習する</button>
-        <button class="btn btn-outline" onclick="shareScore()" data-i18n="btn.share">𝕏 シェア</button>
+        <button class="btn btn-outline" onclick="retryQuiz()" data-i18n="btn.retry">もう一度</button>
       </div>
+      <button class="btn-share-x" onclick="shareScore()" data-i18n="btn.share">Share on 𝕏</button>
     </div>
     <div id="review-section" class="hidden"></div>
   </div>
@@ -2420,7 +2429,7 @@ const i18n={
     'about.title':'PMP試験対策 無料問題集について',
     'about.text':'PMP（Project Management Professional）はPMIが認定する国際的なプロジェクトマネジメント資格です。本アプリでは練習問題を無料で提供。People・Process・Business Environment・Predictive・Agileの5分野を収録し、シナリオベース形式にも対応。スマホ対応・オフライン利用可能で、いつでもどこでもPMP合格を目指せます。',
     'btn.next':'次へ','btn.finish':'結果を見る','btn.quit':'中断してホームに戻る',
-    'btn.home':'ホームに戻る','btn.review':'復習する','btn.share':'𝕏 シェア',
+    'btn.home':'ホームに戻る','btn.review':'復習する','btn.retry':'もう一度','btn.share':'𝕏 シェア',
     'result.pass.title':'合格ライン達成！','result.fail.title':'もう少し頑張りましょう！',
     'result.pass.msg':'この調子で学習を続けましょう。','result.fail.msg':'苦手分野を重点的に復習しましょう。',
     'result.domain.breakdown':'分野別スコア',
@@ -2454,7 +2463,7 @@ const i18n={
     'about.title':'About This Free PMP Quiz App',
     'about.text':'PMP (Project Management Professional) is a globally recognized project management certification by PMI. This free app offers practice questions covering all 5 domains: People, Process, Business Environment, Predictive, and Agile — in scenario-based format. Works offline and on mobile.',
     'btn.next':'Next','btn.finish':'See Results','btn.quit':'Quit and Return Home',
-    'btn.home':'Return Home','btn.review':'Review Answers','btn.share':'Share on 𝕏',
+    'btn.home':'Return Home','btn.review':'Review Answers','btn.retry':'Try Again','btn.share':'Share on 𝕏',
     'result.pass.title':'Pass Line Achieved!','result.fail.title':'Keep Going!',
     'result.pass.msg':'Keep up the great work!','result.fail.msg':'Focus on reviewing your weak areas.',
     'result.domain.breakdown':'Score by Domain',
@@ -2487,7 +2496,7 @@ const i18n={
     'about.title':'무료 PMP 문제집 소개',
     'about.text':'PMP(Project Management Professional)는 PMI가 인증하는 국제적인 프로젝트 관리 자격증입니다. 이 앱은 People·Process·Business Environment·Predictive·Agile 5개 분야의 연습 문제를 무료로 제공합니다. 시나리오형 문제 대응, 스마트폰·오프라인 지원.',
     'btn.next':'다음','btn.finish':'결과 보기','btn.quit':'중단하고 홈으로 돌아가기',
-    'btn.home':'홈으로 돌아가기','btn.review':'복습하기','btn.share':'𝕏 공유',
+    'btn.home':'홈으로 돌아가기','btn.review':'복습하기','btn.retry':'다시 풀기','btn.share':'𝕏 공유',
     'result.pass.title':'합격 기준 달성!','result.fail.title':'조금 더 노력합시다!',
     'result.pass.msg':'이 기세로 계속 학습합시다.','result.fail.msg':'취약 분야를 중점적으로 복습합시다.',
     'result.domain.breakdown':'분야별 점수',
@@ -2520,7 +2529,7 @@ const i18n={
     'about.title':'关于本免费PMP题库',
     'about.text':'PMP（Project Management Professional）是PMI认证的国际项目管理资格。本应用免费提供涵盖People、Process、Business Environment、Predictive、Agile五大领域的练习题，支持场景型题目。支持手机使用及离线访问。',
     'btn.next':'下一题','btn.finish':'查看结果','btn.quit':'中断并返回首页',
-    'btn.home':'返回首页','btn.review':'复习答案','btn.share':'分享到𝕏',
+    'btn.home':'返回首页','btn.review':'复习答案','btn.retry':'再做一遍','btn.share':'分享到𝕏',
     'result.pass.title':'达到合格线！','result.fail.title':'再加把劲！',
     'result.pass.msg':'保持这个势头继续学习吧。','result.fail.msg':'重点复习薄弱领域。',
     'result.domain.breakdown':'各领域得分',
@@ -2553,7 +2562,7 @@ const i18n={
     'about.title':'Sobre Esta App Gratuita de Práctica PMP',
     'about.text':'PMP (Project Management Professional) es una certificación internacional de gestión de proyectos reconocida por PMI. Esta app ofrece preguntas de práctica gratuitas que cubren los 5 dominios: People, Process, Business Environment, Predictive y Agile, en formato de escenarios. Compatible con móvil y uso sin conexión.',
     'btn.next':'Siguiente','btn.finish':'Ver Resultados','btn.quit':'Salir y Volver al Inicio',
-    'btn.home':'Volver al Inicio','btn.review':'Revisar Respuestas','btn.share':'Compartir en 𝕏',
+    'btn.home':'Volver al Inicio','btn.review':'Revisar Respuestas','btn.retry':'Intentar de Nuevo','btn.share':'Compartir en 𝕏',
     'result.pass.title':'¡Línea de Aprobado Alcanzada!','result.fail.title':'¡Sigue Adelante!',
     'result.pass.msg':'¡Mantén este ritmo de estudio!','result.fail.msg':'Concéntrate en repasar tus áreas débiles.',
     'result.domain.breakdown':'Puntuación por Dominio',
@@ -2625,6 +2634,7 @@ let questions=[];
 let stats={answered:{},correct:{}};
 let bookmarks=JSON.parse(localStorage.getItem('pmp-bookmarks')||'[]');
 let quizState={questions:[],current:0,answers:[],mode:''};
+let lastQuiz={questions:[],mode:'all'};
 
 function loadData(){
   // 言語に応じた問題セットを使用
@@ -2866,6 +2876,7 @@ function showResult(){
   document.getElementById('result-title').textContent=pct>=60?t('result.pass.title'):t('result.fail.title');
   document.getElementById('result-msg').textContent=pct>=60?t('result.pass.msg'):t('result.fail.msg');
   document.getElementById('review-section').classList.add('hidden');
+  lastQuiz={questions:quizState.questions.slice(),mode:quizState.mode};
   const bd=document.getElementById('domain-breakdown');
   bd.innerHTML='';
   const domainAnswers={};
@@ -2878,6 +2889,7 @@ function showResult(){
   const domains=Object.keys(domainAnswers);
   if(domains.length>1){
     bd.innerHTML='<h4>'+t('result.domain.breakdown')+'</h4>';
+    if(domains.length>=3){const rc=drawRadarChart(domainAnswers);if(rc){rc.style.cssText='display:block;margin:12px auto 16px';bd.appendChild(rc);}}
     domains.forEach(d=>{
       const {correct,total}=domainAnswers[d];
       const p=Math.round(correct/total*100);
@@ -2888,6 +2900,52 @@ function showResult(){
       bd.appendChild(row);
     });
   }
+}
+
+function drawRadarChart(domainAnswers){
+  const keys=Object.keys(domainAnswers);
+  const n=keys.length;
+  const size=220,cx=110,cy=110,R=72;
+  const canvas=document.createElement('canvas');
+  canvas.width=size;canvas.height=size;
+  const ctx=canvas.getContext('2d');
+  const isDark=document.documentElement.classList.contains('dark');
+  const gridCol=isDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.08)';
+  const axisCol=isDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)';
+  const labelCol=isDark?'#94a3b8':'#64748b';
+  function pt(i,r){const a=(i/n)*2*Math.PI-Math.PI/2;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+  // grid rings
+  [0.25,0.5,0.75,1].forEach(s=>{
+    ctx.beginPath();
+    keys.forEach((_,i)=>{const[x,y]=pt(i,R*s);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.closePath();
+    ctx.strokeStyle=s===0.6?'rgba(59,130,246,0.35)':gridCol;
+    ctx.lineWidth=s===0.6?1.5:1;ctx.stroke();
+  });
+  // pass threshold ring (60%)
+  ctx.beginPath();
+  keys.forEach((_,i)=>{const[x,y]=pt(i,R*0.6);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.closePath();ctx.strokeStyle='rgba(59,130,246,0.35)';ctx.lineWidth=1.5;ctx.stroke();
+  // axes
+  keys.forEach((_,i)=>{ctx.beginPath();ctx.moveTo(cx,cy);const[x,y]=pt(i,R);ctx.lineTo(x,y);ctx.strokeStyle=axisCol;ctx.lineWidth=1;ctx.stroke();});
+  // data polygon
+  const scores=keys.map(k=>domainAnswers[k].correct/domainAnswers[k].total);
+  ctx.beginPath();
+  keys.forEach((_,i)=>{const[x,y]=pt(i,R*scores[i]);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.closePath();ctx.fillStyle='rgba(59,130,246,0.18)';ctx.fill();
+  ctx.strokeStyle='#3b82f6';ctx.lineWidth=2;ctx.stroke();
+  // dots
+  keys.forEach((_,i)=>{const[x,y]=pt(i,R*scores[i]);ctx.beginPath();ctx.arc(x,y,4,0,2*Math.PI);ctx.fillStyle=scores[i]>=0.6?'#22c55e':'#ef4444';ctx.fill();});
+  // labels
+  ctx.font='bold 9px sans-serif';ctx.fillStyle=labelCol;ctx.textAlign='center';ctx.textBaseline='middle';
+  keys.forEach((k,i)=>{
+    const[x,y]=pt(i,R+18);
+    const lbl=getDomainLabel(k);
+    const words=lbl.split(' ');
+    if(words.length>1){ctx.fillText(words[0],x,y-5);ctx.fillText(words.slice(1).join(' '),x,y+6);}
+    else{ctx.fillText(lbl,x,y);}
+  });
+  return canvas;
 }
 
 function showReview(){
@@ -2908,6 +2966,7 @@ function showReview(){
 }
 
 function goHome(){clearQuizState();showScreen('home');updateHome();}
+function retryQuiz(){if(!lastQuiz.questions.length)return;quizState={questions:shuffle(lastQuiz.questions.slice()),current:0,answers:[],mode:lastQuiz.mode};showScreen('quiz');renderQuestion();}
 
 function shareScore(){
   const pct=document.getElementById('score-pct').textContent;
