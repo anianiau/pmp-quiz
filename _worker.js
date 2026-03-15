@@ -53,30 +53,35 @@ export default {
     if (!contentType.includes('text/html')) return assetRes;
 
     // HTMLRewriter でメタタグ・言語を書き換え
-    return new HTMLRewriter()
+    const isTopPage = url.pathname === '/' || url.pathname === '/index.html';
+    let rewriter = new HTMLRewriter()
       .on('html', {
         element(el) { el.setAttribute('lang', cfg.lang); },
-      })
-      .on('title', {
-        element(el) { el.setInnerContent(cfg.title); },
-      })
-      .on('meta[name="description"]', {
-        element(el) { el.setAttribute('content', cfg.description); },
-      })
-      .on('meta[property="og:title"]', {
-        element(el) { el.setAttribute('content', cfg.title); },
-      })
-      .on('meta[property="og:description"]', {
-        element(el) { el.setAttribute('content', cfg.description); },
-      })
+      });
+    if (isTopPage) {
+      rewriter = rewriter
+        .on('title', {
+          element(el) { el.setInnerContent(cfg.title); },
+        })
+        .on('meta[name="description"]', {
+          element(el) { el.setAttribute('content', cfg.description); },
+        })
+        .on('meta[property="og:title"]', {
+          element(el) { el.setAttribute('content', cfg.title); },
+        })
+        .on('meta[property="og:description"]', {
+          element(el) { el.setAttribute('content', cfg.description); },
+        });
+    }
+    return rewriter
       .on('meta[property="og:url"]', {
-        element(el) { el.setAttribute('content', cfg.origin + '/'); },
+        element(el) { el.setAttribute('content', cfg.origin + url.pathname); },
       })
       .on('meta[property="og:image"]', {
         element(el) { el.setAttribute('content', cfg.origin + '/ogp.png'); },
       })
       .on('link[rel="canonical"]', {
-        element(el) { el.setAttribute('href', cfg.origin + '/'); },
+        element(el) { el.setAttribute('href', cfg.origin + url.pathname); },
       })
       .on('script[type="application/ld+json"]', {
         text(chunk) {
