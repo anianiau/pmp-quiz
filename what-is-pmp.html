@@ -70,6 +70,17 @@ li{margin-bottom:6px}
 .cta-btn:hover{opacity:.9;text-decoration:none}
 .site-footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;text-align:center;font-size:0.8rem;color:var(--text-light)}
 [data-lang]{display:none}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text-light);margin-bottom:20px}
+.breadcrumb a{color:var(--text-light)}
+.breadcrumb a:hover{color:var(--primary);text-decoration:underline}
+.breadcrumb span.sep{opacity:0.5}
+.last-updated{font-size:0.78rem;color:var(--text-light);margin-top:8px}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:0 0 36px}
+.toc-title{font-size:0.75rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
+.toc ol{padding-left:1.3em;margin:0}
+.toc li{margin-bottom:5px}
+.toc a{font-size:0.88rem;color:var(--primary)}
+.toc a:hover{text-decoration:underline}
 @media(max-width:600px){
   .stat-grid{grid-template-columns:1fr 1fr}
   .cta-section{padding:28px 20px}
@@ -86,12 +97,26 @@ li{margin-bottom:6px}
 <!-- English -->
 <div data-lang="en">
 <div class="container">
+  <nav class="breadcrumb"><a href="/">Home</a><span class="sep">›</span><span>What is PMP?</span></nav>
   <div class="hero">
     <h1>What is PMP Certification?<br>A Complete Guide 2026</h1>
     <p class="lead">Everything you need to know about the world's leading project management credential — from exam structure to study strategies.</p>
+    <p class="last-updated">Last updated: March 2026</p>
   </div>
 
-  <h2>What is PMP?</h2>
+  <nav class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#en-what">What is PMP?</a></li>
+      <li><a href="#en-who">Who Should Get PMP?</a></li>
+      <li><a href="#en-structure">PMP Exam Structure</a></li>
+      <li><a href="#en-prereq">PMP Exam Prerequisites</a></li>
+      <li><a href="#en-difficulty">How Hard is the PMP Exam?</a></li>
+      <li><a href="#en-study">How to Study for PMP</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="en-what">What is PMP?</h2>
   <p>PMP stands for <strong>Project Management Professional</strong>. It is the most recognized project management certification in the world, awarded by the <strong>Project Management Institute (PMI)</strong> — a non-profit professional organization founded in 1969 and headquartered in the United States.</p>
   <p>The PMP credential validates that you have the experience, education, and competency to lead and direct projects across industries. It is recognized in over 200 countries and consistently ranks among the top certifications for salary premium and career advancement.</p>
 
@@ -99,7 +124,7 @@ li{margin-bottom:6px}
     <p>💡 According to PMI's <em>Earning Power: Project Management Salary Survey</em>, PMP-certified professionals earn on average <strong>33% more</strong> than non-certified colleagues.</p>
   </div>
 
-  <h2>Who Should Get PMP?</h2>
+  <h2 id="en-who">Who Should Get PMP?</h2>
   <p>The PMP is designed for experienced project leaders — not beginners. Ideal candidates include:</p>
   <ul>
     <li>Project managers looking to formalize their experience with a globally recognized credential</li>
@@ -109,7 +134,7 @@ li{margin-bottom:6px}
   </ul>
   <p>If you are just starting out in project management, consider PMI's entry-level <strong>CAPM (Certified Associate in Project Management)</strong> first, then return to the PMP once you have accumulated sufficient experience.</p>
 
-  <h2>PMP Exam Structure</h2>
+  <h2 id="en-structure">PMP Exam Structure</h2>
   <p>The PMP exam was significantly updated in 2021 to reflect modern project management — including agile and hybrid approaches. Here's what to expect:</p>
 
   <div class="stat-grid">
@@ -131,7 +156,7 @@ li{margin-bottom:6px}
 
   <p>Roughly <strong>50% of questions are predictive (waterfall)</strong> and <strong>50% are agile or hybrid</strong> — a major shift from the pre-2021 exam that was mostly PMBOK-based.</p>
 
-  <h2>PMP Exam Prerequisites</h2>
+  <h2 id="en-prereq">PMP Exam Prerequisites</h2>
   <p>Before you can apply, you must meet one of the following experience and education requirements:</p>
 
   <h3>With a 4-year degree (bachelor's or equivalent)</h3>
@@ -148,7 +173,7 @@ li{margin-bottom:6px}
 
   <p>PMI occasionally audits applications, so keep documentation of your project experience ready. The 35 contact hours can be fulfilled through PMI Registered Education Provider (REP) courses, online training, or university programs.</p>
 
-  <h2>How Hard is the PMP Exam?</h2>
+  <h2 id="en-difficulty">How Hard is the PMP Exam?</h2>
   <p>The PMP has a reputation for being challenging. A few things to keep in mind:</p>
   <ul>
     <li>The first-attempt pass rate is estimated at around <strong>60–70%</strong>, though PMI does not publish official figures</li>
@@ -158,7 +183,7 @@ li{margin-bottom:6px}
   </ul>
   <p>Candidates who fail typically do so not because they lack experience, but because they underestimate the need for exam-specific preparation and scenario-based thinking.</p>
 
-  <h2>How to Study for PMP</h2>
+  <h2 id="en-study">How to Study for PMP</h2>
   <p>A well-structured study plan typically takes 2–3 months of consistent effort. Here's what works:</p>
   <ol>
     <li><strong>Study the PMI Examination Content Outline (ECO)</strong> — this is the official blueprint of what the exam covers</li>
@@ -187,12 +212,26 @@ li{margin-bottom:6px}
 <!-- 日本語 -->
 <div data-lang="ja">
 <div class="container">
+  <nav class="breadcrumb"><a href="/">ホーム</a><span class="sep">›</span><span>PMP資格とは？</span></nav>
   <div class="hero">
     <h1>PMP資格とは？<br>完全ガイド2026</h1>
     <p class="lead">PMP（Project Management Professional）の概要・試験構成・受験資格・難易度・勉強法を徹底解説します。</p>
+    <p class="last-updated">最終更新：2026年3月</p>
   </div>
 
-  <h2>PMPとは</h2>
+  <nav class="toc">
+    <div class="toc-title">目次</div>
+    <ol>
+      <li><a href="#ja-what">PMPとは</a></li>
+      <li><a href="#ja-who">PMPを取得すべき人</a></li>
+      <li><a href="#ja-structure">試験の構成</a></li>
+      <li><a href="#ja-prereq">受験資格</a></li>
+      <li><a href="#ja-difficulty">PMP試験の難易度</a></li>
+      <li><a href="#ja-study">PMP試験の勉強法</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="ja-what">PMPとは</h2>
   <p>PMP（Project Management Professional）は、米国の非営利団体 <strong>PMI（Project Management Institute）</strong> が認定する、世界で最も権威あるプロジェクトマネジメント資格です。PMIは1969年に設立され、現在は200以上の国・地域でPMPが認知されています。</p>
   <p>PMP資格は、プロジェクトをリードする知識・経験・能力を持つことを証明します。IT・建設・医療・金融・製造など、業界を問わず評価される国際資格です。</p>
 
@@ -200,7 +239,7 @@ li{margin-bottom:6px}
     <p>💡 PMIの調査によると、PMP取得者は未取得者と比べて平均 <strong>33%高い給与</strong> を得ています。</p>
   </div>
 
-  <h2>PMPを取得すべき人</h2>
+  <h2 id="ja-who">PMPを取得すべき人</h2>
   <p>PMPは実務経験者向けの資格です。以下に当てはまる方に特に適しています。</p>
   <ul>
     <li>プロジェクトマネージャーとしての実務経験を国際資格で証明したい方</li>
@@ -210,7 +249,7 @@ li{margin-bottom:6px}
   </ul>
   <p>プロジェクトマネジメントの経験がまだ浅い方には、PMIのエントリーレベル資格 <strong>CAPM（Certified Associate in Project Management）</strong> から始めることをおすすめします。</p>
 
-  <h2>試験の構成</h2>
+  <h2 id="ja-structure">試験の構成</h2>
   <p>PMP試験は2021年に大幅改訂され、アジャイル・ハイブリッドアプローチが重視されるようになりました。</p>
 
   <div class="stat-grid">
@@ -232,7 +271,7 @@ li{margin-bottom:6px}
 
   <p>出題の約 <strong>50%が予測型（ウォーターフォール）</strong>、残り <strong>50%がアジャイル・ハイブリッド</strong> です。2021年改訂前のPMBOK中心の試験から大きく変化しています。</p>
 
-  <h2>受験資格</h2>
+  <h2 id="ja-prereq">受験資格</h2>
   <p>PMP受験には以下のいずれかの要件を満たす必要があります。</p>
 
   <h3>4年制大学卒業（学士号相当）の場合</h3>
@@ -249,7 +288,7 @@ li{margin-bottom:6px}
 
   <p>PMIは申請内容を抜き打ちで監査することがあります。プロジェクト経験の証明書類を事前に準備しておきましょう。35時間の教育要件は、PMI認定教育機関（REP）のコースや大学の講座で満たすことができます。</p>
 
-  <h2>PMP試験の難易度</h2>
+  <h2 id="ja-difficulty">PMP試験の難易度</h2>
   <p>PMPは難関資格として知られています。以下の点を踏まえて準備しましょう。</p>
   <ul>
     <li>初回合格率は <strong>60〜70%程度</strong>（PMIは公式発表していません）</li>
@@ -259,7 +298,7 @@ li{margin-bottom:6px}
   </ul>
   <p>不合格になる方の多くは、経験不足ではなく、試験特有のシナリオ型思考への準備不足が原因です。</p>
 
-  <h2>PMP試験の勉強法</h2>
+  <h2 id="ja-study">PMP試験の勉強法</h2>
   <p>一般的に2〜3ヶ月の継続的な学習が必要です。効果的なアプローチを紹介します。</p>
   <ol>
     <li><strong>PMI試験コンテントアウトライン（ECO）を確認する</strong> — 試験の公式出題範囲を把握することが最優先</li>
