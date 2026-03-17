@@ -23,6 +23,10 @@ const PAGE_META = {
     ja: { title: 'PMP資格とは？完全ガイド2026 | PMP問題集', description: 'PMP試験の概要・受験資格・試験構成（180問・230分）・難易度・勉強法を徹底解説。無料練習問題付き。' },
     en: null, // HTMLに埋め込み済み
   },
+  '/what-is-pmp-es': {
+    ja: null,
+    en: null, // HTMLに埋め込み済み
+  },
 };
 
 export default {
