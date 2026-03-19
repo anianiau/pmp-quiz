@@ -120,11 +120,11 @@ export default {
           // デフォルト言語をクライアントJSに伝える
           el.append(`<script>window.__DEFAULT_LANG='${cfg.lang}';</script>`, { html: true });
           // hreflang
+          const p = url.pathname;
           el.append(
-            `<link rel="alternate" hreflang="ja" href="https://pmp-test.jp/" />` +
-            `<link rel="alternate" hreflang="en" href="https://pmp-test.site/" />` +
-            `<link rel="alternate" hreflang="ko" href="https://pmp-test.site/" />` +
-            `<link rel="alternate" hreflang="x-default" href="https://pmp-test.site/" />`,
+            `<link rel="alternate" hreflang="ja" href="https://pmp-test.jp${p}" />` +
+            `<link rel="alternate" hreflang="en" href="https://pmp-test.site${p}" />` +
+            `<link rel="alternate" hreflang="x-default" href="https://pmp-test.site${p}" />`,
             { html: true }
           );
         },
