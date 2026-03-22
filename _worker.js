@@ -20,8 +20,8 @@ const FALLBACK = CONFIG['pmp-test.jp'];
 // トップページ以外のページ固有メタ情報
 const PAGE_META = {
   '/what-is-pmp': {
-    ja: { title: 'PMP資格とは？完全ガイド2026 | PMP問題集', description: 'PMP試験の概要・受験資格・試験構成（180問・230分）・難易度・勉強法を徹底解説。無料練習問題付き。' },
-    en: null, // HTMLに埋め込み済み
+    ja: null, // HTMLに埋め込み済み（日本語がデフォルト）
+    en: { title: 'What is PMP Certification? A Complete Guide 2026 | PMP Quiz', description: 'Learn what PMP certification is, who needs it, exam structure (180 questions, 3 domains), prerequisites, and how to study. Includes free practice questions.' },
   },
   '/what-is-pmp-es': {
     ja: null,
