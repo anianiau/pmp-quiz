@@ -26,6 +26,8 @@ const PAGE_META = {
   '/what-is-pmp-es': {
     ja: null,
     en: null, // HTMLに埋め込み済み
+    lang: 'es',
+    canonical: 'https://pmp-test.site/what-is-pmp-es',
   },
 };
 
@@ -66,11 +68,14 @@ export default {
 
     // HTMLRewriter でメタタグ・言語を書き換え
     const isTopPage = url.pathname === '/' || url.pathname === '/index.html';
-    const pageMeta = PAGE_META[url.pathname]?.[cfg.lang] || null;
+    const pageInfo = PAGE_META[url.pathname] || {};
+    const pageMeta = pageInfo[cfg.lang] || null;
     const overrideMeta = isTopPage ? cfg : pageMeta;
+    const pageLang = pageInfo.lang || cfg.lang;
+    const pageCanonical = pageInfo.canonical || (cfg.origin + url.pathname);
     let rewriter = new HTMLRewriter()
       .on('html', {
-        element(el) { el.setAttribute('lang', cfg.lang); },
+        element(el) { el.setAttribute('lang', pageLang); },
       });
     if (overrideMeta) {
       rewriter = rewriter
@@ -95,7 +100,7 @@ export default {
         element(el) { el.setAttribute('content', cfg.origin + '/ogp.png'); },
       })
       .on('link[rel="canonical"]', {
-        element(el) { el.setAttribute('href', cfg.origin + url.pathname); },
+        element(el) { el.setAttribute('href', pageCanonical); },
       })
       .on('script[type="application/ld+json"]', {
         text(chunk) {
@@ -121,12 +126,13 @@ export default {
           el.append(`<script>window.__DEFAULT_LANG='${cfg.lang}';</script>`, { html: true });
           // hreflang
           const p = url.pathname;
-          el.append(
-            `<link rel="alternate" hreflang="ja" href="https://pmp-test.jp${p}" />` +
-            `<link rel="alternate" hreflang="en" href="https://pmp-test.site${p}" />` +
-            `<link rel="alternate" hreflang="x-default" href="https://pmp-test.site${p}" />`,
-            { html: true }
-          );
+          const hreflang = pageInfo.lang === 'es'
+            ? `<link rel="alternate" hreflang="es" href="https://pmp-test.site${p}" />` +
+              `<link rel="alternate" hreflang="x-default" href="https://pmp-test.site${p}" />`
+            : `<link rel="alternate" hreflang="ja" href="https://pmp-test.jp${p}" />` +
+              `<link rel="alternate" hreflang="en" href="https://pmp-test.site${p}" />` +
+              `<link rel="alternate" hreflang="x-default" href="https://pmp-test.site${p}" />`;
+          el.append(hreflang, { html: true });
         },
       })
       .transform(assetRes);

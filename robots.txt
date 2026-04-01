@@ -1,26 +1,4 @@
 User-agent: *
 Allow: /
 
-# AI training crawlers
-User-agent: GPTBot
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: anthropic-ai
-Disallow: /
-
-User-agent: Claude-Web
-Disallow: /
-
-User-agent: PerplexityBot
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
 Sitemap: https://pmp-test.jp/sitemap.xml
