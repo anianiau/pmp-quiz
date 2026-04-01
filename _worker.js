@@ -55,8 +55,13 @@ export default {
 
     // sitemap.xml
     if (url.pathname === '/sitemap.xml') {
-      const text = await (await env.ASSETS.fetch(request)).text();
-      return new Response(text.replace(/https:\/\/pmp-test\.(jp|site)/g, cfg.origin), {
+      let text = await (await env.ASSETS.fetch(request)).text();
+      // canonicalが固定のページ（スペイン語等）はpmp-test.jpのsitemapから除外
+      if (cfg.lang === 'ja') {
+        text = text.replace(/<url>\s*<loc>[^<]*what-is-pmp-es[^<]*<\/loc>[\s\S]*?<\/url>\s*/g, '');
+      }
+      text = text.replace(/https:\/\/pmp-test\.(jp|site)/g, cfg.origin);
+      return new Response(text, {
         headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=3600' },
       });
     }
@@ -94,7 +99,7 @@ export default {
     }
     return rewriter
       .on('meta[property="og:url"]', {
-        element(el) { el.setAttribute('content', cfg.origin + url.pathname); },
+        element(el) { el.setAttribute('content', pageCanonical); },
       })
       .on('meta[property="og:image"]', {
         element(el) { el.setAttribute('content', cfg.origin + '/ogp.png'); },
@@ -107,7 +112,7 @@ export default {
           if (chunk.lastInTextNode) {
             let json = chunk.text
               .replace(/https:\/\/pmp-test\.(jp|site)\//g, cfg.origin + '/')
-              .replace(/"inLanguage"\s*:\s*"\w+"/, `"inLanguage": "${cfg.lang}"`);
+              .replace(/"inLanguage"\s*:\s*"\w+"/, `"inLanguage": "${pageLang}"`);
             if (cfg.lang !== 'ja') {
               json = json
                 .replace(/"name"\s*:\s*"[^"]*"/, `"name": "${cfg.title}"`)
@@ -123,7 +128,7 @@ export default {
       .on('head', {
         element(el) {
           // デフォルト言語をクライアントJSに伝える
-          el.append(`<script>window.__DEFAULT_LANG='${cfg.lang}';</script>`, { html: true });
+          el.append(`<script>window.__DEFAULT_LANG='${pageLang}';</script>`, { html: true });
           // hreflang
           const p = url.pathname;
           const hreflang = pageInfo.lang === 'es'
