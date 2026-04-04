@@ -137,6 +137,18 @@ export default {
           }
         },
       })
+      .on('button[data-lang]', {
+        element(el) {
+          const lang = el.getAttribute('data-lang');
+          // pmp-test.jp → zh/ko/es ボタンを削除（日英のみ）
+          // pmp-test.site → ja ボタンを削除（英西中韓のみ）
+          if (cfg.lang === 'ja' && ['zh', 'ko', 'es'].includes(lang)) {
+            el.remove();
+          } else if (cfg.lang !== 'ja' && lang === 'ja') {
+            el.remove();
+          }
+        },
+      })
       .on('head', {
         element(el) {
           // デフォルト言語をクライアントJSに伝える
