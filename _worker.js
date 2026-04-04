@@ -29,6 +29,18 @@ const PAGE_META = {
     lang: 'es',
     canonical: 'https://pmp-test.site/what-is-pmp-es',
   },
+  '/what-is-pmp-zh': {
+    ja: null,
+    en: null, // HTMLに埋め込み済み
+    lang: 'zh',
+    canonical: 'https://pmp-test.site/what-is-pmp-zh',
+  },
+  '/what-is-pmp-ko': {
+    ja: null,
+    en: null, // HTMLに埋め込み済み
+    lang: 'ko',
+    canonical: 'https://pmp-test.site/what-is-pmp-ko',
+  },
 };
 
 export default {
@@ -56,9 +68,9 @@ export default {
     // sitemap.xml
     if (url.pathname === '/sitemap.xml') {
       let text = await (await env.ASSETS.fetch(request)).text();
-      // canonicalが固定のページ（スペイン語等）はpmp-test.jpのsitemapから除外
+      // pmp-test.site固定のURL（es/zh/ko等）はpmp-test.jpのsitemapから除外
       if (cfg.lang === 'ja') {
-        text = text.replace(/<url>\s*<loc>[^<]*what-is-pmp-es[^<]*<\/loc>[\s\S]*?<\/url>\s*/g, '');
+        text = text.replace(/<url>\s*<loc>https:\/\/pmp-test\.site[^<]*<\/loc>[\s\S]*?<\/url>\s*/g, '');
       }
       text = text.replace(/https:\/\/pmp-test\.(jp|site)/g, cfg.origin);
       return new Response(text, {
@@ -131,8 +143,8 @@ export default {
           el.append(`<script>window.__DEFAULT_LANG='${pageLang}';</script>`, { html: true });
           // hreflang
           const p = url.pathname;
-          const hreflang = pageInfo.lang === 'es'
-            ? `<link rel="alternate" hreflang="es" href="https://pmp-test.site${p}" />` +
+          const hreflang = pageInfo.lang
+            ? `<link rel="alternate" hreflang="${pageInfo.lang}" href="https://pmp-test.site${p}" />` +
               `<link rel="alternate" hreflang="x-default" href="https://pmp-test.site${p}" />`
             : `<link rel="alternate" hreflang="ja" href="https://pmp-test.jp${p}" />` +
               `<link rel="alternate" hreflang="en" href="https://pmp-test.site${p}" />` +

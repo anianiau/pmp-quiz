@@ -2630,6 +2630,8 @@ function applyLang(){
   const desc=descMap[lang]||descMap.ja;
   document.querySelector('meta[name="description"]').setAttribute('content',desc);
   document.querySelector('meta[property="og:description"]').setAttribute('content',desc);
+  const readmoreLink=document.querySelector('a[data-i18n="about.readmore"]');
+  if(readmoreLink){const map={es:'/what-is-pmp-es',zh:'/what-is-pmp-zh',ko:'/what-is-pmp-ko'};readmoreLink.href=map[lang]||'/what-is-pmp';}
 }
 
 let questions=[];
