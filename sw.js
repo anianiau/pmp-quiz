@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pmp-quiz-v8';
+const CACHE_NAME = 'pmp-quiz-v9';
 const ASSETS = [
   './index.html',
   './manifest.json',

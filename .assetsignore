@@ -1,7 +1,17 @@
-_worker.js
-node_modules
-wrangler.jsonc
-wrangler.site.jsonc
-package.json
-package-lock.json
-bun.lockb
+# デフォルト全除外 → 許可ファイルのみ公開
+*
+
+# クイズアプリに必要なファイルのみ許可
+!index.html
+!sw.js
+!manifest.json
+!robots.txt
+!sitemap.xml
+!ogp.png
+!apple-touch-icon.png
+!icon-192.png
+!icon-512.png
+!what-is-pmp.html
+!what-is-pmp-es.html
+!what-is-pmp-ko.html
+!what-is-pmp-zh.html

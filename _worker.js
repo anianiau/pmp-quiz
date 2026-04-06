@@ -109,7 +109,7 @@ export default {
           element(el) { el.setAttribute('content', overrideMeta.description); },
         });
     }
-    return rewriter
+    rewriter = rewriter
       .on('meta[property="og:url"]', {
         element(el) { el.setAttribute('content', pageCanonical); },
       })
@@ -134,18 +134,6 @@ export default {
             chunk.replace(json);
           } else {
             chunk.remove();
-          }
-        },
-      })
-      .on('button[data-lang]', {
-        element(el) {
-          const lang = el.getAttribute('data-lang');
-          // pmp-test.jp → zh/ko/es ボタンを削除（日英のみ）
-          // pmp-test.site → ja ボタンを削除（英西中韓のみ）
-          if (cfg.lang === 'ja' && ['zh', 'ko', 'es'].includes(lang)) {
-            el.remove();
-          } else if (cfg.lang !== 'ja' && lang === 'ja') {
-            el.remove();
           }
         },
       })
@@ -180,7 +168,17 @@ export default {
             );
           }
         },
-      })
-      .transform(assetRes);
+      });
+    // pmp-test.jp → zh/ko/es ボタンを削除、pmp-test.site → ja ボタンを削除
+    if (cfg.lang === 'ja') {
+      rewriter = rewriter
+        .on('button[data-lang="zh"]', { element(el) { el.remove(); } })
+        .on('button[data-lang="ko"]', { element(el) { el.remove(); } })
+        .on('button[data-lang="es"]', { element(el) { el.remove(); } });
+    } else {
+      rewriter = rewriter
+        .on('button[data-lang="ja"]', { element(el) { el.remove(); } });
+    }
+    return rewriter.transform(assetRes);
   },
 };
