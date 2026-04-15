@@ -153,20 +153,21 @@ export default {
         },
       })
       .on('body', {
-        element(el) {
-          if (isTopPage && cfg.lang !== 'ja') {
-            el.append(
-              `<div style="background:var(--card,#fff);border-top:1px solid #e2e8f0;padding:24px;text-align:center">` +
-              `<p style="font-size:0.8rem;color:#64748b;margin-bottom:12px">PMP Study Guides — Available in your language</p>` +
-              `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;font-size:0.85rem">` +
-              `<a href="/what-is-pmp" style="color:#2563eb;font-weight:600">📘 English Guide</a>` +
-              `<a href="/what-is-pmp-es" style="color:#2563eb;font-weight:600">📗 Guía en Español</a>` +
-              `<a href="/what-is-pmp-zh" style="color:#2563eb;font-weight:600">📙 中文指南</a>` +
-              `<a href="/what-is-pmp-ko" style="color:#2563eb;font-weight:600">📕 한국어 가이드</a>` +
-              `</div></div>`,
-              { html: true }
-            );
-          }
+        element(_el) {
+          // [2026-04-15 コメントアウト] 多言語ガイドリンクはindex.htmlの "Learn more about PMP certification →" で十分
+          // if (isTopPage && cfg.lang !== 'ja') {
+          //   _el.append(
+          //     `<div style="background:var(--card,#fff);border-top:1px solid #e2e8f0;padding:24px;text-align:center">` +
+          //     `<p style="font-size:0.8rem;color:#64748b;margin-bottom:12px">PMP Study Guides — Available in your language</p>` +
+          //     `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;font-size:0.85rem">` +
+          //     `<a href="/what-is-pmp" style="color:#2563eb;font-weight:600">📘 English Guide</a>` +
+          //     `<a href="/what-is-pmp-es" style="color:#2563eb;font-weight:600">📗 Guía en Español</a>` +
+          //     `<a href="/what-is-pmp-zh" style="color:#2563eb;font-weight:600">📙 中文指南</a>` +
+          //     `<a href="/what-is-pmp-ko" style="color:#2563eb;font-weight:600">📕 한국어 가이드</a>` +
+          //     `</div></div>`,
+          //     { html: true }
+          //   );
+          // }
         },
       });
     // pmp-test.jp → zh/ko/es ボタンを削除、pmp-test.site → ja ボタンを削除
