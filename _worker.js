@@ -10,7 +10,7 @@ const CONFIG = {
     lang: 'en',
     origin: 'https://pmp-test.site',
     title: 'Free PMP Practice Questions | Exam Prep Quiz',
-    description: '360+ free PMP practice questions covering all PMI exam domains. Scenario-based, mobile-friendly, works offline. No sign-up required — start studying now.',
+    description: 'Free PMP practice questions covering all PMI exam domains. Scenario-based, mobile-friendly, works offline. No sign-up required — start studying now.',
     manifest: { name: 'PMP Quiz', short_name: 'PMP Quiz', description: 'Project Management Professional exam prep app. Free, offline-ready.' },
   },
 };
@@ -40,6 +40,18 @@ const PAGE_META = {
     en: null, // HTMLに埋め込み済み
     lang: 'ko',
     canonical: 'https://pmp-test.site/what-is-pmp-ko',
+  },
+  '/preguntas-pmp': {
+    ja: null,
+    en: null, // HTMLに埋め込み済み
+    lang: 'es',
+    canonical: 'https://pmp-test.site/preguntas-pmp',
+  },
+  '/what-is-pmp-id': {
+    ja: null,
+    en: null, // HTMLに埋め込み済み
+    lang: 'id',
+    canonical: 'https://pmp-test.site/what-is-pmp-id',
   },
 };
 

@@ -46,7 +46,8 @@
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());
-gtag('config','G-EPQQE97M74');
+gtag('config','G-EPQQE97M74',{linker:{domains:['pmp-test.jp','pmp-test.site']}});
+window.addEventListener('appinstalled',()=>{gtag('event','pwa_installed',{event_category:'engagement'});});
 </script>
 <style>
   :root {
@@ -761,7 +762,7 @@ const defaultQuestionsJa=[
   {id:180,domain:"Process",question:"プロジェクトの暗黙知を形式知に変換する方法として最も効果的なものはどれですか？",options:["経験豊富なメンバーとペアを組ませ、実務を通じて暗黙知を自然に継承させる","ナレッジマネジメント活動（文書化、教訓セッション、メンタリング）","定期的な社内勉強会を開催し、メンバーが自分の経験や知見を口頭で共有する","プロジェクト終了時にベテランメンバーへのインタビューを実施し、後任に引き継ぐ"],correct:1,explanation:"暗黙知（経験・ノウハウ）を形式知（文書・データ）に変換するには、明示的に「引き出し・記録」する活動が必要です。option0「ペアを組ませ実務で自然継承」は暗黙知を暗黙知のまま伝える方法（SECIモデルの共同化）であり「形式知への変換」ではありません。option2「口頭での社内勉強会」は形式知化が不十分で情報が参加者の記憶に留まります。option3「プロジェクト終了時のベテランインタビュー」は有効ですが、教訓セッション・文書化・ナレッジベース構築を含むナレッジマネジメント活動がより包括的です。"},
   {id:181,domain:"People",question:"変革のクルト・レヴィンモデルの3つの段階はどれですか？",options:["計画・実行・完了","解凍・変革・再凍結","認識・理解・行動","分析・設計・実装"],correct:1,explanation:"レヴィンの変革モデルは、解凍（Unfreezing：変革の必要性を認識）→変革（Changing：新しい方法を導入）→再凍結（Refreezing：変革を定着させる）の3段階です。"},
   {id:182,domain:"People",question:"プロジェクトにおける「オスモティック・コミュニケーション」とはどれですか？",options:["公式な報告会議","同じ空間にいることで自然に情報が伝わるコミュニケーション","メールでの定期報告","ステータスレポートの配布"],correct:1,explanation:"オスモティック（浸透性）コミュニケーションは、同じ空間にいるチームメンバーが、直接の会話でなくても周囲の議論から自然に情報を吸収する現象です。アジャイルでコロケーションが重視される理由の一つです。"},
-  {id:183,domain:"People",question:"責任分担マトリクス（RAM）とRACIマトリクスの関係はどれですか？",options:["まったく無関係","RACIはRAMの一形態である","RAMはRACIの一部","RAMは予測型のみ、RACIはアジャイルのみ"],correct:1,explanation:"責任分担マトリクス（RAM: Responsibility Assignment Matrix）はプロジェクトの作業と担当者の関係を示す一般的なツールです。RACIマトリクスは、RAMの最も一般的な形態（R/A/C/Iの4役割を使用）です。"},
+  {id:183,domain:"People",question:"責任分担マトリクス（RAM）とRACIマトリクスの関係はどれですか？",options:["まったく無関係","RACIはRAMの一形態である","RAMはRACIの一部","RAMは予測型のみ、RACIはアジャイルのみ"],correct:1,explanation:"RAM（Responsibility Assignment Matrix：責任分担マトリクス）は「誰が何を担当するか」をマトリクス形式で表現するツールの総称です。RACIマトリクスはRAMの中で最も広く使われる具体的な実装形態であり、4つの役割（R:実行、A:説明責任、C:相談、I:報告）で責任を定義します。RAMにはRACIのほかにも派生形があります（例：SupportのSを追加したRASCIなど）。つまり「RACI ⊂ RAM」という包含関係です。誤りの選択肢について：「RAMはRACIの一部（C）」は包含関係が逆。「予測型/アジャイル限定（D）」はどちらも関係なく、RAM・RACIはあらゆるアプローチで使用できます。"},
   {id:184,domain:"People",question:"ナッジ理論をプロジェクトマネジメントに活用する例はどれですか？",options:["チームに罰則を設ける","デフォルトの選択肢を望ましい行動に設定して行動変容を促す","強制的にプロセスに従わせる","インセンティブ報酬を支払う"],correct:1,explanation:"ナッジ理論は、強制や経済的インセンティブではなく、選択肢の提示の仕方（デフォルト設定、情報の見せ方等）を工夫することで、自然に望ましい行動を促す手法です。"},
   {id:185,domain:"Process",question:"プロダクトロードマップの主な目的はどれですか？",options:["詳細な技術仕様を定義する","プロダクトのビジョンと戦略的方向性を時系列で示す","個人のタスクを管理する","日次の進捗を追跡する"],correct:1,explanation:"プロダクトロードマップは、プロダクトのビジョン、戦略的方向性、主要な機能やリリースの計画を時系列で視覚化したものです。ステークホルダーとの期待値の共有に活用します。"},
   {id:186,domain:"Process",question:"組織の変更管理で「チェンジエージェント」の役割はどれですか？",options:["変更に反対する人","変更の推進と支持者の獲得を担う人","変更を承認する権限者","変更の記録を管理する人"],correct:1,explanation:"チェンジエージェントは、組織変更を推進し、変革のビジョンを伝え、抵抗を管理し、支持者を獲得する役割を担う人です。PMやスポンサーがこの役割を担うことが多いです。"},
@@ -1124,7 +1125,7 @@ const defaultQuestionsEn=[
   {id:180,domain:"Process",question:"What is the most effective method to convert tacit knowledge to explicit knowledge in a project?",options:["Pair less experienced members with veterans to allow tacit knowledge to transfer naturally through hands-on work","Knowledge management activities such as documentation, lessons learned sessions, and mentoring","Hold regular in-house study sessions where members share their experience and insights verbally","Conduct interviews with veteran members at project close and hand over knowledge to successors"],correct:1,explanation:"Converting tacit knowledge (experience, know-how) to explicit knowledge (documented, shareable) requires deliberate activities to extract and record it. Option 0 (pairing members for natural knowledge transfer through practice) passes tacit knowledge as tacit knowledge — this is \"socialization\" in the SECI model, not conversion to explicit knowledge. Option 2 (oral knowledge-sharing sessions) risks leaving information in attendees' memories without formal documentation. Option 3 (interviewing veterans at project close) is valuable but narrower than knowledge management activities that include documentation, lessons learned sessions, and knowledge base construction."},
   {id:181,domain:"People",question:"What are the three stages of Kurt Lewin's Change Model?",options:["Plan, Execute, Complete","Unfreeze, Change, Refreeze","Recognize, Understand, Act","Analyze, Design, Implement"],correct:1,explanation:"Lewin's Change Model has three stages: Unfreeze (recognize the need for change) → Change (introduce new ways of doing things) → Refreeze (solidify the change)."},
   {id:182,domain:"People",question:"What is 'Osmotic Communication' in a project?",options:["A formal reporting meeting","Communication where information naturally flows by being in the same space","Regular reporting via email","Distributing status reports"],correct:1,explanation:"Osmotic communication is the phenomenon where team members in the same space naturally absorb information from surrounding conversations without direct participation. It is one of the reasons colocation is valued in Agile."},
-  {id:183,domain:"People",question:"What is the relationship between a Responsibility Assignment Matrix (RAM) and a RACI Matrix?",options:["Completely unrelated","RACI is a form of RAM","RAM is a subset of RACI","RAM is for Predictive only; RACI is for Agile only"],correct:1,explanation:"A Responsibility Assignment Matrix (RAM) is a general tool showing the relationship between project work and the people responsible for it. The RACI matrix is the most common form of RAM, using four roles (R/A/C/I)."},
+  {id:183,domain:"People",question:"What is the relationship between a Responsibility Assignment Matrix (RAM) and a RACI Matrix?",options:["Completely unrelated","RACI is a form of RAM","RAM is a subset of RACI","RAM is for Predictive only; RACI is for Agile only"],correct:1,explanation:"A RAM (Responsibility Assignment Matrix) is the umbrella term for any matrix-format tool that maps project work to the people responsible for it. The RACI matrix is the most widely used specific implementation of a RAM, defining responsibilities through four roles (R: Responsible, A: Accountable, C: Consulted, I: Informed). Other RAM variants exist — for example, RASCI adds an 'S' for Support. The relationship is RACI ⊂ RAM (RACI is a subset of RAM). Why the wrong answers are wrong: Option C reverses the containment — RAM is not a subset of RACI. Option D is false — both RAM and RACI can be used in predictive, agile, and hybrid approaches."},
   {id:184,domain:"People",question:"What is an example of applying Nudge Theory to project management?",options:["Setting penalties for the team","Setting the default choice to the desired behavior to encourage behavior change","Forcing compliance with processes","Paying incentive rewards"],correct:1,explanation:"Nudge theory promotes desired behavior naturally by designing how choices are presented (default settings, information framing, etc.) rather than through coercion or financial incentives."},
   {id:185,domain:"Process",question:"What is the main purpose of a Product Roadmap?",options:["Define detailed technical specifications","Show the product's vision and strategic direction on a timeline","Manage individual tasks","Track daily progress"],correct:1,explanation:"A Product Roadmap is a visual representation of the product vision, strategic direction, and key features or release plans on a timeline. It is used to align stakeholder expectations."},
   {id:186,domain:"Process",question:"What is the role of a 'Change Agent' in organizational change management?",options:["A person who opposes change","A person responsible for driving change and gaining supporters","An authority who approves change","A person who manages change records"],correct:1,explanation:"A Change Agent is someone who drives organizational change, communicates the vision for change, manages resistance, and gains supporters. PMs and sponsors often play this role."},
@@ -1487,7 +1488,7 @@ const defaultQuestionsKo=[
   {id:180,domain:"Process",question:"프로젝트의 암묵지를 형식지로 변환하는 방법으로 가장 효과적인 것은 무엇입니까?",options:["경험이 풍부한 멤버와 페어를 이루어 실무를 통해 자연스럽게 암묵지를 전수한다","지식 관리 활동（문서화, 교훈 세션, 멘토링）","정기적인 사내 스터디 모임을 개최하여 멤버가 경험과 지식을 구두로 공유한다","프로젝트 종료 시 베테랑 멤버 인터뷰를 실시하고 후임자에게 인계한다"],correct:1,explanation:"암묵지（경험·노하우）를 형식지（문서·데이터）로 변환하려면 명시적으로 \"추출·기록\"하는 활동이 필요합니다. option0 \"페어를 구성해 실무에서 자연스럽게 전승\"은 암묵지를 암묵지로 전달하는 방법（SECI 모델의 공동화）으로 \"형식지로의 변환\"이 아닙니다. option2 \"구두 사내 스터디\"는 형식지화가 불충분해 정보가 참가자 기억에 남을 수 있습니다. option3 \"프로젝트 종료 시 베테랑 인터뷰\"는 유효하지만, 교훈 세션·문서화·지식 베이스 구축을 포함하는 지식 관리 활동이 더 포괄적입니다."},
   {id:181,domain:"People",question:"변혁의 쿠르트 레빈 모델의 3단계는 무엇입니까?",options:["계획·실행·완료","해동·변혁·재동결","인식·이해·행동","분석·설계·구현"],correct:1,explanation:"레빈의 변혁 모델은 해동(Unfreezing: 변혁의 필요성 인식)→변혁(Changing: 새로운 방법 도입)→재동결(Refreezing: 변혁을 정착시킴)의 3단계입니다."},
   {id:182,domain:"People",question:"프로젝트에서의 '오스모틱 커뮤니케이션'이란 무엇입니까?",options:["공식적 보고 회의","같은 공간에 있음으로써 자연스럽게 정보가 전달되는 커뮤니케이션","이메일에 의한 정기 보고","상태 보고서의 배포"],correct:1,explanation:"오스모틱(삼투성) 커뮤니케이션은 같은 공간에 있는 팀 멤버가 직접 대화가 아니더라도 주변의 논의에서 자연스럽게 정보를 흡수하는 현상입니다. 애자일에서 코로케이션이 중시되는 이유 중 하나입니다."},
-  {id:183,domain:"People",question:"책임 분담 매트릭스(RAM)와 RACI 매트릭스의 관계는 무엇입니까?",options:["전혀 무관하다","RACI는 RAM의 한 형태이다","RAM은 RACI의 일부이다","RAM은 예측형만, RACI는 애자일만"],correct:1,explanation:"책임 분담 매트릭스(RAM: Responsibility Assignment Matrix)는 프로젝트 작업과 담당자의 관계를 나타내는 일반적인 도구입니다. RACI 매트릭스는 RAM의 가장 일반적인 형태(R/A/C/I의 4역할 사용)입니다."},
+  {id:183,domain:"People",question:"책임 분담 매트릭스(RAM)와 RACI 매트릭스의 관계는 무엇입니까?",options:["전혀 무관하다","RACI는 RAM의 한 형태이다","RAM은 RACI의 일부이다","RAM은 예측형만, RACI는 애자일만"],correct:1,explanation:"RAM(Responsibility Assignment Matrix)은 프로젝트 작업과 담당자를 매트릭스 형식으로 연결하는 도구의 총칭입니다. RACI 매트릭스는 RAM 중 가장 널리 사용되는 구체적인 구현 형태로, 4가지 역할(R:실행, A:설명책임, C:상담, I:보고)로 책임을 정의합니다. RAM의 파생형으로는 Support를 추가한 RASCI 등도 있습니다. 즉 「RACI ⊂ RAM」의 포함 관계입니다. 오답 해설: 'RAM은 RACI의 일부(C)'는 포함 관계가 반대. '예측형/애자일 한정(D)'은 사실이 아니며, RAM·RACI 모두 어떤 접근 방식에도 사용 가능합니다."},
   {id:184,domain:"People",question:"넛지 이론을 프로젝트 관리에 활용하는 예는 무엇입니까?",options:["팀에 벌칙을 설정한다","기본 선택지를 바람직한 행동으로 설정하여 행동 변화를 촉진한다","강제적으로 프로세스에 따르게 한다","인센티브 보상을 지급한다"],correct:1,explanation:"넛지 이론은 강제나 경제적 인센티브가 아니라 선택지 제시 방법(기본 설정, 정보 표시 방법 등)을 고안하여 자연스럽게 바람직한 행동을 촉진하는 기법입니다."},
   {id:185,domain:"Process",question:"프로덕트 로드맵의 주요 목적은 무엇입니까?",options:["상세한 기술 사양을 정의한다","프로덕트의 비전과 전략적 방향성을 시계열로 나타낸다","개인의 태스크를 관리한다","일일 진척을 추적한다"],correct:1,explanation:"프로덕트 로드맵은 프로덕트의 비전, 전략적 방향성, 주요 기능과 릴리스 계획을 시계열로 시각화한 것입니다. 이해관계자와의 기대치 공유에 활용합니다."},
   {id:186,domain:"Process",question:"조직의 변경 관리에서 '체인지 에이전트'의 역할은 무엇입니까?",options:["변경에 반대하는 사람","변경의 추진과 지지자 확보를 담당하는 사람","변경을 승인하는 권한자","변경의 기록을 관리하는 사람"],correct:1,explanation:"체인지 에이전트는 조직 변경을 추진하고 변혁의 비전을 전달하며 저항을 관리하고 지지자를 확보하는 역할을 담당합니다. PM이나 스폰서가 이 역할을 맡는 경우가 많습니다."},
@@ -1850,7 +1851,7 @@ const defaultQuestionsZh=[
   {id:180,domain:"Process",question:"将项目中的隐性知识转化为显性知识，最有效的方法是什么？",options:["与经验丰富的成员配对，通过实际工作自然传承隐性知识","知识管理活动（文档化、经验教训会议、辅导）","定期举办内部学习会，让成员以口头方式分享经验和见解","项目结束时对资深成员进行访谈，将知识交接给后继者"],correct:1,explanation:"将隐性知识（经验、诀窍）转化为显性知识（文档、数据）需要明确的\"提取·记录\"活动。option0\"配对后在实务中自然传承\"是将隐性知识以隐性知识形式传递（SECI模型中的社会化），并非\"转化为显性知识\"。option2\"口头社内学习会\"形式化程度不足，信息可能停留在参与者记忆中。option3\"项目结束时对资深人员进行访谈\"有价值，但包含教训总结、文档化、知识库建设的知识管理活动更为全面。"},
   {id:181,domain:"People",question:"库尔特·勒温变革模型的三个阶段是什么？",options:["计划、执行、完成","解冻、变革、再冻结","认知、理解、行动","分析、设计、实施"],correct:1,explanation:"勒温变革模型分三阶段：解冻（Unfreezing：认识到变革必要性）→变革（Changing：引入新方法）→再冻结（Refreezing：巩固变革成果）。"},
   {id:182,domain:"People",question:"项目中的'渗透式沟通'（Osmotic Communication）是指什么？",options:["正式汇报会议","同处一室时，信息自然流动传递的沟通方式","定期邮件汇报","发放状态报告"],correct:1,explanation:"渗透式沟通是指团队成员处于同一空间时，即便不直接对话，也能从周围的讨论中自然吸收信息的现象。这也是敏捷提倡集中办公的原因之一。"},
-  {id:183,domain:"People",question:"责任分配矩阵（RAM）与RACI矩阵的关系是什么？",options:["两者毫无关联","RACI矩阵是RAM的一种形式","RAM是RACI的子集","RAM仅用于预测型，RACI仅用于敏捷"],correct:1,explanation:"责任分配矩阵（RAM）是显示项目工作与负责人关系的通用工具。RACI矩阵是RAM最常见的形式，使用R/A/C/I四种角色。"},
+  {id:183,domain:"People",question:"责任分配矩阵（RAM）与RACI矩阵的关系是什么？",options:["两者毫无关联","RACI矩阵是RAM的一种形式","RAM是RACI的子集","RAM仅用于预测型，RACI仅用于敏捷"],correct:1,explanation:"RAM（责任分配矩阵）是以矩阵形式将项目工作与负责人对应起来的工具的总称。RACI矩阵是RAM中最广泛使用的具体实现形式，通过四种角色（R:执行, A:负责, C:咨询, I:知会）定义职责。RAM还有其他变体，例如增加Support（支持）角色的RASCI。即「RACI ⊂ RAM」的包含关系。错误选项说明：'RAM是RACI的子集（C）'包含关系反了。'RAM仅限预测型/RACI仅限敏捷（D）'不正确，两者均可用于任何项目方法。"},
   {id:184,domain:"People",question:"将助推理论（Nudge Theory）应用于项目管理的例子是什么？",options:["为团队设置惩罚措施","将默认选项设置为期望行为，从而引导行为改变","强制执行流程","支付激励报酬"],correct:1,explanation:"助推理论通过调整选择方案的呈现方式（默认设置、信息展示方式等），而非强制或经济激励，来自然引导人们做出期望行为。"},
   {id:185,domain:"Process",question:"产品路线图的主要目的是什么？",options:["定义详细技术规格","以时间轴展示产品愿景和战略方向","管理个人任务","追踪日常进度"],correct:1,explanation:"产品路线图是将产品愿景、战略方向及主要功能和发布计划以时间轴可视化的工具，用于与干系人共享期望。"},
   {id:186,domain:"Process",question:"组织变革管理中'变革推动者'（Change Agent）的职责是什么？",options:["反对变革的人","负责推动变革并获取支持者的人","有权批准变革的人","负责记录变革的人"],correct:1,explanation:"变革推动者负责推动组织变革、传播变革愿景、管理阻力和赢得支持者。项目经理和发起人通常承担此角色。"},
@@ -2213,7 +2214,7 @@ const defaultQuestionsEs=[
   {id:180,domain:"Process",question:"¿Cuál es el método más efectivo para convertir el conocimiento tácito en conocimiento explícito en un proyecto?",options:["Emparejar a miembros menos experimentados con veteranos para que el conocimiento tácito se transfiera naturalmente mediante el trabajo práctico","Actividades de gestión del conocimiento como documentación, sesiones de lecciones aprendidas y mentoría","Realizar reuniones de estudio internas periódicas donde los miembros compartan su experiencia e ideas verbalmente","Realizar entrevistas con miembros veteranos al cerrar el proyecto y transferir el conocimiento a sus sucesores"],correct:1,explanation:"Convertir el conocimiento tácito (experiencia, know-how) en explícito (documentado, compartible) requiere actividades deliberadas para extraerlo y registrarlo. La opción 0 (emparejar miembros para transferencia natural) pasa conocimiento tácito como tácito — \"socialización\" en el modelo SECI, no conversión a explícito. La opción 2 (sesiones orales de intercambio) arriesga dejar información en la memoria de los asistentes sin documentación. La opción 3 (entrevistar a veteranos al cierre) es valioso pero más limitado que las actividades de gestión del conocimiento que incluyen documentación, lecciones aprendidas y bases de conocimiento."},
   {id:181,domain:"People",question:"¿Cuáles son las tres etapas del Modelo de Cambio de Kurt Lewin?",options:["Planificar, Ejecutar, Completar","Descongelar, Cambiar, Recongelar","Reconocer, Comprender, Actuar","Analizar, Diseñar, Implementar"],correct:1,explanation:"El Modelo de Cambio de Lewin tiene tres etapas: Descongelar (reconocer la necesidad de cambio) → Cambiar (introducir nuevas formas de hacer las cosas) → Recongelar (consolidar el cambio)."},
   {id:182,domain:"People",question:"¿Qué es la 'Comunicación Osmótica' en un proyecto?",options:["Una reunión de reporte formal","Comunicación donde la información fluye naturalmente al estar en el mismo espacio","Reporte periódico por correo electrónico","Distribución de informes de estado"],correct:1,explanation:"La comunicación osmótica es el fenómeno donde los miembros del equipo que están en el mismo espacio absorben información naturalmente de las conversaciones circundantes sin participación directa. Es una de las razones por las que se valora la colocalización en Agile."},
-  {id:183,domain:"People",question:"¿Cuál es la relación entre una Matriz de Asignación de Responsabilidades (RAM) y una Matriz RACI?",options:["Son completamente independientes","La RACI es una forma de RAM","La RAM es un subconjunto de la RACI","La RAM es solo para Predictivo; la RACI es solo para Agile"],correct:1,explanation:"Una Matriz de Asignación de Responsabilidades (RAM) es una herramienta general que muestra la relación entre el trabajo del proyecto y las personas responsables. La matriz RACI es la forma más común de RAM, usando cuatro roles (R/A/C/I)."},
+  {id:183,domain:"People",question:"¿Cuál es la relación entre una Matriz de Asignación de Responsabilidades (RAM) y una Matriz RACI?",options:["Son completamente independientes","La RACI es una forma de RAM","La RAM es un subconjunto de la RACI","La RAM es solo para Predictivo; la RACI es solo para Agile"],correct:1,explanation:"La RAM (Responsibility Assignment Matrix) es el término general para cualquier herramienta en formato matricial que relaciona el trabajo del proyecto con las personas responsables. La matriz RACI es la implementación más utilizada de la RAM, definiendo responsabilidades mediante cuatro roles (R: Responsible, A: Accountable, C: Consulted, I: Informed). Existen otras variantes de RAM, como la RASCI, que añade una 'S' de Support. La relación es: RACI ⊂ RAM. Por qué son incorrectas las otras opciones: La opción C invierte la relación — la RAM no es subconjunto de la RACI. La opción D es falsa — tanto la RAM como la RACI pueden usarse en enfoques predictivos, ágiles e híbridos."},
   {id:184,domain:"People",question:"¿Cuál es un ejemplo de aplicar la Teoría del Empujón (Nudge Theory) a la gestión de proyectos?",options:["Establecer penalizaciones para el equipo","Establecer la opción predeterminada en el comportamiento deseado para fomentar el cambio de conducta","Forzar el cumplimiento de procesos","Pagar recompensas de incentivo"],correct:1,explanation:"La teoría del empujón promueve el comportamiento deseado de forma natural diseñando cómo se presentan las opciones (configuraciones predeterminadas, enmarcado de información, etc.) en lugar de mediante coerción o incentivos financieros."},
   {id:185,domain:"Process",question:"¿Cuál es el propósito principal de un Mapa de Ruta del Producto (Product Roadmap)?",options:["Definir especificaciones técnicas detalladas","Mostrar la visión y dirección estratégica del producto en una línea de tiempo","Gestionar tareas individuales","Rastrear el avance diario"],correct:1,explanation:"Un Mapa de Ruta del Producto es una representación visual de la visión del producto, la dirección estratégica y las características o planes de lanzamiento clave en una línea de tiempo. Se usa para alinear las expectativas de los interesados."},
   {id:186,domain:"Process",question:"¿Cuál es el rol de un 'Agente de Cambio' en la gestión del cambio organizacional?",options:["Una persona que se opone al cambio","Una persona responsable de impulsar el cambio y ganar partidarios","Una autoridad que aprueba el cambio","Una persona que gestiona los registros de cambio"],correct:1,explanation:"Un Agente de Cambio es alguien que impulsa el cambio organizacional, comunica la visión del cambio, gestiona la resistencia y gana partidarios. Los PM y patrocinadores suelen desempeñar este rol."},
@@ -2594,6 +2595,7 @@ let lang=(function(){
 })();
 function t(k){return (i18n[lang]&&i18n[lang][k])||i18n.ja[k]||k;}
 function setLang(l){
+  if(typeof gtag==='function'&&l!==lang)gtag('event','lang_change',{from_lang:lang,to_lang:l});
   lang=l;
   localStorage.setItem('pmp-lang',l);
   const currentStats=stats;
@@ -2655,7 +2657,9 @@ function toggleBookmark(id){
   const i=bookmarks.indexOf(id);
   if(i>=0)bookmarks.splice(i,1);else bookmarks.push(id);
   safeSetItem('pmp-bookmarks',JSON.stringify(bookmarks));
-  return bookmarks.includes(id);
+  const isNowBookmarked=bookmarks.includes(id);
+  if(typeof gtag==='function')gtag('event','bookmark_toggle',{action:isNowBookmarked?'add':'remove',question_id:id,lang:lang});
+  return isNowBookmarked;
 }
 function saveQuizState(){safeSetItem('pmp-quiz-state',JSON.stringify({questions:quizState.questions.map(q=>q.id),current:quizState.current,answers:quizState.answers,mode:quizState.mode}));}
 function clearQuizState(){localStorage.removeItem('pmp-quiz-state');}
@@ -2668,8 +2672,9 @@ function loadQuizState(){
 function updateHome(){
   const totalQ=questions.length;
   const answeredIds=Object.keys(stats.answered).length;
-  const correctIds=Object.keys(stats.correct).filter(id=>(stats.correct[id]||0)>0).length;
-  const rate=answeredIds>0?Math.round(correctIds/answeredIds*100):'--';
+  const totalAnswers=Object.values(stats.answered).reduce((s,v)=>s+v,0);
+  const totalCorrect=Object.values(stats.correct).reduce((s,v)=>s+v,0);
+  const rate=totalAnswers>0?Math.round(totalCorrect/totalAnswers*100):'--';
   document.getElementById('stat-total').textContent=totalQ;
   document.getElementById('stat-answered').textContent=answeredIds;
   document.getElementById('stat-rate').textContent=rate+'%';
@@ -2680,8 +2685,9 @@ function updateHome(){
     const dqs=questions.filter(q=>q.domain===d);
     const count=dqs.length;
     const dAnsweredIds=dqs.filter(q=>(stats.answered[q.id]||0)>0).length;
-    const dCorrectIds=dqs.filter(q=>(stats.correct[q.id]||0)>0).length;
-    const dRate=dAnsweredIds>0?Math.round(dCorrectIds/dAnsweredIds*100):-1;
+    const dTotalAnswers=dqs.reduce((s,q)=>s+(stats.answered[q.id]||0),0);
+    const dTotalCorrect=dqs.reduce((s,q)=>s+(stats.correct[q.id]||0),0);
+    const dRate=dTotalAnswers>0?Math.round(dTotalCorrect/dTotalAnswers*100):-1;
     const btn=document.createElement('button');
     btn.className='domain-btn';
     const rateHtml=dRate>=0?' <span style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:10px;margin-left:6px;background:'+(dRate>=60?'#dcfce7;color:var(--success)':'#fee2e2;color:var(--danger)')+'">'+t('rate.label')+dRate+'%</span>':'';
@@ -2732,6 +2738,7 @@ function setQuizCount(n){
 }
 
 function startQuiz(mode){
+  if(typeof gtag==='function')gtag('event','quiz_start',{quiz_mode:mode,quiz_count:selectedQuizCount===0?'all':selectedQuizCount,lang:lang});
   let pool=[];
   const unansweredFirst=document.getElementById('unanswered-first').checked;
   const limit=selectedQuizCount;
@@ -2991,7 +2998,10 @@ function showReview(){
   });
 }
 
-function goHome(){clearQuizState();showScreen('home');updateHome();}
+function goHome(){
+  if(typeof gtag==='function'&&quizState.questions.length>0&&quizState.current>0)gtag('event','quiz_give_up',{quit_at:quizState.current,total:quizState.questions.length,quiz_mode:quizState.mode,lang:lang});
+  clearQuizState();showScreen('home');updateHome();
+}
 function retryQuiz(){if(!lastQuiz.questions.length)return;quizState={questions:shuffle(lastQuiz.questions.slice()),current:0,answers:[],mode:lastQuiz.mode};showScreen('quiz');renderQuestion();}
 
 function shareScore(){
@@ -3006,6 +3016,7 @@ function shareScore(){
     es:`Obtuve ${pct} (${detail}) en el simulacro PMP！🎯\nPruébalo gratis 👇`,
   };
   const text=(msgs[lang]||msgs.en)+'\n#PMP #ProjectManagement';
+  if(typeof gtag==='function')gtag('event','share_x',{score_pct:pct,lang:lang});
   window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(siteUrl),'_blank','width=550,height=420');
 }
 

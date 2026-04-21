@@ -2,6 +2,8 @@
   "name": "pmp-quiz",
   "private": true,
   "scripts": {
+    "validate": "node validate-questions.js",
+    "predeploy": "node validate-questions.js",
     "deploy": "wrangler deploy --config wrangler.jsonc && wrangler deploy --config wrangler.site.jsonc"
   },
   "devDependencies": {
