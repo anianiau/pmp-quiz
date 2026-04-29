@@ -1,0 +1,34 @@
+# PMP Quiz - Free PMP Exam Practice App
+
+> A free, mobile-friendly, offline-capable web application for PMP (Project Management Professional) exam preparation. Features 420+ scenario-based practice questions covering all PMI ECO domains.
+
+## About
+
+This is a Progressive Web App (PWA) that helps PMP exam candidates practice with realistic scenario-based questions. All questions are aligned with the PMI Examination Content Outline (ECO) 2021 and cover three domains: People (42%), Process (50%), and Business Environment (8%).
+
+### Key Features
+
+- 420+ original scenario-based questions (not actual exam questions)
+- Available in 5 languages: Japanese, English, Spanish, Chinese, Korean
+- Mobile-friendly, works offline via Service Worker
+- Track weak areas with accuracy statistics
+- Bookmark questions for later review
+- Quiz modes: all questions, weak questions only, bookmarked, or by domain
+- 100% free, no sign-up required
+
+### Exam Domains Covered
+
+- **People** (42%): Leadership, team management, conflict resolution, stakeholder engagement, emotional intelligence, coaching, ethics
+- **Process** (50%): Planning, execution, monitoring, risk management, scope/schedule/cost management, quality, procurement, agile/hybrid methodologies
+- **Business Environment** (8%): Benefits management, compliance, organizational change, strategic alignment
+
+## URLs
+
+- Main App (Japanese): https://pmp-test.jp/
+- Main App (English): https://pmp-test.site/
+- What is PMP? (English): https://pmp-test.site/what-is-pmp
+- What is PMP? (Spanish): https://pmp-test.site/what-is-pmp-es
+- What is PMP? (Chinese): https://pmp-test.site/what-is-pmp-zh
+- What is PMP? (Korean): https://pmp-test.site/what-is-pmp-ko
+- What is PMP? (Indonesian): https://pmp-test.site/what-is-pmp-id
+- PMP Practice Questions (Spanish): https://pmp-test.site/preguntas-pmp
