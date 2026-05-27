@@ -11,9 +11,7 @@
 <meta property="og:image" content="https://pmp-test.jp/ogp.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pmp-test.jp/">
-<link rel="canonical" href="https://pmp-test.site/">
-<link rel="alternate" hreflang="ja" href="https://pmp-test.jp/">
-<link rel="alternate" hreflang="x-default" href="https://pmp-test.site/">
+<link rel="canonical" href="https://pmp-test.jp/">
 <!-- 構造化データ -->
 <script type="application/ld+json">
 {
@@ -1672,7 +1670,7 @@ const i18n={
 };
 
 let lang=(function(){
-  const _hostLang=location.hostname==='pmp-test.site'?'en':'ja';
+  const _hostLang='ja';
   const l=localStorage.getItem('pmp-lang')||(window.__DEFAULT_LANG||document.documentElement.lang||_hostLang);
   return ['ja','en','ko','zh','es'].includes(l)?l:'ja';
 })();
@@ -2103,7 +2101,7 @@ function retryQuiz(){if(!lastQuiz.questions.length)return;quizState={questions:s
 function shareScore(){
   const pct=document.getElementById('score-pct').textContent;
   const detail=document.getElementById('score-detail').textContent;
-  const siteUrl=location.hostname==='pmp-test.site'?'https://pmp-test.site':'https://pmp-test.jp';
+  const siteUrl='https://pmp-test.jp';
   const msgs={
     ja:`PMP模擬試験で${pct}（${detail}）正解しました！\n無料問題集で腕試し👇`,
     en:`I scored ${pct} (${detail}) on the PMP practice quiz! 🎯\nTry it free 👇`,

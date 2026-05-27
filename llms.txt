@@ -24,11 +24,10 @@ This is a Progressive Web App (PWA) that helps PMP exam candidates practice with
 
 ## URLs
 
-- Main App (Japanese): https://pmp-test.jp/
-- Main App (English): https://pmp-test.site/
-- What is PMP? (English): https://pmp-test.site/what-is-pmp
-- What is PMP? (Spanish): https://pmp-test.site/what-is-pmp-es
-- What is PMP? (Chinese): https://pmp-test.site/what-is-pmp-zh
-- What is PMP? (Korean): https://pmp-test.site/what-is-pmp-ko
-- What is PMP? (Indonesian): https://pmp-test.site/what-is-pmp-id
-- PMP Practice Questions (Spanish): https://pmp-test.site/preguntas-pmp
+- Main App: https://pmp-test.jp/
+- What is PMP? (Japanese): https://pmp-test.jp/what-is-pmp
+- What is PMP? (Spanish): https://pmp-test.jp/what-is-pmp-es
+- What is PMP? (Chinese): https://pmp-test.jp/what-is-pmp-zh
+- What is PMP? (Korean): https://pmp-test.jp/what-is-pmp-ko
+- What is PMP? (Indonesian): https://pmp-test.jp/what-is-pmp-id
+- PMP Practice Questions (Spanish): https://pmp-test.jp/preguntas-pmp

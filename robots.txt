@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://pmp-test.jp/sitemap.xml
-Sitemap: https://pmp-test.site/sitemap.xml
